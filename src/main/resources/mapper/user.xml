@@ -3,6 +3,46 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.homelearn.ddubeok2.user.UserMapper">
+    <resultMap id="user" type="com.homelearn.ddubeok2.user.User">
+        <result column="id" property="id"></result>
+        <result column="password" property="password"></result>
+        <result column="email" property="email"></result>
+        <result column="name" property="name"></result>
+        <result column="admin" property="admin"></result>
+    </resultMap>
 
 
+    <insert id="addUser" parameterType="AddUserForm">
+        insert into users(password, email, name)
+        values (#{password}, #{email}, #{name})
+    </insert>
+
+    <select id="findByIdUser" parameterType="Long" resultMap="user">
+        select *
+        from users
+        where id=${id}
+    </select>
+
+    <select id="findByAllUsers" resultMap="user">
+        select *
+        from users
+    </select>
+
+    <select id="login" parameterType="LoginForm">
+        select *
+        from users
+        where email=#{email} and password=#{password}
+    </select>
+
+    <update id="editUser" parameterType="EditUserForm">
+        update users set (
+            password=#{password},
+            name=#{name}
+                             )
+    </update>
+    <delete id="deleteUser" parameterType="LoginForm">
+        delete
+        from users
+        where eamil=#{email} and password=#{password};
+    </delete>
 </mapper>

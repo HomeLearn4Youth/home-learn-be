@@ -1,16 +1,12 @@
-package com.homelearn.ddubeok2.user;
+package com.homelearn.ddubeok2.user.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
 @Getter
 @Setter
-@ToString
-public class User {
-    private Long id;
+public class AddUserForm {
     private String password;
     private String email;
     private String name;
-    private Boolean admin;
 }
