@@ -1,16 +1,15 @@
 package com.homelearn.ddubeok2.house;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 @Getter
 @Setter
 @ToString
+@AllArgsConstructor
 public class Apart {
     //housedeal
     private Long no;
-    private Integer dealAmount;
+    private String dealAmount;
     private Integer dealYear;
     private Integer dealMonth;
     private Integer dealDay;
@@ -30,7 +29,7 @@ public class Apart {
     private String bonbun;
     private String bubun;
     private String sigunguCode;
-    private String eubmyeondongCode;
+    private String eubmyundongCode;
     private String dongCode;
     private String landCode;
     private String apartmentName;
