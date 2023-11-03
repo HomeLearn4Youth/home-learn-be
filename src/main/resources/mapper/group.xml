@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.homelearn.ddubeok2.group.GroupMapper">
+    <resultMap id="group" type="com.homelearn.ddubeok2.group.Group">
+        <result column="id" property="id"></result>
+        <result column="name" property="name"></result>
+        <result column="user_id" property="userId"></result>
+    </resultMap>
+    <resultMap id="groupItem" type="com.homelearn.ddubeok2.group.dto.GroupItemOutput">
+        <result column="id" property="groupId"></result>
+        <result column="name" property="groupName"></result>
+        <result column="like_id" property="likeId"></result>
+        <result column="aptCode" property="aptCode"></result>
+        <result column="apartmentName" property="apartmentName"></result>
+        <result column="lng" property="lng"></result>
+        <result column="lat" property="lat"></result>
+    </resultMap>
+
+
+    <insert id="addGroup" parameterType="GroupForm">
+        insert into groups(name, user_id)
+        values (#{name},${userId})
+    </insert>
+
+    <delete id="deleteGroup" parameterType="Long">
+        delete
+        from groups
+        where id=${groupId};
+    </delete>
+
+    <select id="findGroupListByUserId" parameterType="Long" resultMap="group">
+        select id, name, user_id
+        from groups
+        where id=${user_id}
+    </select>
+
+    <select id="findGroupListByGroupId" parameterType="Long" resultMap="groupItem">
+        select b.id, b.name, b.like_id, h.aptCode, h.apartmentName, h.lng, h.lat
+        from (select hi.aptCode, hi.apartmentName, hi.lng, hi.lat
+              from likes join houseinfo hi on likes.houseinfo_id = hi.aptCode) h
+        join (select g.id, g.name, i.like_id
+              from group_items i join groups g on i.group_id = g.id where g.id=${groupId}) b
+        on h.aptCode = b.aptCode
+        where g.id=${groupId}
+    </select>
+
+    <insert id="addGroupItem" parameterType="GroupItemInput">
+        insert into group_items(group_id, like_id)
+        values (${groupId}, ${likeId})
+    </insert>
+
+    <delete id="deleteGroupItem" parameterType="GroupItemInput">
+        delete
+        from group_items
+        where group_id = ${groupId} and like_id = ${likeId};
+    </delete>
+</mapper>
