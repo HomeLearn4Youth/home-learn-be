@@ -10,6 +10,13 @@ CREATE TABLE `users` (
 	`admin`	boolean	DEFAULT false
     
 );
+CREATE TABLE `dongcode` (
+        `dongCode` varchar(10) NOT NULL,
+        `sidoName` varchar(30) DEFAULT NULL,
+        `gugunName` varchar(30) DEFAULT NULL,
+        `dongName` varchar(30) DEFAULT NULL,
+        PRIMARY KEY (`dongCode`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `groups` (
 	`id`	bigint	NOT NULL AUTO_INCREMENT PRIMARY KEY,
@@ -54,26 +61,29 @@ CREATE TABLE `answers` (
 );
 
 CREATE TABLE `houseinfo` (
-	`aptCode`	bigint	NOT NULL,
-	`buildYear`	int	NULL,
-	`roadName`	varchar(40)	NULL,
-	`roadNameBonbun`	varchar(5)	NULL,
-	`roadNameBubun`	varchar(5)	NULL,
-	`roadNameSeq`	varchar(2)	NULL,
-	`roadNameBasementCode`	varchar(1)	NULL,
-	`dong`	varchar(40)	NULL,
-	`bonbun`	varchar(4)	NULL,
-	`bubun`	varchar(4)	NULL,
-	`sigunguCode`	varchar(5)	NULL,
-	`eubmyundongCode`	varchar(5)	NULL,
-	`dongCode`	varchar(10)	NULL,
-	`landCode`	varchar(1)	NULL,
-	`apartmentName`	varchar(40)	NULL,
-	`jibun`	varchar(10)	NULL,
-	`lng`	varchar(30)	NULL,
-	`lat`	varchar(30)	NULL
-);
-
+                             `aptCode` bigint NOT NULL,
+                             `buildYear` int DEFAULT NULL,
+                             `roadName` varchar(40) DEFAULT NULL,
+                             `roadNameBonbun` varchar(5) DEFAULT NULL,
+                             `roadNameBubun` varchar(5) DEFAULT NULL,
+                             `roadNameSeq` varchar(2) DEFAULT NULL,
+                             `roadNameBasementCode` varchar(1) DEFAULT NULL,
+                             `roadNameCode` varchar(7) DEFAULT NULL,
+                             `dong` varchar(40) DEFAULT NULL,
+                             `bonbun` varchar(4) DEFAULT NULL,
+                             `bubun` varchar(4) DEFAULT NULL,
+                             `sigunguCode` varchar(5) DEFAULT NULL,
+                             `eubmyundongCode` varchar(5) DEFAULT NULL,
+                             `dongCode` varchar(10) DEFAULT NULL,
+                             `landCode` varchar(1) DEFAULT NULL,
+                             `apartmentName` varchar(40) DEFAULT NULL,
+                             `jibun` varchar(10) DEFAULT NULL,
+                             `lng` varchar(30) DEFAULT NULL,
+                             `lat` varchar(30) DEFAULT NULL,
+                             UNIQUE KEY `UNIQUE` (`buildYear`,`apartmentName`,`jibun`,`sigunguCode`,`eubmyundongCode`) /*!80000 INVISIBLE */,
+                             KEY `houseinfo_dongCode_dongcode_dongCode_fk_idx` (`dongCode`) /*!80000 INVISIBLE */,
+                             CONSTRAINT `houseinfo_dongCode_dongcode_dongCode_fk` FOREIGN KEY (`dongCode`) REFERENCES `dongcode` (`dongCode`)
+) ENGINE=InnoDB;
 CREATE TABLE `housedeal` (
 	`no`	bigint	NOT NULL,
 	`dealAmount`	varchar(20)	NULL,
