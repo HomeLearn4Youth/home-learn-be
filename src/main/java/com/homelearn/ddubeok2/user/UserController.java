@@ -4,11 +4,9 @@ import com.homelearn.ddubeok2.user.dto.AddUserForm;
 import com.homelearn.ddubeok2.user.dto.EditUserForm;
 import com.homelearn.ddubeok2.user.dto.LoginForm;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Delete;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
