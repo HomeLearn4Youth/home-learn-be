@@ -39,6 +39,7 @@
             password=#{password},
             name=#{name}
                              )
+        where id=#{id}
     </update>
     <delete id="deleteUser" parameterType="LoginForm">
         delete
