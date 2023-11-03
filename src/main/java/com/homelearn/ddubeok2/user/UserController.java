@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @RestController
@@ -16,10 +17,21 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping("/login")
-    public ResponseEntity<User> Login(
-            @RequestBody LoginForm loginForm
+    public ResponseEntity Login(
+            @RequestBody LoginForm loginForm,
+            HttpSession session
     ){
-        return ResponseEntity.ok().body(userService.login(loginForm));
+        User loginUser = userService.login(loginForm);
+        session.setAttribute("loginUser", loginUser);
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity Login(
+            HttpSession session
+    ){
+        session.invalidate();
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/add")
