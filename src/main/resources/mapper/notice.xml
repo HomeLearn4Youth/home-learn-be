@@ -3,6 +3,50 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.homelearn.ddubeok2.notice.NoticeMapper">
+    <resultMap id="notice" type="com.homelearn.ddubeok2.notice.Notice">
+        <result column="id" property="id"></result>
+        <result column="title" property="title"></result>
+        <result column="content" property="content"></result>
+        <result column="view" property="viewCount"></result>
+        <result column="created_at" property="creationTime"></result>
+        <result column="user_id" property="writerId"></result>
+    </resultMap>
 
+    <insert id="addNotice" parameterType="NoticeForm">
+        insert into notices(title, content, user_id)
+        values (#{title}, #{content}, #{writerId})
+    </insert>
+
+    <select id="getNoticeById" parameterType="Long" resultMap="notice">
+        select id, title, content, `view`, created_at, user_id
+        from notices
+        where id = #{noticeId}
+    </select>
+
+    <select id="getNoticeList" resultMap="notice">
+        select id, title, content, `view`, created_at, user_id
+        from notices
+    </select>
+
+    <update id="editNotice" parameterType="NoticeForm">
+        update notices set (
+            title = #{title},
+            content = #{content}
+                               )
+        where id=#{noticeId}
+    </update>
+
+    <update id="countNotice" parameterType="Long">
+        update notices set (
+            `view` = `view`+1,
+                               )
+        where id=#{noticeId}
+    </update>
+
+    <delete id="deleteNoticeById" parameterType="Long">
+        delete
+        from notices
+        where id=#{noticeId};
+    </delete>
 
 </mapper>
