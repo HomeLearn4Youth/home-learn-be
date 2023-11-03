@@ -2,10 +2,7 @@ package com.homelearn.ddubeok2.house;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,23 +17,23 @@ public class ApartController {
         return ResponseEntity.ok().body(apartService.getTotalApart());
     }
 
-    @GetMapping("/search_name")
-    public ResponseEntity<List<Apart>> getApartListByName(@RequestParam("name") String name){
+    @GetMapping("/search_name/{name}")
+    public ResponseEntity<List<Apart>> getApartListByName(@PathVariable("name") String name){
         return ResponseEntity.ok().body(apartService.getApartListByName(name));
     }
 
-    @GetMapping("/search_dong")
-    public ResponseEntity<List<Apart>> getApartListByDongName(@RequestParam("name") String name){
+    @GetMapping("/search_dong/{name}")
+    public ResponseEntity<List<Apart>> getApartListByDongName(@PathVariable("name") String name){
         return ResponseEntity.ok().body(apartService.getApartListByDongName(name));
     }
 
-    @GetMapping("/dong")
-    public ResponseEntity<List<Apart>> getApartListByDongCode(@RequestParam("code") String code){
+    @GetMapping("/dong/{code}")
+    public ResponseEntity<List<Apart>> getApartListByDongCode(@PathVariable("code") String code){
         return ResponseEntity.ok().body(apartService.getApartListByDongCode(code));
     }
 
-    @GetMapping("/detail")
-    public ResponseEntity<Apart> getApartById(@RequestParam("id") String id){
+    @GetMapping("/view/{id}")
+    public ResponseEntity<Apart> getApartById(@PathVariable("id") String id){
         return ResponseEntity.ok().body(apartService.getApartById(id));
     }
 
