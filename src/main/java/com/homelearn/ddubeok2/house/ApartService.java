@@ -1,5 +1,7 @@
 package com.homelearn.ddubeok2.house;
 
+import com.homelearn.ddubeok2.house.dto.ApartInfo;
+
 import java.util.List;
 
 public interface ApartService {
@@ -13,5 +15,5 @@ public interface ApartService {
     //동 코드별 아파트
     List<Apart> getApartListByDongCode(String dongCode);
     //아파트 개별 조회
-    Apart getApartById(String code);
+    ApartInfo getApartInfoById(String code);
 }
