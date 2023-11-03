@@ -35,14 +35,12 @@
     </select>
 
     <update id="editUser" parameterType="EditUserForm">
-        update users set (
-            password=#{password},
-            name=#{name}
-                             )
+        update users set password=#{password}, name=#{name}
+        where id=${id}
     </update>
     <delete id="deleteUser" parameterType="LoginForm">
         delete
         from users
-        where eamil=#{email} and password=#{password};
+        where email=#{email} and password=#{password};
     </delete>
 </mapper>

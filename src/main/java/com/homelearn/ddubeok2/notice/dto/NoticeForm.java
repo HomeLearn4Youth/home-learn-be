@@ -1,15 +1,13 @@
-package com.homelearn.ddubeok2.notice;
+package com.homelearn.ddubeok2.notice.dto;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class Notice {
-    Long id;
+public class NoticeForm {
+    Long noticeId;
     String title;
     String content;
-    int viewCount;
-    String creationTime;
     Long writerId;
 }
