@@ -1,5 +1,6 @@
 package com.homelearn.ddubeok2.house;
 
+import com.homelearn.ddubeok2.house.dto.ApartInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +34,8 @@ public class ApartController {
     }
 
     @GetMapping("/view/{id}")
-    public ResponseEntity<Apart> getApartById(@PathVariable("id") String id){
-        return ResponseEntity.ok().body(apartService.getApartById(id));
+    public ResponseEntity<ApartInfo> getApartInfoById(@PathVariable("id") String id){
+        return ResponseEntity.ok().body(apartService.getApartInfoById(id));
     }
 
 }

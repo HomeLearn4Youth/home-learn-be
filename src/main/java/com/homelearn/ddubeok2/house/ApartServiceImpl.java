@@ -1,5 +1,6 @@
 package com.homelearn.ddubeok2.house;
 
+import com.homelearn.ddubeok2.house.dto.ApartInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class ApartServiceImpl implements ApartService{
     }
 
     @Override
-    public Apart getApartById(String code) {
-        return apartMapper.getApartById(code);
+    public ApartInfo getApartInfoById(String code) {
+        return apartMapper.getApartInfoById(code);
     }
 }

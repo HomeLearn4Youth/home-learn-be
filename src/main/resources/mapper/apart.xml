@@ -37,5 +37,24 @@
         from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
         limit 1000;
     </select>
-
+    <select id="getApartListByName" resultMap="apart">
+        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
+        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
+        where apartmentName like concat('%',#{name},'%');
+    </select>
+    <select id="getApartListByDongName" resultMap="apart">
+        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
+        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
+        where houseinfo.dong like concat('%',#{name},'%');
+    </select>
+    <select id="getApartListByDongCode" resultMap="apart">
+        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
+        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
+        where houseinfo.dongCode like concat(#{code},'%');
+    </select>
+    <select id="getApartInfoById" resultType="ApartInfo">
+        select aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
+        from houseinfo
+        where aptCode=#{id};
+    </select>
 </mapper>
