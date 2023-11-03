@@ -1,5 +1,6 @@
 package com.homelearn.ddubeok2.house;
 
+import com.homelearn.ddubeok2.house.dto.ApartInfo;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.sql.Timestamp;
@@ -17,5 +18,5 @@ public interface ApartMapper {
     //동 코드별 아파트
     List<Apart> getApartListByDongCode(String dongCode);
     //아파트 개별 조회
-    Apart getApartById(String code);
+    ApartInfo getApartInfoById(String code);
 }
