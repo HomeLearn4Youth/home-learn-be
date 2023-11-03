@@ -14,7 +14,7 @@
 
     <insert id="addNotice" parameterType="NoticeForm">
         insert into notices(title, content, user_id)
-        values (#{title}, #{content}, #{writerId})
+        values (#{title}, #{content}, ${writerId})
     </insert>
 
     <select id="getNoticeById" parameterType="Long" resultMap="notice">
@@ -29,24 +29,18 @@
     </select>
 
     <update id="editNotice" parameterType="NoticeForm">
-        update notices set (
-            title = #{title},
-            content = #{content}
-                               )
-        where id=#{noticeId}
+        update notices set title = #{title}, content = #{content}
+        where id=${noticeId}
     </update>
 
     <update id="countNotice" parameterType="Long">
-        update notices set (
-            `view` = `view`+1,
-                               )
-        where id=#{noticeId}
+        update notices set `view` = `view`+1 where id=${noticeId}
     </update>
 
     <delete id="deleteNoticeById" parameterType="Long">
         delete
         from notices
-        where id=#{noticeId};
+        where id=${noticeId};
     </delete>
 
 </mapper>
