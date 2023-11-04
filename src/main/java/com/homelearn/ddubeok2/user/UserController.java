@@ -35,7 +35,7 @@ public class UserController {
         session.invalidate();
         return ResponseEntity.ok().build();
     }
-    @PostMapping("/findPwd")
+    @PostMapping("/findpwd")
     public ResponseEntity findPwd(
             @RequestBody AddUserForm findPasswordForm
             ){
