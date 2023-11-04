@@ -1,9 +1,6 @@
 package com.homelearn.ddubeok2.group;
 
-import com.homelearn.ddubeok2.group.dto.GroupForm;
-import com.homelearn.ddubeok2.group.dto.GroupItemInput;
-import com.homelearn.ddubeok2.group.dto.GroupOutput;
-import com.homelearn.ddubeok2.group.dto.GroupItemOutput;
+import com.homelearn.ddubeok2.group.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,8 +30,10 @@ public class GroupServiceImpl implements GroupService{
         }
         groupMapper.deleteGroup(groupId);
     }
-
-
+    @Override
+    public void editGroupName(Group editForm){
+        groupMapper.editGroupName(editForm);
+    }
 
     @Override
     public List<GroupOutput> findGroupListByUserId(Long userId) {

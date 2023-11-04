@@ -1,5 +1,6 @@
 package com.homelearn.ddubeok2.group;
 
+import com.homelearn.ddubeok2.group.dto.Group;
 import com.homelearn.ddubeok2.group.dto.GroupForm;
 import com.homelearn.ddubeok2.group.dto.GroupOutput;
 import com.homelearn.ddubeok2.group.dto.GroupItemInput;
@@ -12,4 +13,5 @@ public interface GroupService {
     List<GroupOutput> findGroupListByUserId(Long groupId);
     void addGroupItem(GroupItemInput groupItemInput);
     void deleteGroupItem(GroupItemInput groupItemInput);
+    void editGroupName(Group editForm);
 }
