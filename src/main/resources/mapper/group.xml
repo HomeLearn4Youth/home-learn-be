@@ -34,7 +34,7 @@
     <select id="findGroupListByUserId" parameterType="Long" resultMap="group">
         select id, name, user_id
         from `groups`
-        where id=${user_id}
+        where user_id=${user_id}
     </select>
 
     <select id="findGroupListByGroupId" parameterType="Long" resultMap="groupItem">
