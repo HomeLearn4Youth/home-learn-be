@@ -1,4 +1,4 @@
-package com.homelearn.ddubeok2.group;
+package com.homelearn.ddubeok2.group.dto;
 
 import lombok.Getter;
 import lombok.Setter;

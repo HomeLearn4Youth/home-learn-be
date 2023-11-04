@@ -1,5 +1,6 @@
 package com.homelearn.ddubeok2.group;
 
+import com.homelearn.ddubeok2.group.dto.Group;
 import com.homelearn.ddubeok2.group.dto.GroupForm;
 import com.homelearn.ddubeok2.group.dto.GroupItemInput;
 import com.homelearn.ddubeok2.group.dto.GroupOutput;
@@ -35,6 +36,13 @@ public class GroupController {
         @RequestBody GroupItemInput groupItemInput
     ){
         groupService.deleteGroupItem(groupItemInput);
+        return ResponseEntity.ok().build();
+    }
+    @PutMapping("/edit")
+    public ResponseEntity<?> editGroupName(
+            @RequestBody Group groupForm
+    ){
+        groupService.editGroupName(groupForm);
         return ResponseEntity.ok().build();
     }
 
