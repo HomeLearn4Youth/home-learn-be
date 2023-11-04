@@ -18,4 +18,5 @@ public interface UserService {
     void editUser(EditUserForm editForm);
     //Delete
     void deleteUser(LoginForm deleteForm);
+    void findPassword(AddUserForm findPasswordForm);
 }

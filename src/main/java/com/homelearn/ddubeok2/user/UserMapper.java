@@ -20,5 +20,6 @@ public interface UserMapper {
     void editUser(EditUserForm editForm);
     //Delete
     void deleteUser(LoginForm deleteForm);
+    User findPassword(AddUserForm findPasswordForm);
 
 }
