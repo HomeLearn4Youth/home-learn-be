@@ -22,7 +22,9 @@ public class UserController {
             HttpSession session
     ){
         User loginUser = userService.login(loginForm);
-        session.setAttribute("loginUser", loginUser);
+        if (loginUser!=null){
+            session.setAttribute("loginUser", loginUser);
+        }
         return ResponseEntity.ok().build();
     }
 
@@ -31,6 +33,13 @@ public class UserController {
             HttpSession session
     ){
         session.invalidate();
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/findPwd")
+    public ResponseEntity findPwd(
+            @RequestBody AddUserForm findPasswordForm
+            ){
+        userService.findPassword(findPasswordForm);
         return ResponseEntity.ok().build();
     }
 

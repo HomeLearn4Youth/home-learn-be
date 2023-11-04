@@ -2,6 +2,7 @@ package com.homelearn.ddubeok2.user;
 
 import com.homelearn.ddubeok2.user.dto.AddUserForm;
 import com.homelearn.ddubeok2.user.dto.EditUserForm;
+
 import com.homelearn.ddubeok2.user.dto.LoginForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -71,5 +72,22 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteUser(LoginForm deleteForm) {
         userMapper.deleteUser(deleteForm);
+    }
+
+    /**
+     * 비번 변경까지 한번에 받아서 이메일, 이름으로 조회한 유저가 있다면 비번을 바꿔준다.
+     * @param findPasswordForm
+     * @return
+     */
+    @Override
+    public void findPassword(AddUserForm findPasswordForm){
+        User findUser = userMapper.findPassword(findPasswordForm);
+        if (findUser!=null){
+            EditUserForm editUserForm = new EditUserForm();
+            editUserForm.setId(findUser.getId());
+            editUserForm.setName(findUser.getName());
+            editUserForm.setPassword(findPasswordForm.getPassword());
+            userMapper.editUser(editUserForm);
+        }
     }
 }
