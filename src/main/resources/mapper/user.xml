@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.homelearn.ddubeok2.user.UserMapper">
-    <resultMap id="user" type="com.homelearn.ddubeok2.user.User">
+<mapper namespace="com.homelearn.back.user.UserMapper">
+    <resultMap id="user" type="com.homelearn.back.user.entity.User">
         <result column="id" property="id"></result>
         <result column="password" property="password"></result>
         <result column="email" property="email"></result>

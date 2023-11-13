@@ -2,8 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.homelearn.ddubeok2.house.ApartMapper">
-    <resultMap id="apart" type="com.homelearn.ddubeok2.house.Apart">
+<mapper namespace="com.homelearn.back.house.ApartMapper">
+    <resultMap id="apart" type="com.homelearn.back.house.dto.ApartListOutput">
         <result column="no" property="no"></result>
         <result column="dealAmount" property="dealAmount"></result>
         <result column="dealYear" property="dealYear"></result>

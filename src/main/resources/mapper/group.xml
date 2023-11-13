@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.homelearn.ddubeok2.group.GroupMapper">
-    <resultMap id="group" type="com.homelearn.ddubeok2.group.dto.Group">
+<mapper namespace="com.homelearn.back.group.GroupMapper">
+    <resultMap id="group" type="com.homelearn.back.group.entity.Group">
         <result column="id" property="id"></result>
         <result column="name" property="name"></result>
         <result column="user_id" property="userId"></result>
     </resultMap>
-    <resultMap id="groupItem" type="com.homelearn.ddubeok2.group.dto.GroupItemOutput">
+    <resultMap id="groupItem" type="com.homelearn.back.group.dto.GroupItemOutput">
         <result column="id" property="groupId"></result>
         <result column="name" property="groupName"></result>
         <result column="like_id" property="likeId"></result>

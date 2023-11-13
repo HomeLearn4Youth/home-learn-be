@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.homelearn</groupId>
-	<artifactId>ddubeok2</artifactId>
+	<artifactId>back</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ddubeok2</name>
-	<description>ddubeok2</description>
+	<name>back</name>
+	<description>back</description>
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
