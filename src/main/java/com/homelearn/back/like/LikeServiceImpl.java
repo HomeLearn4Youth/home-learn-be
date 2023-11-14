@@ -1,11 +1,10 @@
 package com.homelearn.back.like;
 
-import com.homelearn.back.house.dto.ApartInfoOutput;
-import com.homelearn.back.like.dto.LikeInputForm;
+
+import com.homelearn.back.like.dto.LikeParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -14,17 +13,12 @@ public class LikeServiceImpl implements LikeService{
     private final LikeMapper likeMapper;
 
     @Override
-    public void addLike(LikeInputForm likeForm) {
-        likeMapper.addLike(likeForm);
+    public void addLike(LikeParam param) {
+        likeMapper.addLike(param);
     }
 
     @Override
-    public List<ApartInfoOutput> findLikeListByUserId(Long userId) {
-        return likeMapper.findLikeListByUserId(userId);
-    }
-
-    @Override
-    public void deleteLike(LikeInputForm likeForm) {
-        likeMapper.deleteLike(likeForm);
+    public void deleteLike(LikeParam param) {
+        likeMapper.deleteLike(param);
     }
 }

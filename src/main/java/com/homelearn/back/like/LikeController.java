@@ -1,39 +1,45 @@
 package com.homelearn.back.like;
 
-import com.homelearn.back.house.dto.ApartInfoOutput;
-import com.homelearn.back.like.dto.LikeInputForm;
+import com.homelearn.back.like.dto.LikeParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/like")
 @RequiredArgsConstructor
 public class LikeController {
     private final LikeService likeService;
-
-    @PostMapping("/add")
-    public ResponseEntity<?> addLike(
-            @RequestBody LikeInputForm likeForm
+    /**
+     * sec 적용 이후 @AuthenticationPrincipal LoginUser 를 통해 user 정보를 가져와서 넣어야함
+     * 현재는 userId를 PathVariable에서 가져오는 방식
+     */
+    @PostMapping("/add/{apartCode}/{userId}")
+    public ResponseEntity addLike(
+            @PathVariable("apartCode") Long code,
+            @PathVariable("userId") Long userId
             ){
-        likeService.addLike(likeForm);
+        likeService.addLike(
+                LikeParam.builder()
+                        .aptCode(code)
+                        .userId(userId)
+                        .build()
+        );
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/findlist/{userId}")
-    public ResponseEntity<List<ApartInfoOutput>> showLikeListByUserId(
-            @PathVariable("userId") Long userId
-    ){
-        return ResponseEntity.ok().body(likeService.findLikeListByUserId(userId));
-    }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<?> deleteLike(
-        @RequestBody LikeInputForm likeForm
+    @DeleteMapping("/delete/{apartCode}/{userId}")
+    public ResponseEntity deleteLike(
+        @PathVariable("apartCode") Long code,
+        @PathVariable("userId") Long userId
     ){
-        likeService.deleteLike(likeForm);
+        likeService.deleteLike(
+                LikeParam.builder()
+                        .aptCode(code)
+                        .userId(userId)
+                        .build()
+        );
         return ResponseEntity.ok().build();
     }
 

@@ -1,7 +1,7 @@
 package com.homelearn.back.house;
 
-import com.homelearn.back.house.dto.ApartDealOutput;
-import com.homelearn.back.house.dto.ApartInfoOutput;
+import com.homelearn.back.house.dto.*;
+import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,24 +14,40 @@ import java.util.List;
 public class ApartController {
     private final ApartService apartService;
 
-    @GetMapping("/findlist/{dongCode}")
-    public ResponseEntity<List<ApartInfoOutput>> findAptList(
-            @PathVariable("dongCode") Long dongCode
-    ){
-        return ResponseEntity.ok().body(apartService.getApartListByDongCode(dongCode));
+    /**
+     * sec 적용 이후 @AuthenticationPrincipal LoginUser 를 통해 user 정보를 가져와서 넣어야함
+     * 현재는 userId를 PathVariable에서 가져오는 방식
+     */
+    @GetMapping("/findlist/{userId}")
+    public ResponseEntity<List<ApartOutputSpec>> findAptList(
+            @RequestBody ApartListInputSpec inputSpec,
+            @PathVariable("userId") Long userId
+            ){
+        return ResponseEntity.ok().body(
+                apartService.getApartList(
+                        new ApartListParam()
+                                .apartListInputSpecToApartListParam(inputSpec, userId)
+                ));
     }
 
-    @GetMapping("/find/{apartCode}")
-    public ResponseEntity<ApartInfoOutput> findApt(
-            @PathVariable("apartCode") Long apartCode
+    @GetMapping("/find/{apartCode}/{userId}")
+    public ResponseEntity<ApartOutputSpec> findApt(
+            @PathVariable("apartCode") Long apartCode,
+            @PathVariable("userId") Long userId
     ){
-        return ResponseEntity.ok().body(apartService.getApartInfoById(apartCode));
+        return ResponseEntity.ok().body(
+                apartService.getApartInfoById(
+                    ApartInfoParam.builder()
+                            .aptCode(apartCode)
+                            .userId(userId)
+                            .build()
+                ));
     }
 
-    @GetMapping("/history/{apartCode}")
-    public ResponseEntity<List<ApartDealOutput>> findAptDeal(
-            @PathVariable("apartCode") Long apartCode
-    ){
-        return ResponseEntity.ok().body(apartService.getApartDealById(apartCode));
+    @GetMapping("/history")
+    public ResponseEntity<List<DealListOutputSpec>> findAptDeal(
+            @RequestBody DealListInputSpec inputSpec
+            ){
+        return ResponseEntity.ok().body(apartService.getApartDealList(inputSpec));
     }
 }

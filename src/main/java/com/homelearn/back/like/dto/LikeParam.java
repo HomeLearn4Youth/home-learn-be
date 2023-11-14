@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class LikeInputForm {
+public class LikeParam {
     private Long userId;
     private Long aptCode;
 }

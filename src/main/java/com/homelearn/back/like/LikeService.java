@@ -1,12 +1,10 @@
 package com.homelearn.back.like;
 
-import com.homelearn.back.house.dto.ApartInfoOutput;
-import com.homelearn.back.like.dto.LikeInputForm;
 
-import java.util.List;
+import com.homelearn.back.like.dto.LikeParam;
+
 
 public interface LikeService {
-    void addLike(LikeInputForm likeForm);
-    List<ApartInfoOutput> findLikeListByUserId(Long userId);
-    void deleteLike(LikeInputForm likeForm);
+    void addLike(LikeParam param);
+    void deleteLike(LikeParam param);
 }

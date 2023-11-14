@@ -10,13 +10,11 @@ import lombok.*;
 @Setter
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class ApartDealOutput {
-    private Long aptCode;
-    private String type;
-    private Integer dealYear;
-    private Integer dealMonth;
-    private Integer dealDay;
-    private String area;
-    private String floor;
-    private Integer dealAmount;
+public class DealListOutputSpec {
+    private Long aptCode; //아파트 코드
+    private String type; // 매매, 전/월세
+    private String dealDate; //거래 일
+    private String area; // 전용면적
+    private String floor; // 층
+    private String dealAmount; // 거래 가격
 }
