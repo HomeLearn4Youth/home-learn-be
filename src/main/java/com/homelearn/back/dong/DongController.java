@@ -20,12 +20,15 @@ public class DongController {
         return ResponseEntity.ok().body(dongService.getSidoList());
     }
 
-    @GetMapping("/gugun_list")
-    public ResponseEntity<List<Gugun>> getGugunList(@RequestParam("code") String code){
+    @GetMapping("/gugun_list/{code}")
+    public ResponseEntity<List<Gugun>> getGugunList(
+            @PathVariable("code") String code){
         return ResponseEntity.ok().body(dongService.getGugunList(code));
     }
-    @GetMapping("/dong_list")
-    public ResponseEntity<List<Dong>> getDongList(@RequestParam("code") String code){
+
+    @GetMapping("/dong_list/{code}")
+    public ResponseEntity<List<Dong>> getDongList(
+            @PathVariable("code") String code){
         return ResponseEntity.ok().body(dongService.getDongList(code));
     }
 }
