@@ -5,6 +5,7 @@ import com.homelearn.back.house.dto.ApartInfoOutput;
 
 import java.util.List;
 
+
 public interface ApartService {
     //동 코드별 아파트
     List<ApartInfoOutput> getApartListByDongCode(Long dongCode);

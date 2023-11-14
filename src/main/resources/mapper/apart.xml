@@ -3,58 +3,58 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.homelearn.back.house.ApartMapper">
-    <resultMap id="apart" type="com.homelearn.back.house.dto.ApartListOutput">
-        <result column="no" property="no"></result>
-        <result column="dealAmount" property="dealAmount"></result>
-        <result column="dealYear" property="dealYear"></result>
-        <result column="dealMonth" property="dealMonth"></result>
-        <result column="dealDay" property="dealDay"></result>
-        <result column="area" property="area"></result>
-        <result column="floor" property="floor"></result>
-        <result column="cancelDealType" property="cancelDealType"></result>
-        <result column="aptCode" property="aptCode"></result>
-        <result column="buildYear" property="buildYear"></result>
-        <result column="roadName" property="roadName"></result>
-        <result column="roadNameBonbun" property="roadNameBonbun"></result>
-        <result column="roadNameBubun" property="roadNameBubun"></result>
-        <result column="roadNameSeq" property="roadNameSeq"></result>
-        <result column="roadNameBasementCode" property="roadNameBasementCode"></result>
-        <result column="roadNameCode" property="roadNameCode"></result>
-        <result column="dong" property="dong"></result>
-        <result column="bonbun" property="bonbun"></result>
-        <result column="bubun" property="bubun"></result>
-        <result column="sigunguCode" property="sigunguCode"></result>
-        <result column="eubmyundongCode" property="eubmyundongCode"></result>
-        <result column="dongCode" property="dongCode"></result>
-        <result column="landCode" property="landCode"></result>
-        <result column="apartmentName" property="apartmentName"></result>
-        <result column="jibun" property="jibun"></result>
-        <result column="lng" property="lng"></result>
-        <result column="lat" property="lat"></result>
-    </resultMap>
-    <select id="getTotalApart" resultMap="apart">
-        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
-        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
-        limit 1000;
-    </select>
-    <select id="getApartListByName" resultMap="apart">
-        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
-        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
-        where apartmentName like concat('%',#{name},'%');
-    </select>
-    <select id="getApartListByDongName" resultMap="apart">
-        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
-        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
-        where houseinfo.dong like concat('%',#{name},'%');
-    </select>
-    <select id="getApartListByDongCode" resultMap="apart">
-        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
-        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
-        where houseinfo.dongCode like concat(#{code},'%');
-    </select>
-    <select id="getApartInfoById" resultType="ApartInfo">
-        select aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
-        from houseinfo
-        where aptCode=#{id};
-    </select>
+<!--    <resultMap id="apart" type="com.homelearn.back.house.dto.ApartListOutput">-->
+<!--        <result column="no" property="no"></result>-->
+<!--        <result column="dealAmount" property="dealAmount"></result>-->
+<!--        <result column="dealYear" property="dealYear"></result>-->
+<!--        <result column="dealMonth" property="dealMonth"></result>-->
+<!--        <result column="dealDay" property="dealDay"></result>-->
+<!--        <result column="area" property="area"></result>-->
+<!--        <result column="floor" property="floor"></result>-->
+<!--        <result column="cancelDealType" property="cancelDealType"></result>-->
+<!--        <result column="aptCode" property="aptCode"></result>-->
+<!--        <result column="buildYear" property="buildYear"></result>-->
+<!--        <result column="roadName" property="roadName"></result>-->
+<!--        <result column="roadNameBonbun" property="roadNameBonbun"></result>-->
+<!--        <result column="roadNameBubun" property="roadNameBubun"></result>-->
+<!--        <result column="roadNameSeq" property="roadNameSeq"></result>-->
+<!--        <result column="roadNameBasementCode" property="roadNameBasementCode"></result>-->
+<!--        <result column="roadNameCode" property="roadNameCode"></result>-->
+<!--        <result column="dong" property="dong"></result>-->
+<!--        <result column="bonbun" property="bonbun"></result>-->
+<!--        <result column="bubun" property="bubun"></result>-->
+<!--        <result column="sigunguCode" property="sigunguCode"></result>-->
+<!--        <result column="eubmyundongCode" property="eubmyundongCode"></result>-->
+<!--        <result column="dongCode" property="dongCode"></result>-->
+<!--        <result column="landCode" property="landCode"></result>-->
+<!--        <result column="apartmentName" property="apartmentName"></result>-->
+<!--        <result column="jibun" property="jibun"></result>-->
+<!--        <result column="lng" property="lng"></result>-->
+<!--        <result column="lat" property="lat"></result>-->
+<!--    </resultMap>-->
+<!--    <select id="getTotalApart" resultMap="apart">-->
+<!--        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat-->
+<!--        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode-->
+<!--            limit 1000;-->
+<!--    </select>-->
+<!--    <select id="getApartListByName" resultMap="apart">-->
+<!--        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat-->
+<!--        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode-->
+<!--        where apartmentName like concat('%',#{name},'%');-->
+<!--    </select>-->
+<!--    <select id="getApartListByDongName" resultMap="apart">-->
+<!--        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat-->
+<!--        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode-->
+<!--        where houseinfo.dong like concat('%',#{name},'%');-->
+<!--    </select>-->
+<!--    <select id="getApartListByDongCode" resultMap="apart">-->
+<!--        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat-->
+<!--        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode-->
+<!--        where houseinfo.dongCode like concat(#{code},'%');-->
+<!--    </select>-->
+<!--    <select id="getApartInfoById" resultType="ApartInfo">-->
+<!--        select aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat-->
+<!--        from houseinfo-->
+<!--        where aptCode=#{id};-->
+<!--    </select>-->
 </mapper>

@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -16,26 +18,31 @@ public class NoticeServiceImpl implements NoticeService{
 
     @Override
     public void addNotice(AddNoticeInputSpec addNoticeInputSpec) {
-
+        noticeMapper.addNotice(addNoticeInputSpec);
     }
 
     @Override
     public FindNoticeOutputSpec getNoticeById(Long noticeId) {
-        return null;
+        noticeMapper.countNotice(noticeId);
+        return new FindNoticeOutputSpec()
+                .noticeJoinMemberToFindOutputSpec(noticeMapper.getNoticeById(noticeId));
     }
 
     @Override
     public List<FindListNoticeOutputSpec> getNoticeList(FindListNoticeInputSpec findListNoticeInputSpec) {
-        return null;
+        return noticeMapper.getNoticeList(findListNoticeInputSpec).stream()
+                .map(m -> new FindListNoticeOutputSpec()
+                        .noticeToFindListOutputSpec(m))
+                .collect(Collectors.toList());
     }
 
     @Override
     public void editNotice(EditNoticeInputSpec editNoticeForm) {
-
+        noticeMapper.editNotice(editNoticeForm);
     }
 
     @Override
     public void deleteNoticeById(Long noticeId) {
-
+        noticeMapper.deleteNoticeById(noticeId);
     }
 }

@@ -55,6 +55,9 @@ public class NoticeController {
     public ResponseEntity addNotice(
             @RequestBody AddNoticeInputSpec addNoticeInputSpec
             ){
+        System.out.println(addNoticeInputSpec.getContent());
+        System.out.println(addNoticeInputSpec.getTitle());
+        System.out.println(addNoticeInputSpec.getWriterId());
         noticeService.addNotice(addNoticeInputSpec);
         return ResponseEntity.ok().build();
     }

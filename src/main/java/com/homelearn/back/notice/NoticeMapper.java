@@ -15,7 +15,7 @@ public interface NoticeMapper {
     void addNotice(AddNoticeInputSpec addNoticeInputSpec);
     //Read
     NoticeJoinMember getNoticeById(Long noticeId);
-    List<NoticeJoinMember> getNoticeList(FindListNoticeInputSpec findListNoticeInputSpec);
+    List<Notice> getNoticeList(FindListNoticeInputSpec findListNoticeInputSpec);
     //Update
     void editNotice(EditNoticeInputSpec editNoticeInputSpec);
     void countNotice(Long noticeId);

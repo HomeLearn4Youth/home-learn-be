@@ -1,5 +1,10 @@
 package com.homelearn.back.house.entity;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class HouseInfo {
     private Long aptCode;
     private Integer buildYear;
