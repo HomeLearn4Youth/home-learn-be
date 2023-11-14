@@ -3,29 +3,68 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.homelearn.back.notice.NoticeMapper">
-    <resultMap id="notice" type="com.homelearn.back.notice.entity.Notice">
-        <result column="id" property="id"></result>
-        <result column="title" property="title"></result>
-        <result column="content" property="content"></result>
-        <result column="view" property="viewCount"></result>
-        <result column="created_at" property="creationTime"></result>
-        <result column="user_id" property="writerId"></result>
+    <resultMap id="notice" type="com.homelearn.back.notice.entity.NoticeJoinMember">
+        <result column="notice_id" property="id"></result>
+        <result column="notice_title" property="title"></result>
+        <result column="notice_content" property="content"></result>
+        <result column="notice_view_count" property="viewCount"></result>
+        <result column="notice_created_at" property="creationTime"></result>
+        <result column="notice_writer_id" property="writerId"></result>
+        <result column="notice_writer_password" property="writerPassword"></result>
+        <result column="notice_writer_email" property="writerEmail"></result>
+        <result column="notice_writer_name" property="writerName"></result>
+        <result column="notice_writer_admin" property="writerAdmin"></result>
     </resultMap>
 
-    <insert id="addNotice" parameterType="NoticeForm">
+    <insert id="addNotice" parameterType="AddNoticeInputSpec">
         insert into notices(title, content, user_id)
         values (#{title}, #{content}, ${writerId})
     </insert>
 
-    <select id="getNoticeById" parameterType="Long" resultMap="notice">
+    <select id="getNoticeById" parameterType="Long" resultMap="NoticeJoinMember">
         select id, title, content, `view`, created_at, user_id
         from notices
         where id = #{noticeId}
     </select>
 
-    <select id="getNoticeList" resultMap="notice">
-        select id, title, content, `view`, created_at, user_id
-        from notices
+    <select id="getNoticeList" parameterType="FindListNoticeInputSpec" resultMap="NoticeJoinMember">
+        select notices.id as notice_id,
+               notices.title as notice_title,
+               notices.content as notice_content,
+               notices.`view` as notice_view_count,
+               notices.created_at as notice_created_at,
+               notices.user_id as notice_writer_id,
+               users.`password` as notice_writer_password,
+               users.email as notice_writer_email,
+               users.`name` as notice_writer_name,
+               users.`admin` as notice_writer_admin
+        from notices join users on ${userId}=users.id
+        order by notices.created_at;
+    </select>
+
+    <select id="getNoticeList" parameterType="FindListNoticeInputSpec" resultMap="NoticeJoinMember">
+        SELECT
+        notices.id AS notice_id,
+        notices.title AS notice_title,
+        notices.content AS notice_content,
+        notices.`view` AS notice_view_count,
+        notices.created_at AS notice_created_at,
+        notices.user_id AS notice_writer_id,
+        users.`password` AS notice_writer_password,
+        users.email AS notice_writer_email,
+        users.`name` AS notice_writer_name,
+        users.`admin` AS notice_writer_admin
+        FROM
+        notices
+        JOIN users ON notices.user_id = users.id
+        <where>
+            <if test="searchText != null and searchText != ''">
+                AND (notices.title LIKE CONCAT('%', #{searchText}, '%')
+                OR notices.content LIKE CONCAT('%', #{searchText}, '%'))
+            </if>
+        </where>
+        ORDER BY notices.created_at
+        LIMIT ${count} OFFSET ${startIndex}
     </select>
 
     <update id="editNotice" parameterType="NoticeForm">

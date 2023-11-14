@@ -10,10 +10,8 @@ import lombok.*;
 @Setter
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class NoticeForm {
-    Long noticeId;
-    String title;
-    String content;
-    String time;
-    Long writerId;
+public class FindListNoticeOutputSpec {
+    private Long noticeId;
+    private String title;
+    private String time;
 }

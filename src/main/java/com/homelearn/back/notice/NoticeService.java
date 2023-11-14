@@ -1,19 +1,18 @@
 package com.homelearn.back.notice;
 
-import com.homelearn.back.notice.dto.NoticeForm;
-import com.homelearn.back.notice.entity.Notice;
+import com.homelearn.back.notice.dto.*;
 
 import java.util.List;
 
 public interface NoticeService {
     //Create
-    void addNotice(NoticeForm noticeForm);
+    void addNotice(AddNoticeInputSpec addNoticeInputSpec);
     //Read
-    Notice getNoticeById(Long noticeId);
-    List<Notice> getNoticeList();
+    FindNoticeOutputSpec getNoticeById(Long noticeId);
+    List<FindListNoticeOutputSpec> getNoticeList(FindListNoticeInputSpec findListNoticeInputSpec);
     //Update
-    void editNotice(NoticeForm noticeForm);
-    void countNotice(Long noticeId);
+    void editNotice(EditNoticeInputSpec editNoticeForm);
     //Delete
     void deleteNoticeById(Long noticeId);
+
 }

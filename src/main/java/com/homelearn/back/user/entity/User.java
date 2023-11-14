@@ -1,5 +1,6 @@
 package com.homelearn.back.user.entity;
 
+import com.homelearn.back.notice.entity.Notice;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

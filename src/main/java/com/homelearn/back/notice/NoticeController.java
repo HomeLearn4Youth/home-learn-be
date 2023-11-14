@@ -1,6 +1,6 @@
 package com.homelearn.back.notice;
 
-import com.homelearn.back.notice.dto.NoticeForm;
+import com.homelearn.back.notice.dto.*;
 import com.homelearn.back.notice.entity.Notice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,10 +21,9 @@ public class NoticeController {
      * @return
      */
     @GetMapping("/find/{noticeId}")
-    public ResponseEntity<Notice> findNotice(
+    public ResponseEntity<FindNoticeOutputSpec> findNotice(
             @PathVariable("noticeId") Long noticeId
     ){
-        noticeService.countNotice(noticeId);
         return ResponseEntity.ok().body(noticeService.getNoticeById(noticeId));
     }
 
@@ -33,38 +32,40 @@ public class NoticeController {
      * @return
      */
     @GetMapping("/findlist")
-    public ResponseEntity<List<Notice>> findNoticeList(
-
-    ){
-        return ResponseEntity.ok().body(noticeService.getNoticeList());
+    public ResponseEntity<List<FindListNoticeOutputSpec>> findNoticeList(
+            @RequestBody FindListNoticeInputSpec findListNoticeInputSpec
+            ){
+        return ResponseEntity.ok().body(noticeService.getNoticeList(findListNoticeInputSpec));
     }
 
     /**
      *
-     * @param noticeForm
+     * @param editNoticeInputSpec
      * @return
      */
     @PutMapping("/edit")
-    public ResponseEntity<?> editNotice(
-            @RequestBody NoticeForm noticeForm
+    public ResponseEntity editNotice(
+            @RequestBody EditNoticeInputSpec editNoticeInputSpec
             ){
-        noticeService.editNotice(noticeForm);
+        noticeService.editNotice(editNoticeInputSpec);
         return ResponseEntity.ok().build();
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addNotice(
-            @RequestBody NoticeForm noticeForm
-    ){
-        noticeService.addNotice(noticeForm);
+    public ResponseEntity addNotice(
+            @RequestBody AddNoticeInputSpec addNoticeInputSpec
+            ){
+        noticeService.addNotice(addNoticeInputSpec);
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete/{noticeId}")
-    public ResponseEntity<?> deleteNotice(
+    public ResponseEntity deleteNotice(
             @PathVariable("noticeId") Long noticeId
     ){
         noticeService.deleteNoticeById(noticeId);
         return ResponseEntity.ok().build();
     }
+
+
 }

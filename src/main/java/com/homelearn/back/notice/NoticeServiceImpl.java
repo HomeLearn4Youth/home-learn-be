@@ -1,6 +1,6 @@
 package com.homelearn.back.notice;
 
-import com.homelearn.back.notice.dto.NoticeForm;
+import com.homelearn.back.notice.dto.*;
 import com.homelearn.back.notice.entity.Notice;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,32 +15,27 @@ public class NoticeServiceImpl implements NoticeService{
 
 
     @Override
-    public void addNotice(NoticeForm noticeForm) {
-        noticeMapper.addNotice(noticeForm);
+    public void addNotice(AddNoticeInputSpec addNoticeInputSpec) {
+
     }
 
     @Override
-    public Notice getNoticeById(Long noticeId) {
-        return noticeMapper.getNoticeById(noticeId);
+    public FindNoticeOutputSpec getNoticeById(Long noticeId) {
+        return null;
     }
 
     @Override
-    public List<Notice> getNoticeList() {
-        return noticeMapper.getNoticeList();
+    public List<FindListNoticeOutputSpec> getNoticeList(FindListNoticeInputSpec findListNoticeInputSpec) {
+        return null;
     }
 
     @Override
-    public void editNotice(NoticeForm noticeForm) {
-        noticeMapper.editNotice(noticeForm);
-    }
+    public void editNotice(EditNoticeInputSpec editNoticeForm) {
 
-    @Override
-    public void countNotice(Long noticeId) {
-        noticeMapper.countNotice(noticeId);
     }
 
     @Override
     public void deleteNoticeById(Long noticeId) {
-        noticeMapper.deleteNoticeById(noticeId);
+
     }
 }
