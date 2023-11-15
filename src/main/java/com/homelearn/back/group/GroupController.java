@@ -33,7 +33,7 @@ public class GroupController {
 
     @DeleteMapping("/item/delete")
     public ResponseEntity<?> deleteGroupItem(
-        @RequestBody GroupItemInput groupItemInput
+        @ModelAttribute GroupItemInput groupItemInput
     ){
         groupService.deleteGroupItem(groupItemInput);
         return ResponseEntity.ok().build();

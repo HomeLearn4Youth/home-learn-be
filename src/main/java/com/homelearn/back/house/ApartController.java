@@ -20,7 +20,7 @@ public class ApartController {
      */
     @GetMapping("/findlist/{userId}")
     public ResponseEntity<List<ApartOutputSpec>> findAptList(
-            @RequestBody ApartListInputSpec inputSpec,
+            @ModelAttribute ApartListInputSpec inputSpec,
             @PathVariable("userId") Long userId
             ){
         return ResponseEntity.ok().body(
@@ -46,8 +46,9 @@ public class ApartController {
 
     @GetMapping("/history")
     public ResponseEntity<List<DealListOutputSpec>> findAptDeal(
-            @RequestBody DealListInputSpec inputSpec
+            @ModelAttribute DealListInputSpec inputSpec
             ){
+        System.out.println(inputSpec.toString());
         return ResponseEntity.ok().body(apartService.getApartDealList(inputSpec));
     }
 }

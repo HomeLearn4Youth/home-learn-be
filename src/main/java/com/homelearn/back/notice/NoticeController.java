@@ -33,7 +33,7 @@ public class NoticeController {
      */
     @GetMapping("/findlist")
     public ResponseEntity<List<FindListNoticeOutputSpec>> findNoticeList(
-            @RequestBody FindListNoticeInputSpec findListNoticeInputSpec
+            @ModelAttribute FindListNoticeInputSpec findListNoticeInputSpec
             ){
         return ResponseEntity.ok().body(noticeService.getNoticeList(findListNoticeInputSpec));
     }
