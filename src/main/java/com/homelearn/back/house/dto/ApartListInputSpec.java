@@ -15,4 +15,5 @@ public class ApartListInputSpec {
     private Integer startIndex; // 시작 번호
     private Integer count; //몇개 뽑을지
     private Boolean isLike; //관심 영역만 출력 조건
+    private Long groupId; //그룹 아이디 설정 조건
 }

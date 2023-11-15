@@ -9,20 +9,20 @@ public class HouseJoinLike {
     //houseInfo
     private Long aptCode;
 
-    private Integer buildYear;
+    private String buildYear;
     private String roadName;
-    private String roadNameBonbun;
-    private String roadNameBubun;
-    private String roadNameSeq;
-    private String roadNameBasementCode;
-    private String roadNameCode;
+    private Long roadNameBonbun;
+    private Long roadNameBubun;
+    private Long roadNameSeq;
+    private Long roadNameBasementCode;
+    private Long roadNameCode;
     private String dong;
-    private String bonbun;
-    private String bubun;
-    private String sigunguCode;
-    private String eubmyundongCode;
-    private String dongCode;
-    private String landCode;
+    private Long bonbun;
+    private Long bubun;
+    private Long sigunguCode;
+    private Long eubmyundongCode;
+    private Long dongCode;
+    private Long landCode;
     private String apartmentName;
     private String jibun;
     private String lng;

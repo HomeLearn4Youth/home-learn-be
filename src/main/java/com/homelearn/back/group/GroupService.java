@@ -1,17 +1,15 @@
 package com.homelearn.back.group;
 
+import com.homelearn.back.group.dto.GroupParam;
 import com.homelearn.back.group.entity.Group;
-import com.homelearn.back.group.dto.GroupForm;
-import com.homelearn.back.group.dto.GroupOutput;
-import com.homelearn.back.group.dto.GroupItemInput;
+import com.homelearn.back.group.dto.GroupItemInputSpec;
 
 import java.util.List;
 
 public interface GroupService {
-    void addGroup(GroupForm newGroup);
+    void addGroup(GroupParam param);
     void deleteGroup(Long groupId);
-    List<GroupOutput> findGroupListByUserId(Long groupId);
-    void addGroupItem(GroupItemInput groupItemInput);
-    void deleteGroupItem(GroupItemInput groupItemInput);
-    void editGroupName(Group editForm);
+    List<Group> findGroupListByUserId(Long userId);
+    void addGroupItem(GroupItemInputSpec groupItemInputSpec);
+    void deleteGroupItem(GroupItemInputSpec groupItemInputSpec);
 }
