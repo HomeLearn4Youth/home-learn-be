@@ -2,16 +2,8 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.homelearn.ddubeok2.house.ApartMapper">
-    <resultMap id="apart" type="com.homelearn.ddubeok2.house.Apart">
-        <result column="no" property="no"></result>
-        <result column="dealAmount" property="dealAmount"></result>
-        <result column="dealYear" property="dealYear"></result>
-        <result column="dealMonth" property="dealMonth"></result>
-        <result column="dealDay" property="dealDay"></result>
-        <result column="area" property="area"></result>
-        <result column="floor" property="floor"></result>
-        <result column="cancelDealType" property="cancelDealType"></result>
+<mapper namespace="com.homelearn.back.house.ApartMapper">
+    <resultMap id="houseJoinLike" type="com.homelearn.back.house.entity.HouseJoinLike">
         <result column="aptCode" property="aptCode"></result>
         <result column="buildYear" property="buildYear"></result>
         <result column="roadName" property="roadName"></result>
@@ -31,30 +23,124 @@
         <result column="jibun" property="jibun"></result>
         <result column="lng" property="lng"></result>
         <result column="lat" property="lat"></result>
+        <result column="like_status" property="likeStatus"></result>
+        <result column="user_id" property="userId"></result>
     </resultMap>
-    <select id="getTotalApart" resultMap="apart">
-        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
-        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
-        limit 1000;
+
+    <resultMap id="dealListOutputSpec" type="com.homelearn.back.house.dto.DealListOutputSpec">
+        <result column="aptCode" property="aptCode"/>
+        <result column="type" property="type"/>
+        <result column="dealDate" property="dealDate"/>
+        <result column="area" property="area"/>
+        <result column="floor" property="floor"/>
+        <result column="dealAmount" property="dealAmount"/>
+    </resultMap>
+
+    <select id="getApartList" parameterType="ApartListParam" resultMap="houseJoinLike">
+        SELECT
+            hi.aptCode as aptCode,
+            hi.buildYear as buildYear,
+            hi.roadName as roadName,
+            hi.roadNameBonbun as roadNameBonbun,
+            hi.roadNameBubun as roadNameBubun,
+            hi.roadNameSeq as roadNameSeq,
+            hi.roadNameBasementCode as roadNameBasementCode,
+            hi.roadNameCode as roadNameCode,
+            hi.dong as dong,
+            hi.bonbun as bonbun,
+            hi.bubun as bubun,
+            hi.sigunguCode as sigunguCode,
+            hi.eubmyundongCode as eubmyundongCode,
+            hi.dongCode as dongCode,
+            hi.landCode as landCode,
+            hi.apartmentName as apartmentName,
+            hi.jibun as jibun,
+            hi.lng as lng,
+            hi.lat as lat,
+            CASE WHEN lk.id IS NOT NULL THEN 'true' ELSE 'false' END AS like_status,
+            ${userId} as user_id
+        FROM
+            houseInfo hi
+        LEFT JOIN
+        (SELECT * FROM likes WHERE user_id = ${userId}) lk
+        ON
+        hi.aptCode = lk.houseInfo_id
+        <if test="dongCode != null">
+            WHERE hi.dongCode = ${dongCode}
+        </if>
+        <if test="isLike != null and isLike">
+            AND lk.id IS NOT NULL
+        </if>
+
+        <if test="startIndex != null and count != null">
+            LIMIT ${startIndex}, ${count}
+        </if>
+
     </select>
-    <select id="getApartListByName" resultMap="apart">
-        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
-        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
-        where apartmentName like concat('%',#{name},'%');
+
+    <select id="getApartInfoById" parameterType="ApartInfoParam" resultMap="houseJoinLike">
+        SELECT
+        hi.aptCode as aptCode,
+        hi.buildYear as buildYear,
+        hi.roadName as roadName,
+        hi.roadNameBonbun as roadNameBonbun,
+        hi.roadNameBubun as roadNameBubun,
+        hi.roadNameSeq as roadNameSeq,
+        hi.roadNameBasementCode as roadNameBasementCode,
+        hi.roadNameCode as roadNameCode,
+        hi.dong as dong,
+        hi.bonbun as bonbun,
+        hi.bubun as bubun,
+        hi.sigunguCode as sigunguCode,
+        hi.eubmyundongCode as eubmyundongCode,
+        hi.dongCode as dongCode,
+        hi.landCode as landCode,
+        hi.apartmentName as apartmentName,
+        hi.jibun as jibun,
+        hi.lng as lng,
+        hi.lat as lat,
+        CASE WHEN lk.id IS NOT NULL THEN 'true' ELSE 'false' END AS like_status,
+        ${userId} as user_id
+        FROM
+        houseInfo hi
+        LEFT JOIN
+        (SELECT * FROM likes WHERE user_id = ${userId}) lk
+        ON
+        hi.aptCode = lk.houseInfo_id
+        <if test="aptCode != null and aptCode != ''">
+            WHERE hi.aptCode = ${aptCode}
+        </if>
     </select>
-    <select id="getApartListByDongName" resultMap="apart">
-        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
-        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
-        where houseinfo.dong like concat('%',#{name},'%');
+
+    <select id="getApartDealList" parameterType="DealListInputSpec" resultMap="dealListOutputSpec">
+        select * from
+            (SELECT
+                 aptCode,
+                 '매매' AS `type`,
+                 CONCAT(dealYear, '-', LPAD(dealMonth, 2, '0'), '-', LPAD(dealDay, 2, '0')) AS `dealDate`,
+                 area,
+                 floor,
+                 dealAmount
+             FROM
+                 housedeal
+             where aptCode=${apartCode}
+             UNION
+             SELECT
+                 aptCode,
+                 '전월세' AS type,
+                 CONCAT(dealYear, '-', LPAD(dealMonth, 2, '0'), '-', LPAD(dealDay, 2, '0')) AS `dealDate`,
+                 areaForExclusiveUse AS area,
+                 floor,
+                 CONCAT(deposit, ' (', monthlyRent, ')') AS dealAmount
+             FROM houselease
+             where aptCode=${apartCode}) as combined
+        <where>
+            <if test="type != null and type != ''">
+                `type` = #{type}
+            </if>
+        </where>
+        order by dealDate desc
+        LIMIT ${count} OFFSET ${startIndex}
     </select>
-    <select id="getApartListByDongCode" resultMap="apart">
-        select `no`,dealAmount,dealYear,dealMonth,dealDay,area,floor,cancelDealType,houseInfo.aptCode as aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
-        from housedeal join houseinfo on housedeal.aptCode=houseinfo.aptCode
-        where houseinfo.dongCode like concat(#{code},'%');
-    </select>
-    <select id="getApartInfoById" resultType="ApartInfo">
-        select aptCode,buildYear,roadName,roadNameBonbun,roadNameBubun,roadNameSeq,roadNameBasementCode,roadNameCode,dong,bonbun,bubun,sigunguCode,eubmyundongCode,dongCode,landCode,apartmentName,jibun,lng,lat
-        from houseinfo
-        where aptCode=#{id};
-    </select>
+
 </mapper>
