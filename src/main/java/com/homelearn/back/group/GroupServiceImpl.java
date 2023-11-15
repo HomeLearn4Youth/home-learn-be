@@ -4,8 +4,6 @@ import com.homelearn.back.group.dto.*;
 import com.homelearn.back.group.entity.Group;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -14,52 +12,30 @@ public class GroupServiceImpl implements GroupService{
 
     private final GroupMapper groupMapper;
 
+
     @Override
-    public void addGroup(GroupForm newGroup) {
-        groupMapper.addGroup(newGroup);
+    public void addGroup(GroupParam param) {
+        groupMapper.addGroup(param);
     }
 
     @Override
     public void deleteGroup(Long groupId) {
-
-
-
-        List<GroupItemOutput> apartIsInGroups = groupMapper.findGroupListByGroupId(groupId);
-        // cascade로 수정하기 귀찮아서 이렇게 씀.. 나중에 바꿔야함..
-        for (GroupItemOutput apartIsInGroup : apartIsInGroups) {
-            GroupItemInput groupItemInput = new GroupItemInput();
-            groupItemInput.setGroupId(groupId);
-            groupItemInput.setLikeId(apartIsInGroup.getLikeId());
-            groupMapper.deleteGroupItem(groupItemInput);
-        }
         groupMapper.deleteGroup(groupId);
     }
+
     @Override
-    public void editGroupName(Group editForm){
-        groupMapper.editGroupName(editForm);
+    public List<Group> findGroupListByUserId(Long groupId) {
+        return groupMapper.findGroupListByUserId(groupId);
     }
 
     @Override
-    public List<GroupOutput> findGroupListByUserId(Long userId) {
-        List<Group> groupListByUserId = groupMapper.findGroupListByUserId(userId);
-        List<GroupOutput> list = new ArrayList<>();
-        for (Group group : groupListByUserId) {
-            GroupOutput groupOutput = new GroupOutput();
-            groupOutput.setGroupId(group.getId());
-            groupOutput.setName(group.getName());
-            groupOutput.setUserLikeGroups(groupMapper.findGroupListByGroupId(group.getUserId()));
-            list.add(groupOutput);
-        }
-        return list;
+    public void addGroupItem(GroupItemInputSpec groupItemInputSpec) {
+        groupMapper.addGroupItem(groupItemInputSpec);
     }
 
     @Override
-    public void addGroupItem(GroupItemInput groupItemInput) {
-        groupMapper.addGroupItem(groupItemInput);
+    public void deleteGroupItem(GroupItemInputSpec groupItemInputSpec) {
+        groupMapper.deleteGroupItem(groupItemInputSpec);
     }
 
-    @Override
-    public void deleteGroupItem(GroupItemInput groupItemInput) {
-        groupMapper.deleteGroupItem(groupItemInput);
-    }
 }

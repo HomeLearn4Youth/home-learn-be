@@ -10,7 +10,7 @@ import lombok.*;
 @Setter
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class GroupItemInput {
+public class GroupItemInputSpec {
     private Long likeId;
     private Long groupId;
 }

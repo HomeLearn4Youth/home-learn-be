@@ -1,9 +1,8 @@
 package com.homelearn.back.group;
 
+import com.homelearn.back.group.dto.GroupParam;
+import com.homelearn.back.group.dto.GroupItemInputSpec;
 import com.homelearn.back.group.entity.Group;
-import com.homelearn.back.group.dto.GroupForm;
-import com.homelearn.back.group.dto.GroupItemInput;
-import com.homelearn.back.group.dto.GroupItemOutput;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -11,11 +10,9 @@ import java.util.List;
 @Mapper
 public interface GroupMapper {
 
-    void addGroup(GroupForm newGroup);
+    void addGroup(GroupParam param);
     void deleteGroup(Long groupId);
-    List<Group> findGroupListByUserId(Long userId);
-    List<GroupItemOutput> findGroupListByGroupId(Long groupId);
-    void addGroupItem(GroupItemInput groupItemInput);
-    void deleteGroupItem(GroupItemInput groupItemInput);
-    void editGroupName(Group editForm);
+    List<Group> findGroupListByUserId(Long groupId);
+    void addGroupItem(GroupItemInputSpec groupItemInputSpec);
+    void deleteGroupItem(GroupItemInputSpec groupItemInputSpec);
 }
