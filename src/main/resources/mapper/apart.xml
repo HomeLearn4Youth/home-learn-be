@@ -37,48 +37,87 @@
     </resultMap>
 
     <select id="getApartList" parameterType="ApartListParam" resultMap="houseJoinLike">
-        SELECT
-            hi.aptCode as aptCode,
-            hi.buildYear as buildYear,
-            hi.roadName as roadName,
-            hi.roadNameBonbun as roadNameBonbun,
-            hi.roadNameBubun as roadNameBubun,
-            hi.roadNameSeq as roadNameSeq,
-            hi.roadNameBasementCode as roadNameBasementCode,
-            hi.roadNameCode as roadNameCode,
-            hi.dong as dong,
-            hi.bonbun as bonbun,
-            hi.bubun as bubun,
-            hi.sigunguCode as sigunguCode,
-            hi.eubmyundongCode as eubmyundongCode,
-            hi.dongCode as dongCode,
-            hi.landCode as landCode,
-            hi.apartmentName as apartmentName,
-            hi.jibun as jibun,
-            hi.lng as lng,
-            hi.lat as lat,
-            CASE WHEN lk.id IS NOT NULL THEN 'true' ELSE 'false' END AS like_status,
-            #{userId} as user_id
-        FROM
-            houseInfo hi
-        LEFT JOIN
-        (SELECT * FROM likes WHERE user_id = #{userId}) lk
-        ON
-        hi.aptCode = lk.houseInfo_id
-        <where>
-            <if test="dongCode != null">
-                hi.dongCode = #{dongCode}
-            </if>
-            <if test="isLike != null and isLike">
-                and lk.id IS NOT NULL
-            </if>
-        </where>
+        <choose>
+            <!-- groupId가 제공됐을 때 -->
+            <when test="groupId != null">
+                SELECT
+                hi.aptCode as aptCode,
+                hi.apartmentName as apartmentName,
+                hi.dong as dong,
+                hi.bonbun as bonbun,
+                hi.bubun as bubun,
+                hi.roadName as aptRoadName,
+                hi.roadNameBonbun as aptRoadNameBonbun,
+                hi.roadNameBubun as aptRoadNameBubun,
+                hi.lng as lng,
+                hi.lat as lat,
+                CASE WHEN userLikes.id IS NOT NULL THEN true ELSE false END as like_status
+                FROM
+                houseInfo hi
+                INNER JOIN
+                likes ON hi.aptCode = likes.houseinfo_id
+                INNER JOIN
+                group_items ON likes.id = group_items.like_id
+                INNER JOIN
+                `groups` ON group_items.group_id = `groups`.id
+                LEFT JOIN
+                likes userLikes ON hi.aptCode = userLikes.houseinfo_id AND userLikes.user_id = #{userId}
+                <where>
+                    groups.id = #{groupId}
+                    <if test="dongCode != null">
+                        AND hi.dongCode = #{dongCode}
+                    </if>
+                    <if test="isLike != null and isLike">
+                        AND userLikes.id IS NOT NULL
+                    </if>
+                </where>
+                <if test="startIndex != null and count != null">
+                    LIMIT #{startIndex}, #{count}
+                </if>
+            </when>
 
-
-        <if test="startIndex != null and count != null">
-            LIMIT #{startIndex}, #{count}
-        </if>
-
+            <!-- groupId가 제공되지 않았을 때 -->
+            <otherwise>
+                SELECT
+                hi.aptCode as aptCode,
+                hi.buildYear as buildYear,
+                hi.roadName as roadName,
+                hi.roadNameBonbun as roadNameBonbun,
+                hi.roadNameBubun as roadNameBubun,
+                hi.roadNameSeq as roadNameSeq,
+                hi.roadNameBasementCode as roadNameBasementCode,
+                hi.roadNameCode as roadNameCode,
+                hi.dong as dong,
+                hi.bonbun as bonbun,
+                hi.bubun as bubun,
+                hi.sigunguCode as sigunguCode,
+                hi.eubmyundongCode as eubmyundongCode,
+                hi.dongCode as dongCode,
+                hi.landCode as landCode,
+                hi.apartmentName as apartmentName,
+                hi.jibun as jibun,
+                hi.lng as lng,
+                hi.lat as lat,
+                CASE WHEN lk.id IS NOT NULL THEN 'true' ELSE 'false' END AS like_status
+                FROM
+                houseInfo hi
+                LEFT JOIN
+                (SELECT * FROM likes WHERE user_id = #{userId}) lk
+                ON
+                hi.aptCode = lk.houseInfo_id
+                <where>
+                    <if test="dongCode != null">
+                        hi.dongCode = #{dongCode}
+                    </if>
+                    <if test="isLike != null and isLike">
+                        AND lk.id IS NOT NULL
+                    </if>
+                </where>
+                <if test="startIndex != null and count != null">
+                    LIMIT #{startIndex}, #{count}
+                </if>
+            </otherwise>
+        </choose>
     </select>
 
     <select id="getApartInfoById" parameterType="ApartInfoParam" resultMap="houseJoinLike">

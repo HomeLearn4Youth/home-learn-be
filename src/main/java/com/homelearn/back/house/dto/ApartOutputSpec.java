@@ -15,11 +15,11 @@ public class ApartOutputSpec {
     private Long aptId;
     private String aptName;
     private String dong;
-    private String bonbun;
-    private String bubun;
+    private Long bonbun;
+    private Long bubun;
     private String aptRoadName;
-    private String aptRoadNameBonbun;
-    private String aptRoadNameBubun;
+    private Long aptRoadNameBonbun;
+    private Long aptRoadNameBubun;
     private Boolean likeStatus; // 좋아요 상태
     private String lng;
     private String lat;
@@ -27,7 +27,7 @@ public class ApartOutputSpec {
 
     public ApartOutputSpec houseJoinLikeToApartOutputSpec(HouseJoinLike m){
         return ApartOutputSpec.builder()
-                .aptId(m.getUserId())
+                .aptId(m.getAptCode())
                 .aptName(m.getApartmentName())
                 .dong(m.getDong())
                 .bonbun(m.getBonbun())
