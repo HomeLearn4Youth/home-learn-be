@@ -58,22 +58,25 @@
             hi.lng as lng,
             hi.lat as lat,
             CASE WHEN lk.id IS NOT NULL THEN 'true' ELSE 'false' END AS like_status,
-            ${userId} as user_id
+            #{userId} as user_id
         FROM
             houseInfo hi
         LEFT JOIN
-        (SELECT * FROM likes WHERE user_id = ${userId}) lk
+        (SELECT * FROM likes WHERE user_id = #{userId}) lk
         ON
         hi.aptCode = lk.houseInfo_id
-        <if test="dongCode != null">
-            WHERE hi.dongCode = ${dongCode}
-        </if>
-        <if test="isLike != null and isLike">
-            AND lk.id IS NOT NULL
-        </if>
+        <where>
+            <if test="dongCode != null">
+                hi.dongCode = #{dongCode}
+            </if>
+            <if test="isLike != null and isLike">
+                and lk.id IS NOT NULL
+            </if>
+        </where>
+
 
         <if test="startIndex != null and count != null">
-            LIMIT ${startIndex}, ${count}
+            LIMIT #{startIndex}, #{count}
         </if>
 
     </select>
@@ -100,15 +103,15 @@
         hi.lng as lng,
         hi.lat as lat,
         CASE WHEN lk.id IS NOT NULL THEN 'true' ELSE 'false' END AS like_status,
-        ${userId} as user_id
+        #{userId} as user_id
         FROM
         houseInfo hi
         LEFT JOIN
-        (SELECT * FROM likes WHERE user_id = ${userId}) lk
+        (SELECT * FROM likes WHERE user_id = #{userId}) lk
         ON
         hi.aptCode = lk.houseInfo_id
         <if test="aptCode != null and aptCode != ''">
-            WHERE hi.aptCode = ${aptCode}
+            WHERE hi.aptCode = #{aptCode}
         </if>
     </select>
 
@@ -123,7 +126,7 @@
                  dealAmount
              FROM
                  housedeal
-             where aptCode=${apartCode}
+             where aptCode=#{apartCode}
              UNION
              SELECT
                  aptCode,
@@ -133,14 +136,15 @@
                  floor,
                  CONCAT(deposit, ' (', monthlyRent, ')') AS dealAmount
              FROM houselease
-             where aptCode=${apartCode}) as combined
+             where aptCode=#{apartCode}
+             ) as combined
         <where>
             <if test="type != null and type != ''">
                 `type` = #{type}
             </if>
         </where>
         order by dealDate desc
-        LIMIT ${count} OFFSET ${startIndex}
+        LIMIT #{count} OFFSET #{startIndex}
     </select>
 
 </mapper>
