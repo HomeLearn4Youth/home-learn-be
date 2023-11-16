@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.homelearn.back.review.ReviewMapper">
+    <resultMap id="reviewJoinUser" type="com.homelearn.back.review.entity.ReviewJoinUser">
+        <result column="user_id" property="userId"/>
+        <result column="content" property="content"/>
+        <result column="apt_code" property="aptCode"/>
+        <result column="review_id" property="reviewId"/>
+        <result column="create_time" property="createTime"/>
+        <result column="password" property="password"/>
+        <result column="email" property="email"/>
+        <result column="name" property="name"/>
+        <result column="role" property="role"/>
+    </resultMap>
+    <select id="findReviewListByAptCode" parameterType="FindListReviewInputSpec" resultMap="reviewJoinUser">
+        SELECT
+        r.id as review_id,
+        r.content,
+        r.user_id,
+        r.aptCode,
+        r.create_time,
+        u.password,
+        u.email,
+        u.name,
+        u.role
+        FROM
+        reviews r
+        JOIN
+        users u ON r.user_id = u.id
+        WHERE
+        r.aptCode = #{aptCode}
+        ORDER BY
+        r.create_time DESC
+        <if test="startIndex != null and count != null">
+            LIMIT #{startIndex}, #{count}
+        </if>
+    </select>
+
+    <insert id="addReview" parameterType="AddReviewParam">
+        INSERT INTO reviews (content, user_id, aptCode)
+        VALUES (#{content}, #{userId}, #{aptCode})
+    </insert>
+
+    <delete id="deleteReview" parameterType="DeleteReviewParam">
+        DELETE FROM reviews
+        WHERE id = #{id} AND user_id = #{userId}
+    </delete>
+
+</mapper>
