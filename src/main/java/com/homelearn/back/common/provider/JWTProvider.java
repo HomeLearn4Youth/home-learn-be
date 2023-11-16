@@ -1,6 +1,8 @@
 package com.homelearn.back.common.provider;
 
 import com.homelearn.back.common.config.JwtProperties;
+import com.homelearn.back.common.exception.JwtErrorCode;
+import com.homelearn.back.common.exception.JwtException;
 import com.homelearn.back.common.util.JwtUtils;
 import com.homelearn.back.user.UserService;
 import com.homelearn.back.user.entity.User;
@@ -34,20 +36,22 @@ public class JWTProvider {
         this.secretKey = jwtProperties.getJwtSecretKey();
     }
 
-    public boolean validateToken(final String token){
+    public void validateToken(final String token){
         try{
             Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
-            return true;
         }catch (SignatureException | MalformedJwtException e){
-            log.info("exception : 잘못된 jwt signature");
+            log.debug("exception : 잘못된 jwt signature");
+            throw new JwtException(JwtErrorCode.TOKEN_SIGNATURE_ERROR);
         }catch (ExpiredJwtException e){
-            log.info("exception : 기간 만료");
+            log.debug("exception : 기간 만료");
+            throw new JwtException(JwtErrorCode.EXPIRED_TOKEN);
         }catch (UnsupportedJwtException e){
-            log.info("exception : 지원되지 않는 jwt 토큰");
+            log.debug("exception : 지원되지 않는 jwt 토큰");
+            throw new JwtException(JwtErrorCode.NOT_SUPPORT_TOKEN);
         }catch (IllegalArgumentException e){
-            log.info("exception : 잘못된 jwt 토큰");
+            log.debug("exception : 잘못된 jwt 토큰");
+            throw new JwtException(JwtErrorCode.INVALID_TOKEN);
         }
-        return false;
     }
 
     public Authentication getAuthentication(final String token) {

@@ -1,6 +1,8 @@
 package com.homelearn.back.common.util;
 
 import com.homelearn.back.common.config.JwtProperties;
+import com.homelearn.back.common.exception.JwtErrorCode;
+import com.homelearn.back.common.exception.JwtException;
 import com.homelearn.back.user.entity.User;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -81,14 +83,17 @@ public class JwtUtils {
             return true;
         }catch (SignatureException | MalformedJwtException e){
             log.info("exception : 잘못된 jwt signature");
+            throw new JwtException(JwtErrorCode.TOKEN_SIGNATURE_ERROR);
         }catch (ExpiredJwtException e){
             log.info("exception : 기간 만료");
+            throw new JwtException(JwtErrorCode.EXPIRED_TOKEN);
         }catch (UnsupportedJwtException e){
             log.info("exception : 지원되지 않는 jwt 토큰");
+            throw new JwtException(JwtErrorCode.NOT_SUPPORT_TOKEN);
         }catch (IllegalArgumentException e){
             log.info("exception : 잘못된 jwt 토큰");
+            throw new JwtException(JwtErrorCode.INVALID_TOKEN);
         }
-        return false;
     }
     public String getParseJwt(final String headerAuth){
         if(StringUtils.hasText(headerAuth)&&headerAuth.startsWith("Bearer")){

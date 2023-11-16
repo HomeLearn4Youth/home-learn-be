@@ -16,6 +16,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     @Getter
     private static final String[] PERMITTED_URL={
+//            "/**"
             "/user/add",
             "/user/findemail",
             "/user/findpass",
