@@ -31,7 +31,8 @@ public class JwtFilter extends OncePerRequestFilter {
         log.info("Request path: " + requestPath);
 
         // 요청 경로가 PERMITTED_URL에 포함되는지 확인
-        boolean isPermittedPath = Arrays.asList(SecurityConfig.getPERMITTED_URL()).contains(requestPath);
+        boolean isPermittedPath = Arrays.stream(SecurityConfig.getPERMITTED_URL())
+                .anyMatch(permittedPath -> requestPath.startsWith(permittedPath.replace("/**", "")));
 
         if (isPermittedPath) {
             filterChain.doFilter(request, response);
