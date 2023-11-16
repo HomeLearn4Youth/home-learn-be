@@ -9,22 +9,37 @@
         <result column="name" property="name"></result>
         <result column="user_id" property="userId"></result>
     </resultMap>
+    <resultMap id="groupItem" type="com.homelearn.back.group.entity.GroupItem">
+        <result column="id" property="id"></result>
+        <result column="group_id" property="groupId"></result>
+        <result column="like_id" property="likeId"></result>
+    </resultMap>
+    <select id="findGroup" parameterType="Long" resultMap="group">
+        select *
+        from `groups`
+        where id = #{groupId}
+    </select>
+    <select id="findGroupItem" parameterType="GroupItemInputSpec" resultMap="groupItem">
+        select *
+        from `group_items`
+        where group_id = #{groupId} and like_id = #{likeId}
+    </select>
 
     <insert id="addGroup" parameterType="GroupParam">
         insert into `groups`(name, user_id)
-        values (#{groupName}, ${userId})
+        values (#{groupName}, #{userId})
     </insert>
 
     <delete id="deleteGroup" parameterType="Long">
         delete
         from `groups`
-        where id=${groupId};
+        where id=#{groupId};
     </delete>
 
     <select id="findGroupListByUserId" parameterType="Long" resultMap="group">
         select id, name, user_id
         from `groups`
-        where user_id=${user_id}
+        where user_id=#{user_id}
     </select>
 
     <insert id="addGroupItem" parameterType="GroupItemInputSpec">
@@ -35,7 +50,7 @@
     <delete id="deleteGroupItem" parameterType="GroupItemInputSpec">
         delete
         from group_items
-        where group_id = ${groupId} and like_id = ${likeId};
+        where group_id = #{groupId} and like_id = #{likeId};
     </delete>
 
 </mapper>
