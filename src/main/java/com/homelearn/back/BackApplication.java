@@ -1,6 +1,6 @@
 package com.homelearn.back;
 
-import com.homelearn.back.common.AppConfig;
+import com.homelearn.back.common.config.AppConfig;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Import;

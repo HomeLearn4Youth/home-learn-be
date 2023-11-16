@@ -1,21 +1,21 @@
 package com.homelearn.back.user;
 
 import com.homelearn.back.user.dto.AddUserForm;
-import com.homelearn.back.user.dto.EditUserForm;
-
 import com.homelearn.back.user.dto.LoginForm;
+import com.homelearn.back.user.dto.EditUserForm;
 import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
     private final UserMapper userMapper;
-
     /**
      * 회원가입
      * @param addForm 회원가입 폼
@@ -52,7 +52,11 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     public User login(LoginForm loginForm) {
-        return userMapper.login(loginForm);
+        Optional<User> user= Optional.ofNullable(userMapper.login(loginForm));
+        if(user.isPresent()) {
+            return user.get();
+        }
+        return null;
     }
 
     /**

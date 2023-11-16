@@ -1,6 +1,7 @@
 package com.homelearn.back.user.entity;
 
 import com.homelearn.back.notice.entity.Notice;
+import com.homelearn.back.user.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,5 +14,5 @@ public class User {
     private String password;
     private String email;
     private String name;
-    private Boolean admin;
+    private UserRole role;
 }
