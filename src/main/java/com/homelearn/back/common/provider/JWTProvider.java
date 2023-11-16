@@ -66,10 +66,7 @@ public class JWTProvider {
 
         // 사용자의 권한 목록 설정
         // 클레임에서 권한 정보 가져오기
-        final Collection<? extends GrantedAuthority> authorities = Stream.of(
-                        "ROLE_"+claims.get("role").toString())
-                .map(SimpleGrantedAuthority::new).collect(Collectors.toList());
-        // Authentication 객체 생성 (사용자, 자격 증명, 권한 목록 포함)
-        return new UsernamePasswordAuthenticationToken(user, userId, authorities);
+        // Authentication 객체 생성 (UserDetails 객체와 권한 목록 포함)
+        return new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
     }
 }
