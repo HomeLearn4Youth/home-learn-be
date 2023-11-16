@@ -30,5 +30,6 @@ public class HouseJoinLike {
 
     // 좋아요
     private Boolean likeStatus;
+    private Long likeId;
     private Long userId;
 }
