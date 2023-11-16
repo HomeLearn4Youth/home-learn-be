@@ -1,5 +1,6 @@
 package com.homelearn.back.user;
 
+
 import com.homelearn.back.user.dto.AddUserForm;
 import com.homelearn.back.user.dto.EditUserForm;
 import com.homelearn.back.user.dto.LoginForm;
@@ -15,7 +16,6 @@ public interface UserService {
     List<User> findByAllUsers();
 
     User login(LoginForm loginForm);
-
     //Update
     void editUser(EditUserForm editForm);
 
