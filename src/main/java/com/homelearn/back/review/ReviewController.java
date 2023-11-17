@@ -37,12 +37,7 @@ public class ReviewController {
             @PathVariable("reviewId") Long reviewId,
             @PathVariable("userId") Long userId
     ){
-        reviewService.deleteReview(
-                DeleteReviewParam.builder()
-                        .id(reviewId)
-                        .userId(userId)
-                        .build()
-        );
+        reviewService.deleteReview(reviewId, userId);
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
