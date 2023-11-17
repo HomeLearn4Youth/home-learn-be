@@ -3,12 +3,18 @@ package com.homelearn.back.notice;
 import com.homelearn.back.common.util.MessageUtil;
 import com.homelearn.back.notice.dto.*;
 import com.homelearn.back.notice.entity.Notice;
+import com.homelearn.back.notice.entity.NoticeJoinMember;
+import com.homelearn.back.notice.exception.NoticeErrorCode;
+import com.homelearn.back.notice.exception.NoticeException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.websocket.server.PathParam;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.homelearn.back.notice.exception.NoticeErrorCode.*;
 
 @RestController
 @RequestMapping("/notice")
@@ -44,7 +50,8 @@ public class NoticeController {
         return ResponseEntity.ok().body(
                 MessageUtil.success(
                         noticeService.getNoticeList(findListNoticeInputSpec)
-                            .stream().map(
+                            .stream()
+                                .map(
                                     m -> new FindListNoticeOutputSpec()
                                             .noticeToFindListOutputSpec(m))
                             .collect(Collectors.toList()
@@ -56,19 +63,35 @@ public class NoticeController {
      * @param editNoticeInputSpec
      * @return
      */
-    @PutMapping("/edit")
+    @PutMapping("/edit/{userId}")
     public ResponseEntity<MessageUtil> editNotice(
-            @RequestBody EditNoticeInputSpec editNoticeInputSpec
+            @RequestBody EditNoticeInputSpec editNoticeInputSpec,
+            @PathVariable("userId") Long userId
             ){
-        noticeService.editNotice(editNoticeInputSpec);
+        if (userId!=noticeService.getNoticeById(editNoticeInputSpec.getNoticeId()).getWriterId()){
+            throw new NoticeException(FORBIDDEN_NOTICE);
+        }
+        noticeService.editNotice(NoticeParam.builder()
+                        .id(editNoticeInputSpec.getNoticeId())
+                        .content(editNoticeInputSpec.getContent())
+                        .title(editNoticeInputSpec.getTitle())
+                        .writerId(userId)
+                        .build());
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
-    @PostMapping("/add")
+    @PostMapping("/add/{userId}")
     public ResponseEntity<MessageUtil> addNotice(
-            @RequestBody AddNoticeInputSpec addNoticeInputSpec
+            @RequestBody AddNoticeInputSpec addNoticeInputSpec,
+            @PathVariable("userId") Long userId
             ){
-        noticeService.addNotice(addNoticeInputSpec);
+        //유저 권한 검증해야함  FORBIDDEN_NOTICE 날려줘야함
+
+        noticeService.addNotice(NoticeParam.builder()
+                .title(addNoticeInputSpec.getTitle())
+                .content(addNoticeInputSpec.getContent())
+                .writerId(userId)
+                .build());
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 

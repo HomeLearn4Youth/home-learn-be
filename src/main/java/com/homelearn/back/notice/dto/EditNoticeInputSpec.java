@@ -14,6 +14,4 @@ public class EditNoticeInputSpec {
     private Long noticeId;
     private String title;
     private String content;
-    private String time;
-    private Long writerId;
 }
