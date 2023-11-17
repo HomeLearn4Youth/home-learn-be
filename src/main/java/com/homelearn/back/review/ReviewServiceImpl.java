@@ -8,6 +8,7 @@ import com.homelearn.back.review.dto.AddReviewParam;
 import com.homelearn.back.review.dto.DeleteReviewParam;
 import com.homelearn.back.review.dto.FindListReviewInputSpec;
 import com.homelearn.back.review.dto.FindReviewParam;
+import com.homelearn.back.review.entity.Review;
 import com.homelearn.back.review.entity.ReviewJoinUser;
 import com.homelearn.back.review.exception.ReviewErrorCode;
 import com.homelearn.back.review.exception.ReviewException;
@@ -36,7 +37,8 @@ public class ReviewServiceImpl implements ReviewService{
                         .id(param.getId())
                         .userId(param.getUserId())
                         .build())
-                .orElseThrow(()-> new ReviewException(NOT_EXISTS_REVIEW));
+                .orElseThrow(() -> new ReviewException(NOT_EXISTS_REVIEW));
+
         reviewMapper.deleteReview(param);
     }
 

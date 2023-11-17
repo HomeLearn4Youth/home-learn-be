@@ -10,6 +10,7 @@ import lombok.*;
 @Setter
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+@ToString
 public class FindListReviewInputSpec {
     private Long aptCode; // 리뷰리스트를 볼 aptCode
     private Integer startIndex; // 시작 번호
