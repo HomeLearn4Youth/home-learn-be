@@ -1,8 +1,10 @@
 package com.homelearn.back.dong;
 
+import com.homelearn.back.common.util.MessageUtil;
 import com.homelearn.back.dong.dto.Dong;
 import com.homelearn.back.dong.dto.Gugun;
 import com.homelearn.back.dong.dto.Sido;
+import com.nimbusds.oauth2.sdk.Message;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,19 +18,19 @@ public class DongController {
     private final DongService dongService;
 
     @GetMapping("/sido_list")
-    public ResponseEntity<List<Sido>> getSidoList(){
-        return ResponseEntity.ok().body(dongService.getSidoList());
+    public ResponseEntity<MessageUtil<List<Sido>>> getSidoList(){
+        return ResponseEntity.ok().body(MessageUtil.success(dongService.getSidoList()));
     }
 
     @GetMapping("/gugun_list/{code}")
-    public ResponseEntity<List<Gugun>> getGugunList(
+    public ResponseEntity<MessageUtil<List<Gugun>>> getGugunList(
             @PathVariable("code") String code){
-        return ResponseEntity.ok().body(dongService.getGugunList(code));
+        return ResponseEntity.ok().body(MessageUtil.success(dongService.getGugunList(code)));
     }
 
     @GetMapping("/dong_list/{code}")
-    public ResponseEntity<List<Dong>> getDongList(
+    public ResponseEntity<MessageUtil<List<Dong>>> getDongList(
             @PathVariable("code") String code){
-        return ResponseEntity.ok().body(dongService.getDongList(code));
+        return ResponseEntity.ok().body(MessageUtil.success(dongService.getDongList(code)));
     }
 }

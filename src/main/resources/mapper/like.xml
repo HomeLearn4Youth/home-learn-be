@@ -3,6 +3,18 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.homelearn.back.like.LikeMapper">
+    <resultMap id="like" type="com.homelearn.back.like.entity.Like">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="houseinfo_id" property="aptCode"/>
+    </resultMap>
+
+
+    <select id="findLike" parameterType="LikeParam" resultMap="like">
+        select *
+        from likes
+        where user_id = ${userId} and houseinfo_id = ${aptCode};
+    </select>
 
     <insert id="addLike" parameterType="LikeParam">
         insert into likes(user_id, houseinfo_id)

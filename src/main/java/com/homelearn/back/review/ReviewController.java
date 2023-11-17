@@ -1,5 +1,6 @@
 package com.homelearn.back.review;
 
+import com.homelearn.back.common.util.MessageUtil;
 import com.homelearn.back.review.dto.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/add/{userId}")
-    public ResponseEntity addReview(
+    public ResponseEntity<MessageUtil> addReview(
             @RequestBody ReviewInputSpec input,
             @PathVariable("userId") Long userId
             ){
@@ -27,7 +28,7 @@ public class ReviewController {
                         .userId(userId)
                         .build()
         );
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
     @DeleteMapping("/delete/{reviewId}/{userId}")
@@ -42,14 +43,14 @@ public class ReviewController {
                         .userId(userId)
                         .build()
         );
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
     @GetMapping("/findlist")
-    public ResponseEntity<List<ReviewOutputSpec>> findReviewList(
+    public ResponseEntity<MessageUtil<List<ReviewOutputSpec>>> findReviewList(
             @ModelAttribute FindListReviewInputSpec inputSpec
     ){
-        return ResponseEntity.ok().body(
+        return ResponseEntity.ok().body(MessageUtil.success(
                 reviewService.findReviewListByAptCode(inputSpec)
                         .stream()
                         .map(m -> ReviewOutputSpec.builder()
@@ -60,7 +61,7 @@ public class ReviewController {
                                 .content(m.getContent())
                                 .build())
                         .collect(Collectors.toList()
-                        )
+                        ))
                 );
     }
 }

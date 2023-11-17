@@ -1,5 +1,6 @@
 package com.homelearn.back.like;
 
+import com.homelearn.back.common.util.MessageUtil;
 import com.homelearn.back.like.dto.LikeParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +16,7 @@ public class LikeController {
      * 현재는 userId를 PathVariable에서 가져오는 방식
      */
     @PostMapping("/add/{apartCode}/{userId}")
-    public ResponseEntity addLike(
+    public ResponseEntity<MessageUtil> addLike(
             @PathVariable("apartCode") Long code,
             @PathVariable("userId") Long userId
             ){
@@ -25,12 +26,12 @@ public class LikeController {
                         .userId(userId)
                         .build()
         );
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
 
     @DeleteMapping("/delete/{apartCode}/{userId}")
-    public ResponseEntity deleteLike(
+    public ResponseEntity<MessageUtil> deleteLike(
         @PathVariable("apartCode") Long code,
         @PathVariable("userId") Long userId
     ){
@@ -40,7 +41,7 @@ public class LikeController {
                         .userId(userId)
                         .build()
         );
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
 }

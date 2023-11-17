@@ -14,6 +14,35 @@
         <result column="name" property="name"/>
         <result column="role" property="role"/>
     </resultMap>
+
+    <resultMap id="review" type="com.homelearn.back.review.entity.Review">
+        <result column="id" property="id"/>
+        <result column="apt_code" property="aptCode"/>
+        <result column="content" property="content"/>
+        <result column="user_id" property="userId"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+    <select id="findReview" parameterType="FindReviewParam" resultMap="review">
+        select *
+        from reviews
+        <where>
+            <if test="id!=null">
+                id = #{id}
+            </if>
+            <if test="aptCode!=null">
+                and aptCode = #{aptCode}
+            </if>
+            <if test="content!=null">
+                and content = #{content}
+            </if>
+            <if test="userId!=null">
+                and user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+
     <select id="findReviewListByAptCode" parameterType="FindListReviewInputSpec" resultMap="reviewJoinUser">
         SELECT
         r.id as review_id,

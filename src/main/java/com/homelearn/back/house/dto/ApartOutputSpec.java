@@ -21,6 +21,7 @@ public class ApartOutputSpec {
     private Long aptRoadNameBonbun;
     private Long aptRoadNameBubun;
     private Boolean likeStatus; // 좋아요 상태
+    private Long likeId; // 좋아요 id
     private String lng;
     private String lat;
 
@@ -36,6 +37,7 @@ public class ApartOutputSpec {
                 .aptRoadNameBonbun(m.getRoadNameBonbun())
                 .aptRoadNameBubun(m.getRoadNameBubun())
                 .likeStatus(m.getLikeStatus())
+                .likeId(m.getLikeId())
                 .lng(m.getLng())
                 .lat(m.getLat())
                 .build();

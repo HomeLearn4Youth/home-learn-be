@@ -8,5 +8,5 @@ import lombok.Setter;
 public class Like {
     private Long id;
     private Long userId;
-    private Long apartCode;
+    private Long aptCode;
 }

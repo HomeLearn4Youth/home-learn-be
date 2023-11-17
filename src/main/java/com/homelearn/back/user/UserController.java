@@ -23,11 +23,7 @@ public class UserController {
     private final UserService userService;
     private final JwtUtils jwtUtils;
     private final RefreshService refreshService;
-    /**
-     * 로그인 기능 추후 수정 필요함
-     * @param loginForm
-     * @return
-     */
+
     @PostMapping("/login")
     public ResponseEntity<?> login(
             @RequestBody LoginForm loginForm,
@@ -36,7 +32,7 @@ public class UserController {
         log.debug("login process");
         User user=userService.login(loginForm);
         String accessToken = jwtUtils.issueAccessToken(user);
-        String refreshToken=jwtUtils.issueRefreshToken(user);
+        String refreshToken = jwtUtils.issueRefreshToken(user);
         refreshService.save(refreshToken, user.getId());
         return ResponseEntity
                 .ok()

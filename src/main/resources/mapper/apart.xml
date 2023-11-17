@@ -24,6 +24,7 @@
         <result column="lng" property="lng"></result>
         <result column="lat" property="lat"></result>
         <result column="like_status" property="likeStatus"></result>
+        <result column="like_id" property="likeId"></result>
         <result column="user_id" property="userId"></result>
     </resultMap>
 
@@ -36,22 +37,62 @@
         <result column="dealAmount" property="dealAmount"/>
     </resultMap>
 
+    <resultMap id="houseInfo" type="com.homelearn.back.house.entity.HouseInfo">
+        <result column="aptCode" property="aptCode"/>
+        <result column="buildYear" property="buildYear"/>
+        <result column="roadName" property="roadName"/>
+        <result column="roadNameBonbun" property="roadNameBonbun"/>
+        <result column="roadNameBubun" property="roadNameBubun"/>
+        <result column="roadNameSeq" property="roadNameSeq"/>
+        <result column="roadNameBasementCode" property="roadNameBasementCode"/>
+        <result column="roadNameCode" property="roadNameCode"/>
+        <result column="dong" property="dong"/>
+        <result column="bonbun" property="bonbun"/>
+        <result column="bubun" property="bubun"/>
+        <result column="sigunguCode" property="sigunguCode"/>
+        <result column="eubmyundongCode" property="eubmyundongCode"/>
+        <result column="dongCode" property="dongCode"/>
+        <result column="landCode" property="landCode"/>
+        <result column="apartmentName" property="apartmentName"/>
+        <result column="landCode" property="landCode"/>
+        <result column="jibun" property="jibun"/>
+        <result column="lng" property="lng"/>
+        <result column="lat" property="lat"/>
+    </resultMap>
+    
+    <select id="findApartByApartCode" parameterType="Long" resultMap="houseInfo">
+        select *
+        from houseInfo
+        where aptCode = #{aptCode}
+    </select>
+
     <select id="getApartList" parameterType="ApartListParam" resultMap="houseJoinLike">
         <choose>
             <!-- groupId가 제공됐을 때 -->
             <when test="groupId != null">
                 SELECT
                 hi.aptCode as aptCode,
-                hi.apartmentName as apartmentName,
+                hi.buildYear as buildYear,
+                hi.roadName as roadName,
+                hi.roadNameBonbun as roadNameBonbun,
+                hi.roadNameBubun as roadNameBubun,
+                hi.roadNameSeq as roadNameSeq,
+                hi.roadNameBasementCode as roadNameBasementCode,
+                hi.roadNameCode as roadNameCode,
                 hi.dong as dong,
                 hi.bonbun as bonbun,
                 hi.bubun as bubun,
-                hi.roadName as aptRoadName,
-                hi.roadNameBonbun as aptRoadNameBonbun,
-                hi.roadNameBubun as aptRoadNameBubun,
+                hi.sigunguCode as sigunguCode,
+                hi.eubmyundongCode as eubmyundongCode,
+                hi.dongCode as dongCode,
+                hi.landCode as landCode,
+                hi.apartmentName as apartmentName,
+                hi.jibun as jibun,
                 hi.lng as lng,
                 hi.lat as lat,
-                CASE WHEN userLikes.id IS NOT NULL THEN true ELSE false END as like_status
+                CASE WHEN userLikes.id IS NOT NULL THEN true ELSE false END as like_status,
+                CASE WHEN userLikes.id IS NOT NULL THEN userLikes.id ELSE 0 END as like_id,
+                #{userId} as user_id
                 FROM
                 houseInfo hi
                 INNER JOIN
@@ -98,7 +139,9 @@
                 hi.jibun as jibun,
                 hi.lng as lng,
                 hi.lat as lat,
-                CASE WHEN lk.id IS NOT NULL THEN 'true' ELSE 'false' END AS like_status
+                CASE WHEN lk.id IS NOT NULL THEN 'true' ELSE 'false' END AS like_status,
+                CASE WHEN lk.id IS NOT NULL THEN lk.id ELSE 0 END as like_id,
+                #{userId} as user_id
                 FROM
                 houseInfo hi
                 LEFT JOIN
@@ -142,6 +185,7 @@
         hi.lng as lng,
         hi.lat as lat,
         CASE WHEN lk.id IS NOT NULL THEN 'true' ELSE 'false' END AS like_status,
+        CASE WHEN lk.id IS NOT NULL THEN lk.id ELSE 0 END AS like_id,
         #{userId} as user_id
         FROM
         houseInfo hi
