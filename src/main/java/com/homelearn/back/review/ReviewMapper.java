@@ -2,7 +2,6 @@ package com.homelearn.back.review;
 
 
 import com.homelearn.back.review.dto.AddReviewParam;
-import com.homelearn.back.review.dto.DeleteReviewParam;
 import com.homelearn.back.review.dto.FindListReviewInputSpec;
 import com.homelearn.back.review.dto.FindReviewParam;
 import com.homelearn.back.review.entity.Review;
@@ -15,7 +14,7 @@ import java.util.Optional;
 @Mapper
 public interface ReviewMapper {
     void addReview(AddReviewParam input);
-    void deleteReview(DeleteReviewParam input);
+    void deleteReview(Long reviewId);
     Optional<Review> findReview(FindReviewParam input);
     List<ReviewJoinUser> findReviewListByAptCode(FindListReviewInputSpec inputSpec);
 }

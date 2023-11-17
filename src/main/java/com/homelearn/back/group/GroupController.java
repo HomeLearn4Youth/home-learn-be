@@ -7,6 +7,7 @@ import com.homelearn.back.group.dto.GroupParam;
 import com.homelearn.back.group.entity.Group;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.method.P;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
 public class GroupController {
     private final GroupService groupService;
 
-    @GetMapping("/{userId}")
+    @GetMapping("/findlist/{userId}")
     public ResponseEntity<MessageUtil<List<Group>>> showGroupList(
         @PathVariable("userId") Long userId
     ){
@@ -27,19 +28,21 @@ public class GroupController {
                 ));
     }
 
-    @DeleteMapping("/delete/{groupId}")
+    @DeleteMapping("/delete/{groupId}/{userId}")
     public ResponseEntity<MessageUtil> deleteGroup(
-            @PathVariable("groupId") Long groupId
+            @PathVariable("groupId") Long groupId,
+            @PathVariable("userId") Long userId
     ){
-        groupService.deleteGroup(groupId);
+        groupService.deleteGroup(groupId, userId);
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
-    @DeleteMapping("/item/delete")
+    @DeleteMapping("/item/delete/{userId}")
     public ResponseEntity<MessageUtil> deleteGroupItem(
-        @ModelAttribute GroupItemInputSpec groupItemInputSpec
+        @ModelAttribute GroupItemInputSpec groupItemInputSpec,
+        @PathVariable("userId") Long userId
     ){
-        groupService.deleteGroupItem(groupItemInputSpec);
+        groupService.deleteGroupItem(groupItemInputSpec, userId);
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
@@ -57,11 +60,12 @@ public class GroupController {
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
-    @PostMapping("/item/add")
+    @PostMapping("/item/add/{userId}")
     public ResponseEntity<MessageUtil> addGroupItem(
-            @RequestBody GroupItemInputSpec newItem
+            @RequestBody GroupItemInputSpec newItem,
+            @PathVariable Long userId
             ){
-        groupService.addGroupItem(newItem);
+        groupService.addGroupItem(newItem, userId);
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
