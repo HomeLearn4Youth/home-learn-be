@@ -7,15 +7,16 @@ import com.homelearn.back.group.entity.GroupItem;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface GroupMapper {
 
     void addGroup(GroupParam param);
     void deleteGroup(Long groupId);
-    Group findGroup(Long groupId);
+    Optional<Group> findGroup(Long groupId);
     List<Group> findGroupListByUserId(Long groupId);
     void addGroupItem(GroupItemInputSpec groupItemInputSpec);
-    GroupItem findGroupItem(GroupItemInputSpec groupItemInputSpec);
+    Optional<GroupItem> findGroupItem(GroupItemInputSpec groupItemInputSpec);
     void deleteGroupItem(GroupItemInputSpec groupItemInputSpec);
 }
