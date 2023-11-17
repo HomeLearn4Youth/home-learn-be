@@ -9,7 +9,7 @@ import static org.springframework.http.HttpStatus.*;
 @Getter
 @AllArgsConstructor
 public enum DongErrorCode {
-    NOT_EXISTS_CODE("존재하지 않는 지역입니다.", NOT_FOUND);
+    NOT_EXISTS_CODE("잘못된 지역 코드 입니다.", BAD_REQUEST);
 
     private final String message;
     private HttpStatus httpStatus;
