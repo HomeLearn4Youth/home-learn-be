@@ -1,5 +1,6 @@
 package com.homelearn.back.notice;
 
+import com.homelearn.back.common.util.MessageUtil;
 import com.homelearn.back.notice.dto.*;
 import com.homelearn.back.notice.entity.Notice;
 import lombok.RequiredArgsConstructor;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/notice")
@@ -21,10 +23,14 @@ public class NoticeController {
      * @return
      */
     @GetMapping("/find/{noticeId}")
-    public ResponseEntity<FindNoticeOutputSpec> findNotice(
+    public ResponseEntity<MessageUtil<FindNoticeOutputSpec>> findNotice(
             @PathVariable("noticeId") Long noticeId
     ){
-        return ResponseEntity.ok().body(noticeService.getNoticeById(noticeId));
+        return ResponseEntity.ok().body(
+                MessageUtil.success(
+                        new FindNoticeOutputSpec().noticeJoinMemberToFindOutputSpec(
+                                noticeService.getNoticeById(noticeId)
+                        )));
     }
 
     /**
@@ -32,10 +38,17 @@ public class NoticeController {
      * @return
      */
     @GetMapping("/findlist")
-    public ResponseEntity<List<FindListNoticeOutputSpec>> findNoticeList(
+    public ResponseEntity<MessageUtil<List<FindListNoticeOutputSpec>>> findNoticeList(
             @ModelAttribute FindListNoticeInputSpec findListNoticeInputSpec
             ){
-        return ResponseEntity.ok().body(noticeService.getNoticeList(findListNoticeInputSpec));
+        return ResponseEntity.ok().body(
+                MessageUtil.success(
+                        noticeService.getNoticeList(findListNoticeInputSpec)
+                            .stream().map(
+                                    m -> new FindListNoticeOutputSpec()
+                                            .noticeToFindListOutputSpec(m))
+                            .collect(Collectors.toList()
+                            )));
     }
 
     /**
@@ -44,30 +57,27 @@ public class NoticeController {
      * @return
      */
     @PutMapping("/edit")
-    public ResponseEntity editNotice(
+    public ResponseEntity<MessageUtil> editNotice(
             @RequestBody EditNoticeInputSpec editNoticeInputSpec
             ){
         noticeService.editNotice(editNoticeInputSpec);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
     @PostMapping("/add")
-    public ResponseEntity addNotice(
+    public ResponseEntity<MessageUtil> addNotice(
             @RequestBody AddNoticeInputSpec addNoticeInputSpec
             ){
-        System.out.println(addNoticeInputSpec.getContent());
-        System.out.println(addNoticeInputSpec.getTitle());
-        System.out.println(addNoticeInputSpec.getWriterId());
         noticeService.addNotice(addNoticeInputSpec);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
     @DeleteMapping("/delete/{noticeId}")
-    public ResponseEntity deleteNotice(
+    public ResponseEntity<MessageUtil> deleteNotice(
             @PathVariable("noticeId") Long noticeId
     ){
         noticeService.deleteNoticeById(noticeId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
 
