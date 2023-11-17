@@ -1,5 +1,6 @@
 package com.homelearn.back.group;
 
+import com.homelearn.back.common.util.MessageUtil;
 import com.homelearn.back.group.dto.GroupInputSpec;
 import com.homelearn.back.group.dto.GroupItemInputSpec;
 import com.homelearn.back.group.dto.GroupParam;
@@ -17,30 +18,33 @@ public class GroupController {
     private final GroupService groupService;
 
     @GetMapping("/{userId}")
-    public ResponseEntity<List<Group>> showGroupList(
+    public ResponseEntity<MessageUtil<List<Group>>> showGroupList(
         @PathVariable("userId") Long userId
     ){
-        return ResponseEntity.ok().body(groupService.findGroupListByUserId(userId));
+        return ResponseEntity.ok().body(
+                MessageUtil.success(
+                        groupService.findGroupListByUserId(userId)
+                ));
     }
 
     @DeleteMapping("/delete/{groupId}")
-    public ResponseEntity deleteGroup(
+    public ResponseEntity<MessageUtil> deleteGroup(
             @PathVariable("groupId") Long groupId
     ){
         groupService.deleteGroup(groupId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
     @DeleteMapping("/item/delete")
-    public ResponseEntity deleteGroupItem(
+    public ResponseEntity<MessageUtil> deleteGroupItem(
         @ModelAttribute GroupItemInputSpec groupItemInputSpec
     ){
         groupService.deleteGroupItem(groupItemInputSpec);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
     @PostMapping("/add/{userId}")
-    public ResponseEntity addGroup(
+    public ResponseEntity<MessageUtil> addGroup(
             @PathVariable("userId") Long userId,
             @RequestBody GroupInputSpec input
             ){
@@ -50,15 +54,15 @@ public class GroupController {
                     .userId(userId)
                     .build()
                 );
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
     @PostMapping("/item/add")
-    public ResponseEntity addGroupItem(
+    public ResponseEntity<MessageUtil> addGroupItem(
             @RequestBody GroupItemInputSpec newItem
             ){
         groupService.addGroupItem(newItem);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
 }
