@@ -20,6 +20,12 @@ public class MessageUtil<T> {
                 .dataBody(data)
                 .build();
     }
+    public static <T> MessageUtil<T> success() {
+        return MessageUtil.<T>builder()
+                .httpStatus(HttpStatus.OK)
+                .responseMessage("정상 작동 입니다.")
+                .build();
+    }
 
     public static MessageUtil<?> error(HttpStatus status, String errorMessage) {
         return MessageUtil.builder()
