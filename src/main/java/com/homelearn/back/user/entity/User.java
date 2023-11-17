@@ -18,6 +18,7 @@ public class User implements UserDetails {
     private String password;
     private String email;
     private String name;
+    private String provider;
     private UserRole role; // UserRole은 사용자 역할을 나타내는 열거형으로 가정합니다.
 
     // UserDetails 인터페이스의 메서드 구현

@@ -23,8 +23,8 @@ public class NoticeServiceImpl implements NoticeService{
 
 
     @Override
-    public void addNotice(AddNoticeInputSpec addNoticeInputSpec) {
-        noticeMapper.addNotice(addNoticeInputSpec);
+    public void addNotice(NoticeParam param) {
+        noticeMapper.addNotice(param);
     }
 
     @Override
@@ -42,8 +42,8 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public void editNotice(EditNoticeInputSpec editNoticeForm) {
-        noticeMapper.editNotice(editNoticeForm);
+    public void editNotice(NoticeParam param) {
+        noticeMapper.editNotice(param);
     }
 
     @Override

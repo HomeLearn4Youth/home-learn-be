@@ -1,5 +1,6 @@
 package com.homelearn.back.notice.entity;
 
+import com.homelearn.back.user.UserRole;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +16,6 @@ public class NoticeJoinMember {
     private String writerPassword;
     private String writerEmail;
     private String writerName;
-    private Boolean writerAdmin;
+    private UserRole writerRole;
+    private String provider;
 }
