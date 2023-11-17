@@ -16,16 +16,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     @Getter
     private static final String[] PERMITTED_URL={
-//            "/**"
-            "/user/add",
-            "/user/findemail",
-            "/user/findpass",
-            "/user/login",
-            "/user/refresh",
-            "/notice/find/**",
-            "/notice/findlist/**",
-            "/review/findlist/**",
-            "/dong/**"
+            "/**"
+//            "/user/add",
+//            "/user/findemail",
+//            "/user/findpass",
+//            "/user/login",
+//            "/user/refresh",
+//            "/notice/find/**",
+//            "/notice/findlist/**",
+//            "/review/findlist/**",
+//            "/dong/**"
     };
     private final JwtFilter jwtFilter;
     @Bean

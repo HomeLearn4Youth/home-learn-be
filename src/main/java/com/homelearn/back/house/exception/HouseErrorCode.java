@@ -10,7 +10,7 @@ import static org.springframework.http.HttpStatus.*;
 @AllArgsConstructor
 public enum HouseErrorCode {
 
-    NOT_EXISTS_HOUSE("존재하지 않은 아파트 입니다.", NOT_FOUND);
+    NOT_EXISTS_HOUSE("존재하지 않은 아파트 입니다.", BAD_REQUEST);
 
     private final String message;
     private HttpStatus httpStatus;

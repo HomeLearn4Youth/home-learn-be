@@ -37,6 +37,35 @@
         <result column="dealAmount" property="dealAmount"/>
     </resultMap>
 
+    <resultMap id="houseInfo" type="com.homelearn.back.house.entity.HouseInfo">
+        <result column="aptCode" property="aptCode"/>
+        <result column="buildYear" property="buildYear"/>
+        <result column="roadName" property="roadName"/>
+        <result column="roadNameBonbun" property="roadNameBonbun"/>
+        <result column="roadNameBubun" property="roadNameBubun"/>
+        <result column="roadNameSeq" property="roadNameSeq"/>
+        <result column="roadNameBasementCode" property="roadNameBasementCode"/>
+        <result column="roadNameCode" property="roadNameCode"/>
+        <result column="dong" property="dong"/>
+        <result column="bonbun" property="bonbun"/>
+        <result column="bubun" property="bubun"/>
+        <result column="sigunguCode" property="sigunguCode"/>
+        <result column="eubmyundongCode" property="eubmyundongCode"/>
+        <result column="dongCode" property="dongCode"/>
+        <result column="landCode" property="landCode"/>
+        <result column="apartmentName" property="apartmentName"/>
+        <result column="landCode" property="landCode"/>
+        <result column="jibun" property="jibun"/>
+        <result column="lng" property="lng"/>
+        <result column="lat" property="lat"/>
+    </resultMap>
+    
+    <select id="findApartByApartCode" parameterType="Long" resultMap="houseInfo">
+        select *
+        from houseInfo
+        where aptCode = #{aptCode}
+    </select>
+
     <select id="getApartList" parameterType="ApartListParam" resultMap="houseJoinLike">
         <choose>
             <!-- groupId가 제공됐을 때 -->
