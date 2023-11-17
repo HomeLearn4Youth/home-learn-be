@@ -8,13 +8,14 @@ import com.homelearn.back.notice.entity.NoticeJoinMember;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface NoticeMapper {
     //Create
     void addNotice(AddNoticeInputSpec addNoticeInputSpec);
     //Read
-    NoticeJoinMember getNoticeById(Long noticeId);
+    Optional<NoticeJoinMember> getNoticeById(Long noticeId);
     List<Notice> getNoticeList(FindListNoticeInputSpec findListNoticeInputSpec);
     //Update
     void editNotice(EditNoticeInputSpec editNoticeInputSpec);
