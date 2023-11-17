@@ -1,5 +1,6 @@
 package com.homelearn.back.group.exception;
 
+import com.homelearn.back.common.util.MessageUtil;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -8,8 +9,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GroupExceptionHandler {
 
     @ExceptionHandler
-    public ResponseEntity dongExceptionHandler(GroupException e){
+    public ResponseEntity groupExceptionHandler(GroupException e){
         return ResponseEntity.status(e.getErrorCode().getHttpStatus())
-                .body(e.getMessage());
+                .body(MessageUtil.error(e.getErrorCode().getHttpStatus(), e.getMessage()));
     }
 }

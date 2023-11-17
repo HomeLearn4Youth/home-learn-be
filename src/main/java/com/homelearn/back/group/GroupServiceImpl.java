@@ -26,7 +26,7 @@ public class GroupServiceImpl implements GroupService{
     @Override
     public void deleteGroup(Long groupId) {
         Group group = groupMapper.findGroup(groupId);
-        if (group!=null){
+        if (group==null){
             throw new GroupException(NOT_EXISTS_GROUP);
         }
         groupMapper.deleteGroup(groupId);
