@@ -11,9 +11,10 @@ import java.util.List;
 @Mapper
 public interface UserMapper {
     //Create
-    void addUser(AddUserForm addForm);
+    void addUser(User user);
     //Read
     User findByIdUser(Long id);
+    User findByEmail(String email);
     List<User> findByAllUsers() ;
     User login(LoginForm loginForm);
     //Update

@@ -1,10 +1,14 @@
 package com.homelearn.back.user;
 
+import com.homelearn.back.common.util.JwtUtils;
+import com.homelearn.back.oauth.dto.OAuthDto;
 import com.homelearn.back.user.dto.AddUserForm;
 import com.homelearn.back.user.dto.LoginForm;
 import com.homelearn.back.user.dto.EditUserForm;
 import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +20,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService{
 
     private final UserMapper userMapper;
+    @Value(value = "${dummy.adminPassword}")
+    private String adminPassword;
     /**
      * 회원가입
      * @param addForm 회원가입 폼
@@ -23,7 +29,18 @@ public class UserServiceImpl implements UserService{
      */
     @Override
     public void addUser(AddUserForm addForm) {
-        userMapper.addUser(addForm);
+        User newUser=User.builder()
+                .name(addForm.getName())
+                .email(addForm.getEmail())
+                .password(addForm.getPassword())
+                .role(UserRole.DDUBEOKY)
+                .build();
+        if(addForm.getAdminPassword().equals(adminPassword)){//관리자 비밀번호와 일치
+            newUser.toBuilder()
+                    .role(UserRole.ADMIN)
+                    .build();
+        }
+        userMapper.addUser(newUser);
     }
 
     /**
@@ -34,6 +51,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findByIdUser(Long id) {
         return userMapper.findByIdUser(id);
+    }
+
+    @Override
+    public User findByEmail(String email) {
+        return userMapper.findByEmail(email);
     }
 
     /**
@@ -77,6 +99,15 @@ public class UserServiceImpl implements UserService{
     @Override
     public void deleteUser(LoginForm deleteForm) {
         userMapper.deleteUser(deleteForm);
+    }
+
+    @Override
+    public User findOrCreate(OAuthDto oAuthDto) {
+        User user=userMapper.findByEmail(oAuthDto.getEmail());
+        if(user==null){//기존에 존재하지 않는 사용자
+            userMapper.addUser(oAuthDto.toEntity());
+        }
+        return user;
     }
 
 

@@ -22,6 +22,11 @@
         from users
         where id=${id}
     </select>
+    <select id="findByIdEmail" parameterType="String" resultMap="user">
+        select *
+        from users
+        where email=${email}
+    </select>
 
     <select id="findByAllUsers" resultMap="user">
         select *

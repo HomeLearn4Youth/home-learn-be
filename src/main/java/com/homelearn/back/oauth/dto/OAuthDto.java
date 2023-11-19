@@ -5,10 +5,12 @@ import com.homelearn.back.user.UserRole;
 import com.homelearn.back.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.ToString;
 
 import java.util.Map;
 
 @Getter
+@ToString
 public class OAuthDto {
     private Map<String, Object> attributes;
     private String nameAttributeKey;

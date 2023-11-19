@@ -34,8 +34,7 @@ public class CustomOauthService implements OAuth2UserService<OAuth2UserRequest, 
 
         OAuthDto attributes = OAuthDto.of(userNameAttributeName,oAuth2User.getAttributes());
 
-
-        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(UserRole.DDUBEOKY.getRole())),
+        return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority(UserRole.DDUBEOKY.getAuthRole())),
                 attributes.getAttributes(),
                 attributes.getNameAttributeKey());
     }
