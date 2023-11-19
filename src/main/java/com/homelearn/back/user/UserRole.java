@@ -9,9 +9,12 @@ public enum UserRole {
 
     private final String role;
     private final String roleKR;
+    private final String authRole;
 
     UserRole(String role, String roleKR) {
         this.role=role;
         this.roleKR = roleKR;
+        this.authRole="ROLE_"+role;
     }
+
 }

@@ -1,6 +1,8 @@
 package com.homelearn.back.user.entity;
 
+import com.homelearn.back.oauth.OAuthProvider;
 import com.homelearn.back.user.UserRole;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,12 +15,14 @@ import java.util.Collections;
 @Getter
 @Setter
 @ToString
+@Builder(toBuilder = true)
 public class User implements UserDetails {
     private Long id;
     private String password;
     private String email;
     private String name;
     private UserRole role; // UserRole은 사용자 역할을 나타내는 열거형으로 가정합니다.
+    private OAuthProvider provider;
 
     // UserDetails 인터페이스의 메서드 구현
 
