@@ -14,4 +14,5 @@ public class AddUserForm {
     private String password;
     private String email;
     private String name;
+    private String adminPassword;
 }
