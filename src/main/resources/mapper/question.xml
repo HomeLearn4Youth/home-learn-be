@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.homelearn.back.qna.QuestionMapper">
+    <resultMap id="questionJoinUser" type="com.homelearn.back.qna.entity.QuestionJoinUser">
+        <result column="id" property="id"></result>
+        <result column="title" property="title"></result>
+        <result column="question" property="question"></result>
+        <result column="answer" property="answer"></result>
+        <result column="questionCreateTime" property="questionCreateTime"></result>
+        <result column="answerCreateTime" property="answerCreateTime"></result>
+        <result column="writer_id" property="userId"></result>
+        <result column="writer_email" property="email"></result>
+        <result column="writer_name" property="name"></result>
+        <result column="writer_provider" property="provider"></result>
+        <result column="writer_role" property="role"></result>
+    </resultMap>
+
+    <insert id="addQuestion" parameterType="QuestionInputParam">
+        INSERT INTO question (user_id, title, question)
+        VALUES (#{loginUserId}, #{title}, #{question})
+    </insert>
+
+    <update id="addAnswer" parameterType="AnswerInputSpec" >
+        UPDATE question
+        SET answer = #{answer}
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteQuestion" parameterType="Long">
+        DELETE FROM question WHERE id = #{id}
+    </delete>
+
+    <select id="findQuestion" parameterType="QuestionListInputSpec" resultMap="questionJoinUser">
+        SELECT
+            q.id,
+            q.title,
+            q.question,
+            q.answer,
+            q.questionCreateTime,
+            q.answerCreateTime,
+            q.user_id as writer_id,
+            u.email as writer_email,
+            u.name as writer_name,
+            u.provider as writer_provider,
+            u.role as writer_role
+        FROM question q
+        JOIN users u ON q.user_id = u.id
+        ORDER BY q.questionCreateTime desc
+        LIMIT ${count} OFFSET ${startIndex}
+    </select>
+
+    <select id="findQuestionById" parameterType="Long" resultMap="questionJoinUser">
+        SELECT
+            q.id,
+            q.title,
+            q.question,
+            q.answer,
+            q.questionCreateTime,
+            q.answerCreateTime,
+            q.user_id as writer_id,
+            u.email as writer_email,
+            u.name as writer_name,
+            u.provider as writer_provider,
+            u.role as writer_role
+        FROM question q
+        JOIN users u ON q.user_id = u.id
+        WHERE
+            q.id = #{id}
+    </select>
+
+</mapper>

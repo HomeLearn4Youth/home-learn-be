@@ -12,7 +12,7 @@ import static org.springframework.http.HttpStatus.FORBIDDEN;
 public enum QuestionErrorCode {
 
     NOT_EXISTS_QUESTION("존재하지 않는 질문입니다.", BAD_REQUEST),
-    FORBIDDEN_GROUP_QUESTION("권한이 없습니다.", FORBIDDEN);
+    FORBIDDEN_QUESTION("권한이 없습니다.", FORBIDDEN);
     private final String message;
     private HttpStatus httpStatus;
 }

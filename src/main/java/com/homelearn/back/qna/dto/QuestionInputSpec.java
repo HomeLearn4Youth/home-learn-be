@@ -11,5 +11,6 @@ import lombok.*;
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class QuestionInputSpec {
+    private String title;
     private String question;
 }

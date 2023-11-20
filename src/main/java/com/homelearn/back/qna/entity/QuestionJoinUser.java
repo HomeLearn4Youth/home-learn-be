@@ -9,6 +9,7 @@ import lombok.Setter;
 public class QuestionJoinUser {
     private Long id;
 
+    private String title;
     private String question;
     private String answer;
     private String questionCreateTime;

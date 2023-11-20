@@ -8,6 +8,7 @@ import lombok.*;
 @Setter
 @Builder
 public class QuestionInputParam {
+    private String title;
     private String question;
     private Long loginUserId;
 }

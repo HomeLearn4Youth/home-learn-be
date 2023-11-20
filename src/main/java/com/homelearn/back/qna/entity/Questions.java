@@ -8,6 +8,7 @@ import lombok.Setter;
 public class Questions {
     private Long id;
     private Long userId;
+    private String title;
     private String question;
     private String answer;
     private String questionCreateTime;

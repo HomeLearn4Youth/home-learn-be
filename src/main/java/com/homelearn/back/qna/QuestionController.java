@@ -29,7 +29,7 @@ public class QuestionController {
     }
 
 
-    @PostMapping("/answer/{userId}")
+    @PutMapping("/answer/{userId}")
     public ResponseEntity<MessageUtil> addAnswer(
             @RequestBody AnswerInputSpec inputSpec,
             @PathVariable("userId") Long userId
@@ -49,25 +49,28 @@ public class QuestionController {
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
-    @GetMapping("/findlist/{userId}")
+    @GetMapping("/findlist")
     public ResponseEntity<MessageUtil<List<QuestionOutputSpec>>> findQuestionList(
             @ModelAttribute QuestionListInputSpec inputSpec
     ){
         return ResponseEntity.ok().body(
-                MessageUtil.success(questionService.findQuestion(inputSpec).stream().map(
-                            m-> new QuestionOutputSpec().questionJoinUserToOutputSpec(m))
-                        .collect(Collectors.toList())
-                ));
+                MessageUtil.success(
+                        questionService.findQuestion(inputSpec)
+                                .stream()
+                                .map(
+                                        m-> new QuestionOutputSpec().questionJoinUserToOutputSpec(m))
+                                .collect(Collectors.toList())));
     }
 
     @GetMapping("/find/{questionId}")
     public ResponseEntity<MessageUtil<QuestionOutputSpec>> findQuestion(
             @PathVariable("questionId") Long questionId
     ){
-        return ResponseEntity.ok().body(MessageUtil.success(
-                new QuestionOutputSpec()
-                        .questionJoinUserToOutputSpec(
-                                questionService.findQuestionById(questionId))));
+        return ResponseEntity.ok().body(
+                MessageUtil.success(
+                        new QuestionOutputSpec()
+                                .questionJoinUserToOutputSpec(
+                                        questionService.findQuestionById(questionId))));
     }
 
 }
