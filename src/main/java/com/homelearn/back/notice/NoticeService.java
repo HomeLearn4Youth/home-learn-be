@@ -8,13 +8,13 @@ import java.util.List;
 
 public interface NoticeService {
     //Create
-    void addNotice(NoticeParam param);
+    void addNotice(NoticeParam param, Long loginUserId);
     //Read
     NoticeJoinMember getNoticeById(Long noticeId);
     List<Notice> getNoticeList(FindListNoticeInputSpec findListNoticeInputSpec);
     //Update
-    void editNotice(NoticeParam param);
+    void editNotice(NoticeParam param, Long loginUserId);
     //Delete
-    void deleteNoticeById(Long noticeId);
+    void deleteNoticeById(Long noticeId, Long loginUserId);
 
 }
