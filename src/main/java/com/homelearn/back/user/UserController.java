@@ -1,6 +1,7 @@
 package com.homelearn.back.user;
 
 import com.homelearn.back.common.util.JwtUtils;
+import com.homelearn.back.common.util.MessageUtil;
 import com.homelearn.back.user.dto.AddUserForm;
 import com.homelearn.back.user.dto.EditUserForm;
 import com.homelearn.back.user.dto.LoginForm;
@@ -10,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -25,42 +27,55 @@ public class UserController {
     private final RefreshService refreshService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(
+    public ResponseEntity<MessageUtil> login(
             @RequestBody LoginForm loginForm,
             @RequestHeader HttpHeaders headers
     ){
         log.debug("login process");
-        User user=userService.login(loginForm);
-        String accessToken = jwtUtils.issueAccessToken(user);
-        String refreshToken = jwtUtils.issueRefreshToken(user);
-        refreshService.save(refreshToken, user.getId());
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                .header("refresh_token", "Bearer " + refreshToken)
-                .build();
+        try {
+            User user=userService.login(loginForm);
+            String accessToken = jwtUtils.issueAccessToken(user);
+            String refreshToken = jwtUtils.issueRefreshToken(user);
+            refreshService.save(refreshToken, user.getId());
+            return ResponseEntity
+                    .ok()
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                    .header("refresh_token", "Bearer " + refreshToken)
+                    .body(MessageUtil.success());
+        }catch (Exception e){
+            return ResponseEntity
+                    .ok()
+                    .body(MessageUtil.error(HttpStatus.UNAUTHORIZED, e.getMessage()));
+        }
     }
     @GetMapping("/refresh")
-    public ResponseEntity<?> refresh(@RequestHeader HttpHeaders headers){
+    public ResponseEntity<MessageUtil> refresh(@RequestHeader HttpHeaders headers){
         List<String> refreshTokenList = headers.get("refresh_token");
 
         if (refreshTokenList != null && !refreshTokenList.isEmpty()) {
-            String refreshToken = refreshTokenList.get(0); // 리스트의 첫 번째 요소를 가져옵니다.
+            try {
+                String refreshToken = refreshTokenList.get(0); // 리스트의 첫 번째 요소를 가져옵니다.
 
-            if (refreshToken.startsWith("Bearer ")) {
-                refreshToken = refreshToken.substring(7); // "Bearer "를 제거
+                if (refreshToken.startsWith("Bearer ")) {
+                    refreshToken = refreshToken.substring(7); // "Bearer "를 제거
+                }
+
+                log.info("refresh token : " + refreshToken);
+                String accessToken = refreshService.match(refreshToken);
+
+                return ResponseEntity.ok()
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                        .header("refresh_token", "Bearer " + refreshToken)
+                        .body(MessageUtil.success());
+            }catch (Exception e){
+                return ResponseEntity.ok()
+                        .body(MessageUtil.error(HttpStatus.UNAUTHORIZED,e.getMessage()));
             }
-
-            log.info("refresh token : " + refreshToken);
-            String accessToken = refreshService.match(refreshToken);
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
-                    .header("refresh_token", "Bearer " + refreshToken)
-                    .build();
         }
 
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("no refresh token");
+        return ResponseEntity
+                .ok()
+                .body(MessageUtil.error(HttpStatus.BAD_REQUEST,"리프레시 토큰이 없습니다."));
     }
     /**
      * 로그아웃 기능 추후 수정 필요함
@@ -80,13 +95,18 @@ public class UserController {
      * @return
      */
     @PostMapping("/add")
-    public ResponseEntity addUser(
+    public ResponseEntity<MessageUtil> addUser(
             @RequestBody AddUserForm userForm
     )
     {
         log.debug("add user");
-        userService.addUser(userForm);
-        return ResponseEntity.ok().build();
+        try {
+            userService.addUser(userForm);
+            return ResponseEntity.ok().body(MessageUtil.success());
+        } catch (Exception e){
+            return ResponseEntity.ok()
+                    .body(MessageUtil.error(HttpStatus.UNAUTHORIZED, e.getMessage()));
+        }
     }
 
     /**
@@ -94,12 +114,12 @@ public class UserController {
      * @param userId
      * @return
      */
-    @GetMapping("/find/{userId}")
-    public ResponseEntity<User> findUser(
-            @PathVariable("userId") Long userId
+    @GetMapping("/find")
+    public ResponseEntity<MessageUtil<User>> findUser(
+            @AuthenticationPrincipal User user
     )
     {
-        return ResponseEntity.ok().body(userService.findByIdUser(userId));
+        return ResponseEntity.ok().body(MessageUtil.success(userService.findByIdUser(user.getId())));
     }
 
     /**
@@ -108,11 +128,11 @@ public class UserController {
      * @return
      */
     @PutMapping("/edit")
-    public ResponseEntity editUser(
+    public ResponseEntity<MessageUtil> editUser(
             @RequestBody EditUserForm userForm
     ){
         userService.editUser(userForm);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
     /**
@@ -120,8 +140,8 @@ public class UserController {
      * @return
      */
     @GetMapping("/findlist")
-    public ResponseEntity<List<User>> findUsers(){
-        return ResponseEntity.ok().body(userService.findByAllUsers());
+    public ResponseEntity<MessageUtil<List<User>>> findUsers(){
+        return ResponseEntity.ok().body(MessageUtil.success(userService.findByAllUsers()));
     }
 
     /**
@@ -130,9 +150,9 @@ public class UserController {
      * @return
      */
     @DeleteMapping("/delete")
-    public ResponseEntity deleteUser(@RequestBody LoginForm loginForm){
+    public ResponseEntity<MessageUtil> deleteUser(@RequestBody LoginForm loginForm){
         userService.deleteUser(loginForm);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok().body(MessageUtil.success());
     }
 
 }

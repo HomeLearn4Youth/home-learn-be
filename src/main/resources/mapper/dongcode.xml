@@ -10,7 +10,7 @@
     <select id="getGugunList" resultType="com.homelearn.back.dong.dto.Gugun">
         select distinct gugunName, substring(dongCode,1,5) gugunCode
         from dongCode
-        where substring(dongCode,1,2)=#{code} and gugunName is not null;
+        where substring(dongCode,1,2)=#{code} and dongName is not null;
     </select>
     <select id="getDongList" resultType="com.homelearn.back.dong.dto.Dong">
         select distinct dongName, dongCode
