@@ -34,7 +34,7 @@ public class SecurityConfig {
             "/dong/**",
             "/oauth/**",
             "/user/oauth/**",
-            "/login/**"
+            "/login/**",
     };
     private final JwtFilter jwtFilter;
     private final CustomOauthService customOauthService;

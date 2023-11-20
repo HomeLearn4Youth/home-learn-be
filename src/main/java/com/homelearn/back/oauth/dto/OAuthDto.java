@@ -6,10 +6,13 @@ import com.homelearn.back.user.entity.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Getter
+@Slf4j
 @ToString
 public class OAuthDto {
     private Map<String, Object> attributes;
@@ -30,9 +33,11 @@ public class OAuthDto {
     }
 
     private static OAuthDto ofNaver(String userNameAttributeName, Map<String, Object> attributes) {
+        LinkedHashMap<String,String> response= (LinkedHashMap<String, String>) attributes.get("response");
+        log.info(response.toString());
         return OAuthDto.builder()
-                .name((String) attributes.get("name"))
-                .email((String) attributes.get("email"))
+                .name(response.get("name"))
+                .email(response.get("email"))
                 .attributes(attributes)
                 .nameAttributeKey(userNameAttributeName)
                 .build();

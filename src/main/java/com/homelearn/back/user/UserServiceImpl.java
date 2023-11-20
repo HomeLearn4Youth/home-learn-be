@@ -7,6 +7,7 @@ import com.homelearn.back.user.dto.LoginForm;
 import com.homelearn.back.user.dto.EditUserForm;
 import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
@@ -16,6 +17,7 @@ import java.util.Optional;
 
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService{
 
@@ -55,6 +57,7 @@ public class UserServiceImpl implements UserService{
 
     @Override
     public User findByEmail(String email) {
+        log.info(email);
         return userMapper.findByEmail(email);
     }
 

@@ -1,6 +1,7 @@
 package com.homelearn.back.oauth.handler;
 
 import com.homelearn.back.common.util.JwtUtils;
+import com.homelearn.back.oauth.OAuthProvider;
 import com.homelearn.back.oauth.dto.OAuthDto;
 import com.homelearn.back.user.UserService;
 import com.homelearn.back.user.entity.User;
@@ -29,13 +30,19 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
         log.info("success");
         OAuth2User oAuth2User= (OAuth2User) authentication.getPrincipal();
         OAuthDto oAuthDto=OAuthDto.of(oAuth2User.getName(),oAuth2User.getAttributes());
+        log.info("oauth service : "+oAuthDto.toString());
         User user=userService.findOrCreate(oAuthDto);
+        user.toBuilder()
+                .provider(OAuthProvider.NAVER)
+                .build();
+        log.info(user.toString());
         responseWithToken(user,response);
     }
     public void responseWithToken(User user,HttpServletResponse response) throws IOException {
         String accessToken=jwtUtils.issueAccessToken(user);
         String refreshToken= jwtUtils.issueRefreshToken(user);
-
+        log.info(accessToken);
+        log.info(refreshToken);
         // 성공 응답 데이터 생성
         JSONObject responseData = new JSONObject();
         response.addHeader("Authorization",accessToken);
