@@ -7,5 +7,5 @@ import com.homelearn.back.news.dto.NewsOutputSpec;
 import java.util.List;
 
 public interface NewsService {
-    List<NaverNews> searchNews (NewsInputSpec inputSpec);
+    List<NewsOutputSpec> searchNews (NewsInputSpec inputSpec);
 }

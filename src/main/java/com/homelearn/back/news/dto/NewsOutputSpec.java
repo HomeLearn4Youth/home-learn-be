@@ -17,4 +17,5 @@ public class NewsOutputSpec {
     private String mediaCompany;
     private String description;
     private String pubDate;
+
 }

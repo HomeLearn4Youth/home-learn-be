@@ -15,9 +15,7 @@ import java.util.List;
 public class NewsServiceImpl implements NewsService {
     private final NewsMaker newsMaker;
     @Override
-    public List<NaverNews> searchNews(NewsInputSpec inputSpec) {
-        List<NaverNews> items = newsMaker.getNaverNews(inputSpec).getItems();
-        System.out.println(items);
-        return items;
+    public List<NewsOutputSpec> searchNews(NewsInputSpec inputSpec) {
+        return newsMaker.getNews(inputSpec);
     }
 }

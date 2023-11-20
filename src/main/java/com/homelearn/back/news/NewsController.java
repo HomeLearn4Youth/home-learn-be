@@ -16,7 +16,7 @@ import java.util.List;
 public class NewsController {
     private final NewsService newsService;
     @GetMapping
-    public ResponseEntity<MessageUtil<List<NaverNews>>> getNewsList(
+    public ResponseEntity<MessageUtil<List<NewsOutputSpec>>> getNewsList(
             @ModelAttribute NewsInputSpec inputSpec
     ){
         return ResponseEntity.ok().body(MessageUtil.success(newsService.searchNews(inputSpec)));

@@ -1,12 +1,15 @@
 package com.homelearn.back.news;
 
-import com.homelearn.back.news.dto.NaverNewsInput;
-import com.homelearn.back.news.dto.NewsInputSpec;
+import com.homelearn.back.news.dto.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Component
 @Slf4j
 public class NewsMaker {
@@ -37,5 +40,25 @@ public class NewsMaker {
                 .retrieve()
                 .bodyToMono(NaverNewsInput.class)
                 .block();
+    }
+
+    public List<NewsOutputSpec> getNews(NewsInputSpec inputSpec){
+
+        NaverNewsInput input = getNaverNews(inputSpec);
+
+        List<NaverNews> items = input.getItems();
+        List<NewsOutputSpec> output = new ArrayList<NewsOutputSpec>();
+        for (NaverNews item : items) {
+            NewsSite siteData = NewsCrawler.getThumbnailAndSiteName(item.getOriginallink());
+            output.add(NewsOutputSpec.builder()
+                    .title(item.getTitle())
+                    .link(item.getLink())
+                    .description(item.getDescription().replaceAll("<[^>]*>",""))
+                    .pubDate(item.getPubDate())
+                    .mediaCompany(siteData.getSiteName())
+                    .thumbnailLink(siteData.getThumnail())
+                    .build());
+        }
+        return output;
     }
 }
