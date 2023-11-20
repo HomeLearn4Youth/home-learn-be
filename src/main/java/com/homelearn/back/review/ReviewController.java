@@ -2,8 +2,10 @@ package com.homelearn.back.review;
 
 import com.homelearn.back.common.util.MessageUtil;
 import com.homelearn.back.review.dto.*;
+import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,28 +18,28 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @PostMapping("/add/{userId}")
+    @PostMapping("/add")
     public ResponseEntity<MessageUtil> addReview(
             @RequestBody ReviewInputSpec input,
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User user
             ){
         reviewService.addReview(
                 AddReviewParam.builder()
                         .content(input.getContent())
                         .aptCode(input.getAptCode())
-                        .userId(userId)
+                        .userId(user.getId())
                         .build()
         );
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
-    @DeleteMapping("/delete/{reviewId}/{userId}")
+    @DeleteMapping("/delete/{reviewId}")
     public ResponseEntity deleteReview(
             @ModelAttribute ReviewInputSpec input,
             @PathVariable("reviewId") Long reviewId,
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User user
     ){
-        reviewService.deleteReview(reviewId, userId);
+        reviewService.deleteReview(reviewId, user.getId());
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 

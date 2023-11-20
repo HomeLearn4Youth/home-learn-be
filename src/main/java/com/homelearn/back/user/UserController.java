@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpSession;
@@ -94,12 +95,12 @@ public class UserController {
      * @param userId
      * @return
      */
-    @GetMapping("/find/{userId}")
+    @GetMapping("/find")
     public ResponseEntity<User> findUser(
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User user
     )
     {
-        return ResponseEntity.ok().body(userService.findByIdUser(userId));
+        return ResponseEntity.ok().body(userService.findByIdUser(user.getId()));
     }
 
     /**

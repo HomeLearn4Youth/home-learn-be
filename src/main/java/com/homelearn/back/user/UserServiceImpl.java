@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService{
                 .password(addForm.getPassword())
                 .role(UserRole.DDUBEOKY)
                 .build();
-        if(addForm.getAdminPassword().equals(adminPassword)){//관리자 비밀번호와 일치
+        if(addForm.getAdminPassword()!=null&&addForm.getAdminPassword().equals(adminPassword)){//관리자 비밀번호와 일치
             newUser.toBuilder()
                     .role(UserRole.ADMIN)
                     .build();

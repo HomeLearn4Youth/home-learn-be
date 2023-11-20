@@ -5,9 +5,11 @@ import com.homelearn.back.group.dto.GroupInputSpec;
 import com.homelearn.back.group.dto.GroupItemInputSpec;
 import com.homelearn.back.group.dto.GroupParam;
 import com.homelearn.back.group.entity.Group;
+import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.method.P;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,54 +20,54 @@ import java.util.List;
 public class GroupController {
     private final GroupService groupService;
 
-    @GetMapping("/findlist/{userId}")
+    @GetMapping("/findlist")
     public ResponseEntity<MessageUtil<List<Group>>> showGroupList(
-        @PathVariable("userId") Long userId
-    ){
+            @AuthenticationPrincipal User user
+            ){
         return ResponseEntity.ok().body(
                 MessageUtil.success(
-                        groupService.findGroupListByUserId(userId)
+                        groupService.findGroupListByUserId(user.getId())
                 ));
     }
 
-    @DeleteMapping("/delete/{groupId}/{userId}")
+    @DeleteMapping("/delete/{groupId}")
     public ResponseEntity<MessageUtil> deleteGroup(
             @PathVariable("groupId") Long groupId,
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User user
     ){
-        groupService.deleteGroup(groupId, userId);
+        groupService.deleteGroup(groupId, user.getId());
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
-    @DeleteMapping("/item/delete/{userId}")
+    @DeleteMapping("/item/delete")
     public ResponseEntity<MessageUtil> deleteGroupItem(
         @ModelAttribute GroupItemInputSpec groupItemInputSpec,
-        @PathVariable("userId") Long userId
+        @AuthenticationPrincipal User user
     ){
-        groupService.deleteGroupItem(groupItemInputSpec, userId);
+        groupService.deleteGroupItem(groupItemInputSpec, user.getId());
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
-    @PostMapping("/add/{userId}")
+    @PostMapping("/add")
     public ResponseEntity<MessageUtil> addGroup(
-            @PathVariable("userId") Long userId,
+            @AuthenticationPrincipal User user,
             @RequestBody GroupInputSpec input
             ){
         groupService.addGroup(
                 GroupParam.builder()
                     .groupName(input.getGroupName())
-                    .userId(userId)
+                    .userId(user.getId())
                     .build()
                 );
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
-    @PostMapping("/item/add/{userId}")
+    @PostMapping("/item/add")
     public ResponseEntity<MessageUtil> addGroupItem(
             @RequestBody GroupItemInputSpec newItem,
-            @PathVariable Long userId
+            @AuthenticationPrincipal User user
             ){
-        groupService.addGroupItem(newItem, userId);
+        groupService.addGroupItem(newItem, user.getId());
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
