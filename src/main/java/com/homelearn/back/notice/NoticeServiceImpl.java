@@ -23,7 +23,8 @@ public class NoticeServiceImpl implements NoticeService{
 
 
     @Override
-    public void addNotice(NoticeParam param) {
+    public void addNotice(NoticeParam param, Long loginUserId) {
+        //추후 권한 인증 들어가야함
         noticeMapper.addNotice(param);
     }
 
@@ -42,15 +43,20 @@ public class NoticeServiceImpl implements NoticeService{
     }
 
     @Override
-    public void editNotice(NoticeParam param) {
+    public void editNotice(NoticeParam param, Long loginUserId) {
+        if (noticeMapper
+                .getNoticeById(param.getId())
+                .orElseThrow(() -> new NoticeException(NOT_EXISTS_NOTICE))
+                .getWriterId()!=loginUserId) throw new NoticeException(FORBIDDEN_NOTICE);
         noticeMapper.editNotice(param);
     }
 
     @Override
-    public void deleteNoticeById(Long noticeId) {
-        noticeMapper
+    public void deleteNoticeById(Long noticeId, Long loginUserId) {
+        if (noticeMapper
                 .getNoticeById(noticeId)
-                .orElseThrow(() -> new NoticeException(NOT_EXISTS_NOTICE));
+                .orElseThrow(() -> new NoticeException(NOT_EXISTS_NOTICE))
+                .getWriterId()!=loginUserId) throw new NoticeException(FORBIDDEN_NOTICE);
         noticeMapper.deleteNoticeById(noticeId);
     }
 }
