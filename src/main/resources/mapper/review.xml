@@ -72,9 +72,9 @@
         VALUES (#{content}, #{userId}, #{aptCode})
     </insert>
 
-    <delete id="deleteReview" parameterType="DeleteReviewParam">
+    <delete id="deleteReview" parameterType="Long">
         DELETE FROM reviews
-        WHERE id = #{id} AND user_id = #{userId}
+        WHERE id = #{id}
     </delete>
 
 </mapper>

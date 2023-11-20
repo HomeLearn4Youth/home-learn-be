@@ -13,18 +13,22 @@
     <select id="findLike" parameterType="LikeParam" resultMap="like">
         select *
         from likes
-        where user_id = ${userId} and houseinfo_id = ${aptCode};
+        where user_id = #{userId} and houseinfo_id = #{aptCode};
     </select>
-
+    <select id="findLikeByLikeId" parameterType="Long" resultMap="like">
+        select *
+        from likes
+        where id = #{likeId}
+    </select>
     <insert id="addLike" parameterType="LikeParam">
         insert into likes(user_id, houseinfo_id)
-        values (${userId}, ${aptCode})
+        values (#{userId}, #{aptCode})
     </insert>
 
     <delete id="deleteLike" parameterType="LikeParam">
         delete
         from likes
-        where user_id = ${userId} and houseinfo_id = ${aptCode};
+        where user_id = #{userId} and houseinfo_id = #{aptCode};
     </delete>
 
 </mapper>

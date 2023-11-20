@@ -11,6 +11,7 @@ import java.util.Optional;
 @Mapper
 public interface LikeMapper {
     Optional<Like> findLike(LikeParam param);
+    Optional<Like> findLikeByLikeId(Long likeId);
     void addLike(LikeParam param);
     void deleteLike(LikeParam param);
 }
