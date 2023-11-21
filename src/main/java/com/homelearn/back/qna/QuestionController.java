@@ -7,6 +7,7 @@ import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,33 +19,30 @@ import java.util.stream.Collectors;
 public class QuestionController {
     private final QuestionService questionService;
     private final UserMapper userMapper;
-    @PostMapping("/add/{userId}")
+    @PostMapping("/add")
     public ResponseEntity<MessageUtil> addQuestion(
             @RequestBody QuestionInputSpec inputSpec,
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User loginUser
             ){
-        User loginUser = userMapper.findByIdUser(userId);
         questionService.addQuestion(inputSpec,loginUser);
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
 
-    @PutMapping("/answer/{userId}")
+    @PutMapping("/answer")
     public ResponseEntity<MessageUtil> addAnswer(
             @RequestBody AnswerInputSpec inputSpec,
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User loginUser
             ){
-        User loginUser = userMapper.findByIdUser(userId);
         questionService.addAnswer(inputSpec, loginUser);
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
-    @DeleteMapping("/delete/{questionId}/{userId}")
+    @DeleteMapping("/delete/{questionId}")
     public ResponseEntity<MessageUtil> deleteQuestion(
             @PathVariable("questionId") Long questionId,
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User loginUser
     ){
-        User loginUser = userMapper.findByIdUser(userId);
         questionService.deleteQuestion(questionId,loginUser);
         return ResponseEntity.ok().body(MessageUtil.success());
     }

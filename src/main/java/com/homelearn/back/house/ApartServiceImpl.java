@@ -1,8 +1,10 @@
 package com.homelearn.back.house;
 
 import com.homelearn.back.house.dto.*;
+import com.homelearn.back.house.entity.HouseJoinLike;
 import com.homelearn.back.house.exception.HouseErrorCode;
 import com.homelearn.back.house.exception.HouseException;
+import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -18,19 +20,19 @@ public class ApartServiceImpl implements ApartService{
     private final ApartMapper apartMapper;
 
     @Override
-    public List<ApartOutputSpec> getApartList(ApartListParam listParam) {
-        return apartMapper.getApartList(listParam)
-                .stream()
-                .map(m-> new ApartOutputSpec()
-                        .houseJoinLikeToApartOutputSpec(m))
-                .collect(Collectors.toList());
+    public List<HouseJoinLike> getApartList(ApartListInputSpec input, User user) {
+        return apartMapper.getApartList(
+                new ApartListParam().apartListInputSpecToApartListParam(input,user.getId()));
     }
 
     @Override
-    public ApartOutputSpec getApartInfoById(ApartInfoParam infoParam) {
+    public ApartOutputSpec getApartInfoById(Long apartCode, User user) {
         return new ApartOutputSpec()
                 .houseJoinLikeToApartOutputSpec(
-                        apartMapper.getApartInfoById(infoParam)
+                        apartMapper.getApartInfoById(ApartInfoParam.builder()
+                                        .aptCode(apartCode)
+                                        .userId(user.getId())
+                                        .build())
                                 .orElseThrow(()->new HouseException(NOT_EXISTS_HOUSE)));
     }
 

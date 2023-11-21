@@ -3,6 +3,17 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.homelearn.back.user.UserMapper">
+    <insert id="addUser" parameterType="AddUserForm">
+        <if test="password!=null">
+            insert into users(password, email, name)
+            values (#{password}, #{email}, #{name})
+        </if>
+        <if test="password==null">
+            insert into users(email, `name`)
+            values (#{email}, #{name})
+        </if>
+    </insert>
+
     <resultMap id="user" type="com.homelearn.back.user.entity.User">
         <result column="id" property="id"></result>
         <result column="password" property="password"></result>
@@ -10,12 +21,6 @@
         <result column="name" property="name"></result>
         <result column="role" property="role"></result>
     </resultMap>
-
-
-    <insert id="addUser" parameterType="AddUserForm">
-        insert into users(password, email, name)
-        values (#{password}, #{email}, #{name})
-    </insert>
 
     <select id="findByIdUser" parameterType="Long" resultMap="user">
         select *
