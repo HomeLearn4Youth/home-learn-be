@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService{
      * @return 추가된 회원 ID
      */
     @Override
-    public void addUser(AddUserForm addForm) {
+    public Long addUser(AddUserForm addForm) {
         User newUser=User.builder()
                 .name(addForm.getName())
                 .email(addForm.getEmail())
@@ -42,7 +42,7 @@ public class UserServiceImpl implements UserService{
                     .role(UserRole.ADMIN)
                     .build();
         }
-        userMapper.addUser(newUser);
+        return userMapper.addUser(newUser);
     }
 
     /**
@@ -107,11 +107,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public User findOrCreate(OAuthDto oAuthDto) {
         User user=userMapper.findByEmail(oAuthDto.getEmail());
+//        log.debug(user.toString());
         if(user==null){//기존에 존재하지 않는 사용자
-            userMapper.addUser(oAuthDto.toEntity());
+            user=oAuthDto.toEntity();
+            user.toBuilder().id(userMapper.addUser(user));
         }
         return user;
     }
-
 
 }

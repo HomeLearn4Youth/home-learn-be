@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface UserService {
     //Create
-    void addUser(AddUserForm addForm);
+    Long addUser(AddUserForm addForm);
     //Read
     User findByIdUser(Long id);
     User findByEmail(String email);
