@@ -6,8 +6,10 @@ import com.homelearn.back.notice.entity.Notice;
 import com.homelearn.back.notice.entity.NoticeJoinMember;
 import com.homelearn.back.notice.exception.NoticeErrorCode;
 import com.homelearn.back.notice.exception.NoticeException;
+import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.websocket.server.PathParam;
@@ -28,16 +30,15 @@ public class NoticeController {
      * @param noticeId
      * @return
      */
-    @GetMapping("/find/{noticeId}/{userId}")
+    @GetMapping("/find/{noticeId}")
     public ResponseEntity<MessageUtil<FindNoticeOutputSpec>> findNotice(
-            @PathVariable("noticeId") Long noticeId,
-            @PathVariable("userId") Long userId
+            @PathVariable("noticeId") Long noticeId
     ){
         return ResponseEntity.ok().body(
                 MessageUtil.success(
-                        new FindNoticeOutputSpec().noticeJoinMemberToFindOutputSpec(
-                                noticeService.getNoticeById(noticeId)
-                        )));
+                        new FindNoticeOutputSpec()
+                                .noticeJoinMemberToFindOutputSpec(
+                                        noticeService.getNoticeById(noticeId))));
     }
 
     /**
@@ -52,11 +53,10 @@ public class NoticeController {
                 MessageUtil.success(
                         noticeService.getNoticeList(findListNoticeInputSpec)
                             .stream()
-                                .map(
-                                    m -> new FindListNoticeOutputSpec()
-                                            .noticeToFindListOutputSpec(m))
-                            .collect(Collectors.toList()
-                            )));
+                            .map(
+                                m -> new FindListNoticeOutputSpec()
+                                        .noticeToFindListOutputSpec(m))
+                            .collect(Collectors.toList())));
     }
 
     /**
@@ -64,48 +64,32 @@ public class NoticeController {
      * @param editNoticeInputSpec
      * @return
      */
-    @PutMapping("/edit/{userId}")
+    @PutMapping("/edit")
     public ResponseEntity<MessageUtil> editNotice(
             @RequestBody EditNoticeInputSpec editNoticeInputSpec,
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User user
             ){
-
-        noticeService.editNotice(NoticeParam.builder()
-                        .id(editNoticeInputSpec.getNoticeId())
-                        .content(editNoticeInputSpec.getContent())
-                        .title(editNoticeInputSpec.getTitle())
-                        .writerId(userId)
-                        .build(), userId);
+        noticeService.editNotice(editNoticeInputSpec, user);
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
-    @PostMapping("/add/{userId}")
+    @PostMapping("/add")
     public ResponseEntity<MessageUtil> addNotice(
             @RequestBody AddNoticeInputSpec addNoticeInputSpec,
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User user
             ){
-        //유저 권한 검증해야함  FORBIDDEN_NOTICE 날려줘야함
-
-        noticeService.addNotice(NoticeParam.builder()
-                .title(addNoticeInputSpec.getTitle())
-                .content(addNoticeInputSpec.getContent())
-                .writerId(userId)
-                .build(), userId);
+        noticeService.addNotice(addNoticeInputSpec, user);
         return ResponseEntity.ok().body(MessageUtil.success());
     }
 
-    @DeleteMapping("/delete/{noticeId}/{userId}")
+    @DeleteMapping("/delete/{noticeId}")
     public ResponseEntity<MessageUtil> deleteNotice(
             @PathVariable("noticeId") Long noticeId,
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User user
 
     ){
-        if (userId!=noticeService.getNoticeById(noticeId).getWriterId()){
-            throw new NoticeException(FORBIDDEN_NOTICE);
-        }
-        noticeService.deleteNoticeById(noticeId, userId);
+        noticeService.deleteNoticeById(noticeId, user);
         return ResponseEntity.ok().body(MessageUtil.success());
     }
-
 
 }
