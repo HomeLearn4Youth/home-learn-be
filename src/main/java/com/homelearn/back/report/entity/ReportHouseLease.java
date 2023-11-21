@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class HouseLease {
+public class ReportHouseLease {
     private int aptCode;// 아파트 코드
     private String dongCode; //시군구동 코드
     private String sigu; //시군구 코드

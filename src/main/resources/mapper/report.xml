@@ -6,10 +6,11 @@
     <select id="findApartList" parameterType="String" resultType="RentHouseInfo">
         select *
         from renthouseinfo
-        where dongCode = ${dongCode}
+        where dongCode = #{dongCode}
     </select>
+<!--    dongCode에 해당하는 aptCode 찾기 (renthouseinfo) , -->
 
-    <select id="getApartLeaseList" parameterType="int" resultType="HouseLease">
+    <select id="getApartLeaseList" parameterType="int" resultType="ReportHouseLease">
         select *
         from houselease
         where aptCode = #{aptCode}
@@ -18,13 +19,13 @@
     <select id="getLeaseDealPercent" parameterType="String" resultType="PerLeaseDeal">
         select *
         from perleasedeal
-        where sidoCode = left(${dongCode}, 5)
+        where sidoCode = left(#{dongCode}, 5)
     </select>
 
     <select id="getLeaseAvg" parameterType="String" resultType="AvgSquareMeter">
         select *
         from avgsquaremeter
-        where left(sidoCode,2) = left(${dongCode}, 2)
+        where left(sidoCode,2) = left(#{dongCode}, 2)
     </select>
 
 </mapper>
