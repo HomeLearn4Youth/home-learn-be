@@ -51,6 +51,7 @@ public class JwtFilter extends OncePerRequestFilter {
                 //토큰이 유효할 경우 토큰에서 Authentication 객체를 가져와 SecurityContext에 저장
                 Authentication auth = jwtProvider.getAuthentication(token);
                 SecurityContextHolder.getContext().setAuthentication(auth);
+                filterChain.doFilter(request,response);
             }else {
                 throw new JwtException(JwtErrorCode.NO_TOKEN);
             }
@@ -60,7 +61,7 @@ public class JwtFilter extends OncePerRequestFilter {
             SecurityContextHolder.clearContext();
             response.sendError(e.getErrorCode().getHttpStatus().value(), e.getMessage());
         }
-
+//        log.debug("Authorization pass");
 
     }
 

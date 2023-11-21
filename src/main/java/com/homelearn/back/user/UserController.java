@@ -111,15 +111,13 @@ public class UserController {
 
     /**
      * 회원 조회
-     * @param userId
      * @return
      */
     @GetMapping("/find")
-    public ResponseEntity<MessageUtil<User>> findUser(
-            @AuthenticationPrincipal User user
-    )
-    {
-        return ResponseEntity.ok().body(MessageUtil.success(userService.findByIdUser(user.getId())));
+    public ResponseEntity<MessageUtil<User>> findUser(@AuthenticationPrincipal User user){
+        User foundUser=userService.findByIdUser(user.getId());
+        log.debug(foundUser.toString());
+        return ResponseEntity.ok().body(MessageUtil.success(foundUser));
     }
 
     /**
