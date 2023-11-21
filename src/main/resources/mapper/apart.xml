@@ -108,6 +108,9 @@
                     <if test="dongCode != null">
                         AND hi.dongCode = #{dongCode}
                     </if>
+                    <if test="searchApartName != null">
+                        AND hi.apartmentName like CONCAT('%', #{searchApartName}, '%')
+                    </if>
                     <if test="isLike != null and isLike">
                         AND userLikes.id IS NOT NULL
                     </if>
@@ -151,6 +154,9 @@
                 <where>
                     <if test="dongCode != null">
                         hi.dongCode = #{dongCode}
+                    </if>
+                    <if test="searchApartName != null">
+                        AND hi.apartmentName like CONCAT('%', #{searchApartName}, '%')
                     </if>
                     <if test="isLike != null and isLike">
                         AND lk.id IS NOT NULL

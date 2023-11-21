@@ -5,6 +5,7 @@ import com.homelearn.back.house.dto.*;
 import com.homelearn.back.news.CrawlerToObjectMaker;
 import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/apart")
 @RequiredArgsConstructor
+@Slf4j
 public class ApartController {
     private final ApartService apartService;
     private final CrawlerToObjectMaker maker;
@@ -47,7 +49,6 @@ public class ApartController {
     public ResponseEntity<MessageUtil<List<DealListOutputSpec>>> findAptDeal(
             @ModelAttribute DealListInputSpec inputSpec
             ){
-        System.out.println(inputSpec.toString());
         return ResponseEntity.ok().body(
                 MessageUtil.success(
                         apartService.getApartDealList(inputSpec))

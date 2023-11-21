@@ -24,8 +24,7 @@ public class ApartServiceImpl implements ApartService{
     private final CrawlerToObjectMaker maker;
     @Override
     public List<HouseJoinLike> getApartList(ApartListInputSpec input, User user) {
-        return apartMapper.getApartList(
-                new ApartListParam().apartListInputSpecToApartListParam(input,user.getId()));
+        return apartMapper.getApartList(new ApartListParam().apartListInputSpecToApartListParam(input, user.getId()));
     }
 
     @Override
