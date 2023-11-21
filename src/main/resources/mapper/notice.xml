@@ -46,7 +46,7 @@
         FROM
             notices
         JOIN users ON notices.user_id = users.id
-        where notices.id = ${noticeId}
+        where notices.id = #{noticeId}
     </select>
 
 
@@ -62,22 +62,22 @@
             </if>
         </where>
         ORDER BY created_at
-        LIMIT ${count} OFFSET ${startIndex}
+        LIMIT #{count} OFFSET #{startIndex}
     </select>
 
     <update id="editNotice" parameterType="NoticeParam">
         update notices set title = #{title}, content = #{content}
-        where id=${id}
+        where id=#{id}
     </update>
 
     <update id="countNotice" parameterType="Long">
-        update notices set `view` = `view`+1 where id=${noticeId}
+        update notices set `view` = `view`+1 where id=#{noticeId}
     </update>
 
     <delete id="deleteNoticeById" parameterType="Long">
         delete
         from notices
-        where id=${noticeId};
+        where id=#{noticeId};
     </delete>
 
 </mapper>
