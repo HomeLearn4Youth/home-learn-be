@@ -37,6 +37,7 @@
         select *
         from users
         where email=#{email} and password=#{password}
+        limit 1
     </select>
     <select id="findPassword" parameterType="AddUserForm" resultMap="user">
         select *

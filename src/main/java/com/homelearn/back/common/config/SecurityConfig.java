@@ -23,19 +23,19 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 public class SecurityConfig {
     @Getter
     private static final String[] PERMITTED_URL={
-            "/**",
-//            "/user/add",
-//            "/user/findemail",
-//            "/user/findpass",
-//            "/user/login",
-//            "/user/refresh",
-//            "/notice/find/**",
-//            "/notice/findlist/**",
-//            "/review/findlist/**",
-//            "/dong/**",
-//            "/oauth/**",
-//            "/user/oauth/**",
-//            "/login/**",
+//            "/**",
+            "/user/add",
+            "/user/findemail",
+            "/user/findpass",
+            "/user/login",
+            "/user/refresh",
+            "/notice/find/**",
+            "/notice/findlist/**",
+            "/review/findlist/**",
+            "/dong/**",
+            "/oauth/**",
+            "/user/oauth/**",
+            "/login/**",
     };
     private final JwtFilter jwtFilter;
     private final CustomOauthService customOauthService;
