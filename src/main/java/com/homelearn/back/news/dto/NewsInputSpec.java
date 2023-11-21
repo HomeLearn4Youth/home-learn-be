@@ -11,7 +11,7 @@ import lombok.*;
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class NewsInputSpec {
-    private String searchText;
+    private Long aptCode;
     private Integer startIndex;
     private Integer count;
 }
