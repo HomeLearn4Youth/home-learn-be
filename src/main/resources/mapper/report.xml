@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.homelearn.back.report.ReportMapper">
+    <select id="findApartList" parameterType="String" resultType="RentHouseInfo">
+        select *
+        from renthouseinfo
+        where dongCode = ${dongCode}
+    </select>
+
+    <select id="getApartLeaseList" parameterType="int" resultType="HouseLease">
+        select *
+        from houselease
+        where aptCode = #{aptCode}
+    </select>
+
+    <select id="getLeaseDealPercent" parameterType="String" resultType="PerLeaseDeal">
+        select *
+        from perleasedeal
+        where sidoCode = left(${dongCode}, 5)
+    </select>
+
+    <select id="getLeaseAvg" parameterType="String" resultType="AvgSquareMeter">
+        select *
+        from avgsquaremeter
+        where left(sidoCode,2) = left(${dongCode}, 2)
+    </select>
+
+</mapper>
