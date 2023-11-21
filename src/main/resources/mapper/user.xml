@@ -4,8 +4,8 @@
 
 <mapper namespace="com.homelearn.back.user.UserMapper">
     <insert id="addUser" parameterType="AddUserForm" useGeneratedKeys="true" keyProperty="id">
-        insert into users(password, email, name)
-        values (#{password}, #{email}, #{name})
+        insert into users(password, email, name,role)
+        values (#{password}, #{email}, #{name},#{role})
     </insert>
 
     <resultMap id="user" type="com.homelearn.back.user.entity.User">
