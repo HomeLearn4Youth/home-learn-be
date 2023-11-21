@@ -5,9 +5,11 @@ import com.homelearn.back.house.dto.*;
 import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/apart")
@@ -19,36 +21,25 @@ public class ApartController {
      * sec 적용 이후 @AuthenticationPrincipal LoginUser 를 통해 user 정보를 가져와서 넣어야함
      * 현재는 userId를 PathVariable에서 가져오는 방식
      */
-    @GetMapping("/findlist/{userId}")
+    @GetMapping("/findlist")
     public ResponseEntity<MessageUtil<List<ApartOutputSpec>>> findAptList(
             @ModelAttribute ApartListInputSpec inputSpec,
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User user
             ){
         return ResponseEntity.ok().body(
                 MessageUtil.success(
-                        apartService.getApartList(
-                                new ApartListParam()
-                                        .apartListInputSpecToApartListParam(inputSpec, userId)
-                        )
-                )
-        );
+                        apartService.getApartList(inputSpec, user).stream()
+                                .map(m->new ApartOutputSpec().houseJoinLikeToApartOutputSpec(m))
+                                .collect(Collectors.toList())));
     }
 
-    @GetMapping("/find/{apartCode}/{userId}")
+    @GetMapping("/find/{apartCode}")
     public ResponseEntity<MessageUtil<ApartOutputSpec>> findApt(
             @PathVariable("apartCode") Long apartCode,
-            @PathVariable("userId") Long userId
+            @AuthenticationPrincipal User user
     ){
         return ResponseEntity.ok().body(
-                MessageUtil.success(
-                        apartService.getApartInfoById(
-                                ApartInfoParam.builder()
-                                        .aptCode(apartCode)
-                                        .userId(userId)
-                                        .build()
-                        )
-                )
-        );
+                MessageUtil.success(apartService.getApartInfoById(apartCode, user)));
     }
 
     @GetMapping("/history")
