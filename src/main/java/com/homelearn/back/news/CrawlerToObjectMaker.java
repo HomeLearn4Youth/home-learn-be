@@ -1,5 +1,6 @@
 package com.homelearn.back.news;
 
+import com.homelearn.back.house.entity.HouseInfo;
 import com.homelearn.back.house.entity.HouseJoinLike;
 import com.homelearn.back.news.dto.*;
 import lombok.extern.slf4j.Slf4j;
@@ -34,7 +35,7 @@ public class CrawlerToObjectMaker {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/v1/search/image")
-                        .queryParam("query", house.getDong() + " " + house.getApartmentName())
+                        .queryParam("query", getSearchParam(house.getDong(), house.getApartmentName()))
                         .queryParam("start", 1)
                         .queryParam("display", 1)
                         .build())
@@ -47,11 +48,11 @@ public class CrawlerToObjectMaker {
         return naverImgs.getItems().get(0).getLink();
     }
 
-    public NaverNewsInput getNaverNews(NewsInputSpec inputSpec){
+    public NaverNewsInput getNaverNews(NewsInputSpec inputSpec, HouseInfo houseInfo){
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/v1/search/news")
-                        .queryParam("query", inputSpec.getSearchText())
+                        .queryParam("query", getSearchParam(houseInfo.getDong(), houseInfo.getApartmentName()))
                         .queryParam("start", inputSpec.getStartIndex()+1)
                         .queryParam("display", inputSpec.getCount())
                         .build())
@@ -60,16 +61,16 @@ public class CrawlerToObjectMaker {
                 .block();
     }
 
-    public List<NewsOutputSpec> getNews(NewsInputSpec inputSpec){
+    public List<NewsOutputSpec> getNews(NewsInputSpec inputSpec, HouseInfo houseInfo){
 
-        NaverNewsInput input = getNaverNews(inputSpec);
+        NaverNewsInput input = getNaverNews(inputSpec, houseInfo);
 
         List<NaverNews> items = input.getItems();
         List<NewsOutputSpec> output = new ArrayList<NewsOutputSpec>();
         for (NaverNews item : items) {
             NewsSite siteData = NewsCrawler.getThumbnailAndSiteName(item.getOriginallink());
             output.add(NewsOutputSpec.builder()
-                    .title(item.getTitle())
+                    .title(item.getTitle().replaceAll("<[^>]*>",""))
                     .link(item.getLink())
                     .description(item.getDescription().replaceAll("<[^>]*>",""))
                     .pubDate(item.getPubDate())
@@ -78,5 +79,12 @@ public class CrawlerToObjectMaker {
                     .build());
         }
         return output;
+    }
+
+    private String getSearchParam(
+                             String dong,
+                             String apartName
+                             ){
+        return dong+" "+apartName+" 부동산";
     }
 }
