@@ -9,9 +9,11 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@ToString
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ApartListParam {
     private Long dongCode; // 동코드
+    private String searchApartName; // 아파트 이름 검색
     private Integer startIndex; // 시작 번호
     private Integer count; //몇개 뽑을지
     private Boolean isLike; //관심 영역만 출력 조건
@@ -21,6 +23,7 @@ public class ApartListParam {
     public ApartListParam apartListInputSpecToApartListParam (ApartListInputSpec inputSpec, Long userId){
         return ApartListParam.builder()
                 .dongCode(inputSpec.getDongCode())
+                .searchApartName(inputSpec.getSearchApartName())
                 .startIndex(inputSpec.getStartIndex())
                 .count(inputSpec.getCount())
                 .isLike(inputSpec.getIsLike())
