@@ -2,7 +2,7 @@ package com.homelearn.back.report.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import com.homelearn.back.report.entity.HouseLease;
+import com.homelearn.back.report.entity.ReportHouseLease;
 import lombok.*;
 
 @AllArgsConstructor
@@ -31,7 +31,7 @@ public class ReportFindOutputSpec {
     private String termContracet; // 계약기간
     private String previousDeposit; // 이전 거래 가격
 
-    public ReportFindOutputSpec reportFindInputSpecToReportFindParam(HouseLease m) {
+    public ReportFindOutputSpec reportFindInputSpecToReportFindParam(ReportHouseLease m) {
         return ReportFindOutputSpec.builder()
                 .aptCode(m.getAptCode())
                 .apartmentName(m.getApartmentName())

@@ -28,30 +28,45 @@ public class ReportController {
      * @param dongCode
      * @return
      */
-    @GetMapping("/find/{dongCode}")
+    @GetMapping("/apartList/{dongCode}")
     public ResponseEntity<MessageUtil<List<LApartListOutputSpec>>> findAptList(
             @PathVariable("dongCode") String dongCode
             ){
-        return ResponseEntity.ok().body(MessageUtil.success(reportService.findApartList(dongCode)));
+        return ResponseEntity.ok().body(
+                MessageUtil.success(
+                        reportService.findApartList(dongCode)));
     }
-    @GetMapping("/find/{aptCode}")
+
+    /**
+     * 전세 매물 상세조회
+     * @param aptCode
+     * @return
+     */
+    @GetMapping("/apartInfo/{aptCode}")
     public ResponseEntity<MessageUtil<List<ReportFindOutputSpec>>> getApartLeaseList(
         @PathVariable("aptCode") int aptCode
     ){
-        return ResponseEntity.ok().body(MessageUtil.success(reportService.getApartLeaseList(aptCode)));
+        return ResponseEntity.ok().body(
+                MessageUtil.success(
+                        reportService.getApartLeaseList(aptCode)));
     }
     @GetMapping("/avg/{dongCode}")
     public ResponseEntity<MessageUtil<List<PerLeaseDeal>>> getLeaseDealPercent(
             @PathVariable("dongCode") String dongCode
     ){
-        return ResponseEntity.ok().body(MessageUtil.success(reportService.getLeaseDealPercent(dongCode)));
+        return ResponseEntity.ok().body(
+                MessageUtil.success(
+                        reportService.getLeaseDealPercent(dongCode)));
     }
 
     @GetMapping("/per/{dongCode}")
     public ResponseEntity<MessageUtil<List<AvgSquareMeter>>> getLeaseAvg(
             @PathVariable("dongCode") String dongCode
             ){
-        return null;
+        return ResponseEntity.ok().body(
+                MessageUtil.success(
+                        reportService.getLeaseAvg(dongCode))
+        );
 
     }
 }
