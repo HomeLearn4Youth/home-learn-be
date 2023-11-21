@@ -8,7 +8,7 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Getter
 @AllArgsConstructor
-public enum HouseErrorCode {
+public enum ReportErrorCode {
 
     NOT_EXISTS_HOUSE("존재하지 않은 아파트 입니다.", BAD_REQUEST);
 

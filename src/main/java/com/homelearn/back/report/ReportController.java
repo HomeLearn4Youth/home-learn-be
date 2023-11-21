@@ -9,12 +9,14 @@ import com.homelearn.back.report.dto.ReportFindOutputSpec;
 import com.homelearn.back.report.entity.AvgSquareMeter;
 import com.homelearn.back.report.entity.PerLeaseDeal;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/report")
 @RequiredArgsConstructor
@@ -28,30 +30,27 @@ public class ReportController {
      */
     @GetMapping("/find/{dongCode}")
     public ResponseEntity<MessageUtil<List<LApartListOutputSpec>>> findAptList(
-            @ModelAttribute LApartListInputSpec inputSpec,
             @PathVariable("dongCode") String dongCode
             ){
-        return null;
+        return ResponseEntity.ok().body(MessageUtil.success(reportService.findApartList(dongCode)));
     }
     @GetMapping("/find/{aptCode}")
     public ResponseEntity<MessageUtil<List<ReportFindOutputSpec>>> getApartLeaseList(
-            @ModelAttribute ReportFindInputSpec inputSpec,
-            @PathVariable("apartCode") int apartCode
+        @PathVariable("aptCode") int aptCode
     ){
-        return null;
+        return ResponseEntity.ok().body(MessageUtil.success(reportService.getApartLeaseList(aptCode)));
     }
     @GetMapping("/avg/{dongCode}")
     public ResponseEntity<MessageUtil<List<PerLeaseDeal>>> getLeaseDealPercent(
-            @PathVariable("apartCode") Long apartCode
+            @PathVariable("dongCode") String dongCode
     ){
-        return null;
+        return ResponseEntity.ok().body(MessageUtil.success(reportService.getLeaseDealPercent(dongCode)));
     }
 
     @GetMapping("/per/{dongCode}")
     public ResponseEntity<MessageUtil<List<AvgSquareMeter>>> getLeaseAvg(
-            @ModelAttribute DealListInputSpec inputSpec
+            @PathVariable("dongCode") String dongCode
             ){
-        System.out.println(inputSpec.toString());
         return null;
 
     }
