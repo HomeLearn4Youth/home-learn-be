@@ -14,6 +14,7 @@ import lombok.*;
 public class ApartOutputSpec {
     private Long aptId;
     private String aptName;
+    private String aptImg;
     private String dong;
     private Long bonbun;
     private Long bubun;
@@ -26,10 +27,11 @@ public class ApartOutputSpec {
     private String lat;
 
 
-    public ApartOutputSpec houseJoinLikeToApartOutputSpec(HouseJoinLike m){
+    public ApartOutputSpec houseJoinLikeToApartOutputSpec(HouseJoinLike m, String img){
         return ApartOutputSpec.builder()
                 .aptId(m.getAptCode())
                 .aptName(m.getApartmentName())
+                .aptImg(img)
                 .dong(m.getDong())
                 .bonbun(m.getBonbun())
                 .bubun(m.getBubun())

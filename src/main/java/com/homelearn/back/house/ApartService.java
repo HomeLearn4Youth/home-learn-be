@@ -16,4 +16,5 @@ public interface ApartService {
     ApartOutputSpec getApartInfoById(Long apartCode, User user);
     //아파트 거래내역 조회
     List<DealListOutputSpec> getApartDealList(DealListInputSpec dealListInputSpec);
+
 }
