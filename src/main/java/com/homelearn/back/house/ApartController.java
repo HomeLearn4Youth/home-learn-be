@@ -2,6 +2,7 @@ package com.homelearn.back.house;
 
 import com.homelearn.back.common.util.MessageUtil;
 import com.homelearn.back.house.dto.*;
+import com.homelearn.back.news.CrawlerToObjectMaker;
 import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ApartController {
     private final ApartService apartService;
-
+    private final CrawlerToObjectMaker maker;
     /**
      * sec 적용 이후 @AuthenticationPrincipal LoginUser 를 통해 user 정보를 가져와서 넣어야함
      * 현재는 userId를 PathVariable에서 가져오는 방식
@@ -29,7 +30,7 @@ public class ApartController {
         return ResponseEntity.ok().body(
                 MessageUtil.success(
                         apartService.getApartList(inputSpec, user).stream()
-                                .map(m->new ApartOutputSpec().houseJoinLikeToApartOutputSpec(m))
+                                .map(m->new ApartOutputSpec().houseJoinLikeToApartOutputSpec(m,maker.getImg(m)))
                                 .collect(Collectors.toList())));
     }
 
@@ -53,4 +54,5 @@ public class ApartController {
                 );
 
     }
+
 }

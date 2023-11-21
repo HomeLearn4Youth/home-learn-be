@@ -13,7 +13,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class NewsServiceImpl implements NewsService {
-    private final NewsMaker newsMaker;
+    private final CrawlerToObjectMaker newsMaker;
     @Override
     public List<NewsOutputSpec> searchNews(NewsInputSpec inputSpec) {
         return newsMaker.getNews(inputSpec);
