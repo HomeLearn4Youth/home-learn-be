@@ -121,6 +121,17 @@ public class UserController {
     }
 
     /**
+     * 회원 조회
+     * @return
+     */
+    @GetMapping("/find/{userId}")
+    public ResponseEntity<MessageUtil<User>> findUser(@PathVariable Long userId){
+        User foundUser=userService.findByIdUser(userId);
+        log.debug(foundUser.toString());
+        return ResponseEntity.ok().body(MessageUtil.success(foundUser));
+    }
+
+    /**
      * 회원수정
      * @param userForm
      * @return
