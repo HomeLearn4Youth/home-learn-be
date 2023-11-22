@@ -1,8 +1,11 @@
 package com.homelearn.back.news;
 
+import com.homelearn.back.house.ApartMapper;
+import com.homelearn.back.house.dto.AddApartImgParam;
 import com.homelearn.back.house.entity.HouseInfo;
 import com.homelearn.back.house.entity.HouseJoinLike;
 import com.homelearn.back.news.dto.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,13 +21,15 @@ public class CrawlerToObjectMaker {
     private String naverClientId;
     private String naverClientSecret;
     private WebClient webClient;
-
+    private ApartMapper apartMapper;
     @Autowired
     public CrawlerToObjectMaker(
             @Value(value = "${dummy.naver-client-id}") String naverClientId,
-            @Value(value = "${dummy.naver-client-secret}") String naverClientSecret) {
+            @Value(value = "${dummy.naver-client-secret}") String naverClientSecret,
+            ApartMapper apartMapper) {
         this.naverClientId = naverClientId;
         this.naverClientSecret = naverClientSecret;
+        this.apartMapper = apartMapper;
         this.webClient = WebClient.builder()
                             .baseUrl("https://openapi.naver.com")
                             .defaultHeader("X-Naver-Client-Id", naverClientId)
@@ -44,8 +49,12 @@ public class CrawlerToObjectMaker {
                 .block();
     }
     public String getImg(HouseJoinLike house){
-        NaverImgInputSpec naverImgs = getNaverImgs(house);
-        return naverImgs.getItems().get(0).getLink();
+        String link = getNaverImgs(house).getItems().get(0).getLink();
+        apartMapper.addAptImg(AddApartImgParam.builder()
+                        .aptCode(house.getAptCode())
+                        .aptImg(link)
+                        .build());
+        return link;
     }
 
     public NaverNewsInput getNaverNews(NewsInputSpec inputSpec, HouseInfo houseInfo){

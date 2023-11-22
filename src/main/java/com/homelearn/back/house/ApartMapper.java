@@ -18,4 +18,5 @@ public interface ApartMapper {
     //아파트 거래내역 조회
     List<DealListOutputSpec> getApartDealList(DealListInputParam inputParam);
     Optional<HouseInfo> findApartByApartCode(Long ApartCode);
+    void addAptImg(AddApartImgParam param);
 }

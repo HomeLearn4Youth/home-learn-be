@@ -27,6 +27,7 @@ public class HouseJoinLike {
     private String jibun;
     private String lng;
     private String lat;
+    private String aptImg;
 
     // 좋아요
     private Boolean likeStatus;
