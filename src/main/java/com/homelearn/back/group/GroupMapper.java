@@ -1,5 +1,6 @@
 package com.homelearn.back.group;
 
+import com.homelearn.back.group.dto.GroupListCountParam;
 import com.homelearn.back.group.dto.GroupParam;
 import com.homelearn.back.group.dto.GroupItemInputSpec;
 import com.homelearn.back.group.entity.Group;
@@ -19,4 +20,6 @@ public interface GroupMapper {
     void addGroupItem(GroupItemInputSpec groupItemInputSpec);
     Optional<GroupItem> findGroupItem(GroupItemInputSpec groupItemInputSpec);
     void deleteGroupItem(GroupItemInputSpec groupItemInputSpec);
+
+    Integer findGroupCount(GroupListCountParam param);
 }
