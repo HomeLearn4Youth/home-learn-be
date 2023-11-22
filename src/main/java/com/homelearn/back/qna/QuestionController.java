@@ -48,16 +48,22 @@ public class QuestionController {
     }
 
     @GetMapping("/findlist")
-    public ResponseEntity<MessageUtil<List<QuestionOutputSpec>>> findQuestionList(
+    public ResponseEntity<MessageUtil<QuestionListOutputSpec>> findQuestionList(
             @ModelAttribute QuestionListInputSpec inputSpec
     ){
         return ResponseEntity.ok().body(
                 MessageUtil.success(
-                        questionService.findQuestion(inputSpec)
-                                .stream()
-                                .map(
-                                        m-> new QuestionOutputSpec().questionJoinUserToOutputSpec(m))
-                                .collect(Collectors.toList())));
+                        QuestionListOutputSpec.builder()
+                                .startIndex(inputSpec.getStartIndex())
+                                .currentCount(inputSpec.getCount())
+                                .totalCount(questionService.getTotalCount())
+                                .items(questionService.findQuestion(inputSpec)
+                                        .stream()
+                                        .map(
+                                                m-> new QuestionOutputSpec().questionJoinUserToOutputSpec(m))
+                                        .collect(Collectors.toList()))
+                                .build())
+                        );
     }
 
     @GetMapping("/find/{questionId}")

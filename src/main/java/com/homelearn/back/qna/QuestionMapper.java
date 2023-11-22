@@ -19,4 +19,6 @@ public interface QuestionMapper {
     List<QuestionJoinUser> findQuestion(QuestionListInputSpec inputSpec);
     //질문 상세 보기
     Optional<QuestionJoinUser> findQuestionById(Long id);
+
+    Integer getTotalCount();
 }
