@@ -68,4 +68,9 @@ public class NoticeServiceImpl implements NoticeService{
                 .getWriterId() != loginUser.getId()) throw new NoticeException(FORBIDDEN_NOTICE);
         noticeMapper.deleteNoticeById(noticeId);
     }
+
+    @Override
+    public Integer getTotalCount() {
+        return noticeMapper.getTotalCount();
+    }
 }
