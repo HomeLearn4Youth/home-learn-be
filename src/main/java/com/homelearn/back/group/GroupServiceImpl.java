@@ -2,17 +2,11 @@ package com.homelearn.back.group;
 
 import com.homelearn.back.group.dto.*;
 import com.homelearn.back.group.entity.Group;
-import com.homelearn.back.group.entity.GroupItem;
-import com.homelearn.back.group.exception.GroupErrorCode;
 import com.homelearn.back.group.exception.GroupException;
-import com.homelearn.back.house.ApartMapper;
 import com.homelearn.back.house.ApartService;
 import com.homelearn.back.house.dto.ApartListInputSpec;
 import com.homelearn.back.house.dto.ApartOutputSpec;
-import com.homelearn.back.house.entity.HouseJoinLike;
 import com.homelearn.back.like.LikeMapper;
-import com.homelearn.back.like.dto.LikeParam;
-import com.homelearn.back.like.exception.LikeErrorCode;
 import com.homelearn.back.like.exception.LikeException;
 import com.homelearn.back.news.CrawlerToObjectMaker;
 import com.homelearn.back.user.entity.User;
@@ -20,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,7 +98,8 @@ public class GroupServiceImpl implements GroupService{
         else {
             int endIdx = groupApartList.size() - 1;
             log.debug("endIdx : " + String.valueOf(endIdx));
-            List<ApartOutputSpec> shortestPath = ShortestPath.findApproximateShortestPath(groupApartList);
+//            List<ApartOutputSpec> shortestPath = ApproximateShortestPath.findApproximateShortestPath(groupApartList);
+            List<ApartOutputSpec> shortestPath=ShortestPath.findOptimalPath(groupApartList);
             ApartOutputSpec startApart = shortestPath.get(0);
             ApartOutputSpec endApart = shortestPath.get(endIdx);
             StringBuilder passList = new StringBuilder();
