@@ -13,9 +13,9 @@ import java.util.List;
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class FindListNoticeOutputSpec {
-    private String searchText; // 검색어
-    private Integer startIndex; // 시작 번호
-    private Integer count; //몇개 뽑을지
+    private String requestSearchText; // 검색어
+    private Integer requestStartIndex; // 시작 번호
+    private Integer requestCount; //몇개 뽑을지
     private Integer totalCount; // 총
     private List<FindListNoticeItemOutputSpec> items;
 }

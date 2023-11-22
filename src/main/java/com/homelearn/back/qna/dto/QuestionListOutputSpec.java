@@ -13,8 +13,8 @@ import java.util.List;
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class QuestionListOutputSpec {
-    private Integer startIndex; // 시작 번호
-    private Integer currentCount; //몇개 뽑을지
+    private Integer requestStartIndex; // 시작 번호
+    private Integer requestCount; //몇개 뽑을지
     private Integer totalCount;
     private List<QuestionOutputSpec> items;
 }
