@@ -54,8 +54,8 @@ public class QuestionController {
         return ResponseEntity.ok().body(
                 MessageUtil.success(
                         QuestionListOutputSpec.builder()
-                                .startIndex(inputSpec.getStartIndex())
-                                .currentCount(inputSpec.getCount())
+                                .requestStartIndex(inputSpec.getStartIndex())
+                                .requestCount(inputSpec.getCount())
                                 .totalCount(questionService.getTotalCount())
                                 .items(questionService.findQuestion(inputSpec)
                                         .stream()
