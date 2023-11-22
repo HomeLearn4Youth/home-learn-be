@@ -55,4 +55,9 @@ public class QuestionServiceImpl implements QuestionService{
     public QuestionJoinUser findQuestionById(Long questionId) {
         return questionMapper.findQuestionById(questionId).orElseThrow(()->new QuestionException(NOT_EXISTS_QUESTION));
     }
+
+    @Override
+    public Integer getTotalCount() {
+        return questionMapper.getTotalCount();
+    }
 }

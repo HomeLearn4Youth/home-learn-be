@@ -5,7 +5,7 @@ import com.homelearn.back.house.dto.AddApartImgParam;
 import com.homelearn.back.house.entity.HouseInfo;
 import com.homelearn.back.house.entity.HouseJoinLike;
 import com.homelearn.back.news.dto.*;
-import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +22,8 @@ public class CrawlerToObjectMaker {
     private String naverClientSecret;
     private WebClient webClient;
     private ApartMapper apartMapper;
+    private static final String DEFAULT_APART_IMG_LINK = "https://img.freepik.com/free-photo/3d-view-of-house-model_23-2150761178.jpg?w=1380&t=st=1700658708~exp=1700659308~hmac=003edb3bdfc42e0f43d0280f159c13a2f8e6a48d463a495166541e08bc9ff2c6";
+
     @Autowired
     public CrawlerToObjectMaker(
             @Value(value = "${dummy.naver-client-id}") String naverClientId,
@@ -49,7 +51,15 @@ public class CrawlerToObjectMaker {
                 .block();
     }
     public String getImg(HouseJoinLike house){
-        String link = getNaverImgs(house).getItems().get(0).getLink();
+        String link = "";
+        try {
+            link = getNaverImgs(house).getItems().get(0).getLink();
+        }catch (NullPointerException e){
+            link = DEFAULT_APART_IMG_LINK;
+        } catch (IndexOutOfBoundsException e) {
+            link = DEFAULT_APART_IMG_LINK;
+        }
+        if (link==null) link = DEFAULT_APART_IMG_LINK;
         apartMapper.addAptImg(AddApartImgParam.builder()
                         .aptCode(house.getAptCode())
                         .aptImg(link)
@@ -79,7 +89,7 @@ public class CrawlerToObjectMaker {
         for (NaverNews item : items) {
             NewsSite siteData = NewsCrawler.getThumbnailAndSiteName(item.getOriginallink());
             output.add(NewsOutputSpec.builder()
-                    .title(item.getTitle().replaceAll("<[^>]*>",""))
+                    .title(item.getTitle().replaceAll("&quot;", "\"").replaceAll("<[^>]*>", ""))
                     .link(item.getLink())
                     .description(item.getDescription().replaceAll("<[^>]*>",""))
                     .pubDate(item.getPubDate())
@@ -94,6 +104,7 @@ public class CrawlerToObjectMaker {
                              String dong,
                              String apartName
                              ){
+        if (dong==null || apartName==null) return "부동산";
         return dong+" "+apartName+" 부동산";
     }
 }

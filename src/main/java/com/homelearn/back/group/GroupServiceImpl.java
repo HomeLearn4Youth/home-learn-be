@@ -92,11 +92,20 @@ public class GroupServiceImpl implements GroupService{
                 })
                 .collect(Collectors.toList());
         //마지막 인덱스
-        int endIdx = groupApartList.size() - 1;
-        if (endIdx > -1) {
+        if (groupApartList.size()==0){
+            return GroupItemListOutputSpec.builder()
+                    .startX(null)
+                    .startY(null)
+                    .endX(null)
+                    .endY(null)
+                    .passList(null)
+                    .items(groupApartList)
+                    .build();
+        }
+        else {
+            int endIdx = groupApartList.size() - 1;
             log.debug("endIdx : " + String.valueOf(endIdx));
             List<ApartOutputSpec> shortestPath = ShortestPath.findApproximateShortestPath(groupApartList);
-
             ApartOutputSpec startApart = shortestPath.get(0);
             ApartOutputSpec endApart = shortestPath.get(endIdx);
             StringBuilder passList = new StringBuilder();
@@ -122,7 +131,6 @@ public class GroupServiceImpl implements GroupService{
                     .items(groupApartList)
                     .build();
         }
-        return null;
     }
 
 

@@ -69,5 +69,7 @@
         WHERE
             q.id = #{id}
     </select>
-
+    <select id="getTotalCount" resultType="Integer">
+        SELECT COUNT(*) FROM question;
+    </select>
 </mapper>

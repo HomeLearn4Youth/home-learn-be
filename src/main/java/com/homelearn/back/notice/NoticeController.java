@@ -46,17 +46,23 @@ public class NoticeController {
      * @return
      */
     @GetMapping("/findlist")
-    public ResponseEntity<MessageUtil<List<FindListNoticeOutputSpec>>> findNoticeList(
-            @ModelAttribute FindListNoticeInputSpec findListNoticeInputSpec
+    public ResponseEntity<MessageUtil<FindListNoticeOutputSpec>> findNoticeList(
+            @ModelAttribute FindListNoticeInputSpec inputSpec
             ){
         return ResponseEntity.ok().body(
-                MessageUtil.success(
-                        noticeService.getNoticeList(findListNoticeInputSpec)
-                            .stream()
-                            .map(
-                                m -> new FindListNoticeOutputSpec()
-                                        .noticeToFindListOutputSpec(m))
-                            .collect(Collectors.toList())));
+                MessageUtil.success(FindListNoticeOutputSpec.builder()
+                                .items(noticeService.getNoticeList(inputSpec)
+                                    .stream()
+                                    .map(
+                                        m -> new FindListNoticeItemOutputSpec()
+                                                .noticeToFindListOutputSpec(m))
+                                    .collect(Collectors.toList()))
+                                .requestSearchText(inputSpec.getSearchText())
+                                .requestStartIndex(inputSpec.getStartIndex())
+                                .requestCount(inputSpec.getCount())
+                                .totalCount(noticeService.getTotalCount())
+                                .build()
+                        ));
     }
 
     /**

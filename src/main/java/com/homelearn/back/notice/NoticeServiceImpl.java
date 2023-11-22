@@ -5,6 +5,7 @@ import com.homelearn.back.notice.entity.Notice;
 import com.homelearn.back.notice.entity.NoticeJoinMember;
 import com.homelearn.back.notice.exception.NoticeErrorCode;
 import com.homelearn.back.notice.exception.NoticeException;
+import com.homelearn.back.user.UserRole;
 import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,7 @@ public class NoticeServiceImpl implements NoticeService{
 
     @Override
     public void addNotice(AddNoticeInputSpec inputSpec, User loginUser) {
+        if (loginUser.getRole()!= UserRole.ADMIN) throw new NoticeException(FORBIDDEN_NOTICE);
         noticeMapper.addNotice(NoticeParam.builder()
                         .title(inputSpec.getTitle())
                         .content(inputSpec.getContent())
@@ -67,5 +69,10 @@ public class NoticeServiceImpl implements NoticeService{
                 .orElseThrow(() -> new NoticeException(NOT_EXISTS_NOTICE))
                 .getWriterId() != loginUser.getId()) throw new NoticeException(FORBIDDEN_NOTICE);
         noticeMapper.deleteNoticeById(noticeId);
+    }
+
+    @Override
+    public Integer getTotalCount() {
+        return noticeMapper.getTotalCount();
     }
 }

@@ -23,4 +23,6 @@ public interface NoticeMapper {
     void countNotice(Long noticeId);
     //Delete
     void deleteNoticeById(Long noticeId);
+
+    Integer getTotalCount();
 }

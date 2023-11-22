@@ -61,7 +61,7 @@
                 OR content LIKE CONCAT('%', #{searchText}, '%'))
             </if>
         </where>
-        ORDER BY created_at
+        ORDER BY created_at desc
         LIMIT #{count} OFFSET #{startIndex}
     </select>
 
@@ -73,6 +73,10 @@
     <update id="countNotice" parameterType="Long">
         update notices set `view` = `view`+1 where id=#{noticeId}
     </update>
+
+    <select id="getTotalCount" resultType="Integer">
+        SELECT COUNT(*) FROM notices;
+    </select>
 
     <delete id="deleteNoticeById" parameterType="Long">
         delete

@@ -17,4 +17,5 @@ public interface QuestionService {
     List<QuestionJoinUser> findQuestion(QuestionListInputSpec param);
     //질문 상세 보기
     QuestionJoinUser findQuestionById(Long questionId);
+    Integer getTotalCount();
 }
