@@ -22,6 +22,8 @@ public class CrawlerToObjectMaker {
     private String naverClientSecret;
     private WebClient webClient;
     private ApartMapper apartMapper;
+    private static final String DEFAULT_APART_IMG_LINK = "https://img.freepik.com/free-photo/vertical-shot-of-a-white-building-under-the-clear-sky_181624-4575.jpg?w=740&t=st=1700655900~exp=1700656500~hmac=230dc5a466dda28cba85a6ef719cc63c165b6c3a73ecfdb18d9d1d308dbc4581";
+
     @Autowired
     public CrawlerToObjectMaker(
             @Value(value = "${dummy.naver-client-id}") String naverClientId,
@@ -49,7 +51,12 @@ public class CrawlerToObjectMaker {
                 .block();
     }
     public String getImg(HouseJoinLike house){
-        String link = getNaverImgs(house).getItems().get(0).getLink();
+        String link = "";
+        try {
+            link = getNaverImgs(house).getItems().get(0).getLink();
+        }catch (NullPointerException e){
+            link = DEFAULT_APART_IMG_LINK;
+        }
         apartMapper.addAptImg(AddApartImgParam.builder()
                         .aptCode(house.getAptCode())
                         .aptImg(link)
@@ -94,6 +101,7 @@ public class CrawlerToObjectMaker {
                              String dong,
                              String apartName
                              ){
+        if (dong==null || apartName==null) return "부동산";
         return dong+" "+apartName+" 부동산";
     }
 }
