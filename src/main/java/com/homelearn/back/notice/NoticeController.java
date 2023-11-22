@@ -57,10 +57,10 @@ public class NoticeController {
                                         m -> new FindListNoticeItemOutputSpec()
                                                 .noticeToFindListOutputSpec(m))
                                     .collect(Collectors.toList()))
-                                .count(inputSpec.getCount())
+                                .requestSearchText(inputSpec.getSearchText())
+                                .requestStartIndex(inputSpec.getStartIndex())
+                                .requestCount(inputSpec.getCount())
                                 .totalCount(noticeService.getTotalCount())
-                                .startIndex(inputSpec.getStartIndex())
-                                .searchText(inputSpec.getSearchText())
                                 .build()
                         ));
     }
