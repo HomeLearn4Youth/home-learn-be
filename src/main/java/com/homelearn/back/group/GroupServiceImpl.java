@@ -17,6 +17,7 @@ import com.homelearn.back.like.exception.LikeException;
 import com.homelearn.back.news.CrawlerToObjectMaker;
 import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import static com.homelearn.back.group.exception.GroupErrorCode.*;
 import static com.homelearn.back.like.exception.LikeErrorCode.*;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class GroupServiceImpl implements GroupService{
 
@@ -82,39 +84,45 @@ public class GroupServiceImpl implements GroupService{
     public GroupItemListOutputSpec findGroupItemList(ApartListInputSpec inputSpec, User user) {
         List<ApartOutputSpec> groupApartList = apartService.getApartList(inputSpec, user).stream()
                 .map(m -> {
-                    if (m.getAptImg()==null){
-                        return new ApartOutputSpec().houseJoinLikeToApartOutputSpec(m,maker.getImg(m));
-                    }else {
+                    if (m.getAptImg() == null) {
+                        return new ApartOutputSpec().houseJoinLikeToApartOutputSpec(m, maker.getImg(m));
+                    } else {
                         return new ApartOutputSpec().houseJoinLikeToApartOutputSpec(m);
                     }
                 })
                 .collect(Collectors.toList());
+        //마지막 인덱스
+        int endIdx = groupApartList.size() - 1;
+        if (endIdx > -1) {
+            log.debug("endIdx : " + String.valueOf(endIdx));
+            List<ApartOutputSpec> shortestPath = ShortestPath.findApproximateShortestPath(groupApartList);
 
-        int endIdx = groupApartList.size()-1;
-        ApartOutputSpec startApart = groupApartList.get(0);
-        ApartOutputSpec endApart = groupApartList.get(endIdx);
-        StringBuilder passList = new StringBuilder();
-        for (int i = 1; i <= endIdx-1; i++) {
-            ApartOutputSpec passApart = groupApartList.get(i);
-            if (i!=endIdx-1){
-                passList.append(passApart.getLng())
-                        .append(",")
-                        .append(passApart.getLat())
-                        .append("_");
-            }else {
-                passList.append(passApart.getLng())
-                        .append(",")
-                        .append(passApart.getLat());
+            ApartOutputSpec startApart = shortestPath.get(0);
+            ApartOutputSpec endApart = shortestPath.get(endIdx);
+            StringBuilder passList = new StringBuilder();
+            for (int i = 1; i < endIdx; i++) {
+                ApartOutputSpec passApart = shortestPath.get(i);
+                if (i != endIdx - 1) {
+                    passList.append(passApart.getLng())
+                            .append(",")
+                            .append(passApart.getLat())
+                            .append("_");
+                } else {
+                    passList.append(passApart.getLng())
+                            .append(",")
+                            .append(passApart.getLat());
+                }
             }
+            return GroupItemListOutputSpec.builder()
+                    .startX(startApart.getLng())
+                    .startY(startApart.getLat())
+                    .endX(endApart.getLng())
+                    .endY(endApart.getLat())
+                    .passList(passList.toString())
+                    .items(groupApartList)
+                    .build();
         }
-        return GroupItemListOutputSpec.builder()
-                .startX(startApart.getLng())
-                .startY(startApart.getLat())
-                .endX(endApart.getLng())
-                .endY(endApart.getLat())
-                .passList(passList.toString())
-                .items(groupApartList)
-                .build();
+        return null;
     }
 
 
