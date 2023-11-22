@@ -1,4 +1,4 @@
-package com.homelearn.back.notice.dto;
+package com.homelearn.back.qna.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -12,10 +12,9 @@ import java.util.List;
 @Setter
 @Builder
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-public class FindListNoticeOutputSpec {
-    private String searchText; // 검색어
+public class QuestionListOutputSpec {
     private Integer startIndex; // 시작 번호
-    private Integer count; //몇개 뽑을지
-    private Integer totalCount; // 총
-    private List<FindListNoticeItemOutputSpec> items;
+    private Integer currentCount; //몇개 뽑을지
+    private Integer totalCount;
+    private List<QuestionOutputSpec> items;
 }

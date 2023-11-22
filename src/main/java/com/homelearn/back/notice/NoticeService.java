@@ -17,4 +17,5 @@ public interface NoticeService {
     void editNotice(EditNoticeInputSpec input, User loginUser);
     //Delete
     void deleteNoticeById(Long noticeId, User loginUser);
+    Integer getTotalCount();
 }

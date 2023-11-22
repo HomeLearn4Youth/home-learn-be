@@ -74,6 +74,10 @@
         update notices set `view` = `view`+1 where id=#{noticeId}
     </update>
 
+    <select id="getTotalCount" resultType="Integer">
+        SELECT COUNT(*) FROM notices;
+    </select>
+
     <delete id="deleteNoticeById" parameterType="Long">
         delete
         from notices
