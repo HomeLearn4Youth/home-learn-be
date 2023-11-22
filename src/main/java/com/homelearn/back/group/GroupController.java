@@ -3,8 +3,10 @@ package com.homelearn.back.group;
 import com.homelearn.back.common.util.MessageUtil;
 import com.homelearn.back.group.dto.GroupInputSpec;
 import com.homelearn.back.group.dto.GroupItemInputSpec;
+import com.homelearn.back.group.dto.GroupItemListOutputSpec;
 import com.homelearn.back.group.dto.GroupParam;
 import com.homelearn.back.group.entity.Group;
+import com.homelearn.back.house.dto.ApartListInputSpec;
 import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -70,5 +72,11 @@ public class GroupController {
         groupService.addGroupItem(newItem, user.getId());
         return ResponseEntity.ok().body(MessageUtil.success());
     }
-
+    @GetMapping("/grouplist")
+    public ResponseEntity<MessageUtil<GroupItemListOutputSpec>> findGroupItemList(
+            @ModelAttribute ApartListInputSpec inputSpec,
+            @AuthenticationPrincipal User user
+    ){
+        return ResponseEntity.ok().body(MessageUtil.success(groupService.findGroupItemList(inputSpec, user)));
+    }
 }

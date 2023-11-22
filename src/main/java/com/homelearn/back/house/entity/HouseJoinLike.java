@@ -3,6 +3,7 @@ package com.homelearn.back.house.entity;
 import lombok.Getter;
 import lombok.Setter;
 
+
 @Getter
 @Setter
 public class HouseJoinLike {
@@ -33,4 +34,9 @@ public class HouseJoinLike {
     private Boolean likeStatus;
     private Long likeId;
     private Long userId;
+
+    public double distance(HouseJoinLike p) {
+        return Math.sqrt(Math.pow(Double.parseDouble(p.getLng()) - Double.parseDouble(this.lat), 2) + Math.pow(Double.parseDouble(p.getLat()) - Double.parseDouble(this.lng), 2));
+    }
+
 }
