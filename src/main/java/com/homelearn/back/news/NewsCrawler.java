@@ -35,6 +35,7 @@ public class NewsCrawler {
             siteName = siteNameEle.attr(ATTRIBUTE);
         } catch (Exception e) {
             log.error("크롤링 에러 !!!!",e);
+            return new NewsSite(DEFAULT_NEWS_IMG_LINK, DEFAULT_SITE_NAME);
         }
 
         return new NewsSite(thumnail, siteName);
