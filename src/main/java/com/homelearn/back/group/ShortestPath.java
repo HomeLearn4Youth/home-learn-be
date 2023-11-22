@@ -1,23 +1,20 @@
 package com.homelearn.back.group;
 
 import com.homelearn.back.house.dto.ApartOutputSpec;
-import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.PriorityQueue;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ShortestPath {
 
     static class Point {
         double x, y;
-        ApartOutputSpec aprt;
+        ApartOutputSpec apart;
 
-        Point(double x, double y, ApartOutputSpec aprt) {
-            this.x = x;
-            this.y = y;
-            this.aprt = aprt;
+        Point(ApartOutputSpec apart) {
+            this.x = Double.parseDouble(apart.getLat());
+            this.y = Double.parseDouble(apart.getLng());
+            this.apart = apart;
         }
 
         double distance(Point p) {
@@ -25,114 +22,97 @@ public class ShortestPath {
         }
     }
 
-    static class Edge implements Comparable<Edge> {
-        int src, dest;
-        double weight;
+    static class Node implements Comparable<Node> {
+        int level;
+        double bound;
+        List<Integer> path;
 
-        Edge(int src, int dest, double weight) {
-            this.src = src;
-            this.dest = dest;
-            this.weight = weight;
+        Node(int level, double bound, List<Integer> path) {
+            this.level = level;
+            this.bound = bound;
+            this.path = new ArrayList<>(path);
         }
 
-        public int compareTo(Edge compareEdge) {
-            return Double.compare(this.weight, compareEdge.weight);
-        }
-    }
-
-    static class Subset {
-        int parent, rank;
-
-        Subset(int parent, int rank) {
-            this.parent = parent;
-            this.rank = rank;
+        @Override
+        public int compareTo(Node other) {
+            return Double.compare(this.bound, other.bound);
         }
     }
 
-    static int find(Subset subsets[], int i) {
-        if (subsets[i].parent != i)
-            subsets[i].parent = find(subsets, subsets[i].parent);
+    private static double[][] distanceMatrix;
+    private static double bestCost = Double.MAX_VALUE;
+    private static List<Integer> bestPath;
 
-        return subsets[i].parent;
-    }
+    public static List<ApartOutputSpec> findOptimalPath(List<ApartOutputSpec> aparts) {
+        List<Point> points = aparts.stream()
+                .map(apart-> new Point(apart)).collect(Collectors.toList());
 
-    static void Union(Subset subsets[], int x, int y) {
-        int xroot = find(subsets, x);
-        int yroot = find(subsets, y);
-
-        if (subsets[xroot].rank < subsets[yroot].rank)
-            subsets[xroot].parent = yroot;
-        else if (subsets[xroot].rank > subsets[yroot].rank)
-            subsets[yroot].parent = xroot;
-        else {
-            subsets[yroot].parent = xroot;
-            subsets[xroot].rank++;
-        }
-    }
-
-    static List<Edge> KruskalMST(List<Point> points) {
-        PriorityQueue<Edge> pq = new PriorityQueue<>();
-        int V = points.size();
-        Subset subsets[] = new Subset[V];
-        for (int v = 0; v < V; ++v) {
-            subsets[v] = new Subset(v, 0);
-        }
-
-        for (int i = 0; i < V; ++i)
-            for (int j = i + 1; j < V; ++j)
-                pq.add(new Edge(i, j, points.get(i).distance(points.get(j))));
-
-        List<Edge> mst = new ArrayList<>();
-
-        while (mst.size() < V - 1) {
-            Edge edge = pq.remove();
-            int x = find(subsets, edge.src);
-            int y = find(subsets, edge.dest);
-
-            if (x != y) {
-                mst.add(edge);
-                Union(subsets, x, y);
+        int n = points.size();
+        distanceMatrix = new double[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                distanceMatrix[i][j] = points.get(i).distance(points.get(j));
             }
         }
 
-        return mst;
+        branchAndBound(n);
+
+        List<ApartOutputSpec> optimalPath = new ArrayList<>();
+        for (int index : bestPath) {
+            optimalPath.add(aparts.get(index));
+        }
+        return optimalPath;
     }
 
-    static void dfsUtil(int v, boolean visited[], List<List<Integer>> adjList, List<Integer> path) {
-        visited[v] = true;
-        path.add(v);
+    private static void branchAndBound(int n) {
+        PriorityQueue<Node> pq = new PriorityQueue<>();
+        pq.add(new Node(0, 0, Arrays.asList(0)));
 
-        for (int i : adjList.get(v)) {
-            if (!visited[i])
-                dfsUtil(i, visited, adjList, path);
+        while (!pq.isEmpty()) {
+            Node node = pq.poll();
+
+            if (node.bound < bestCost) {
+                for (int i = 0; i < n; i++) {
+                    if (!node.path.contains(i)) {
+                        List<Integer> newPath = new ArrayList<>(node.path);
+                        newPath.add(i);
+
+                        if (newPath.size() == n) {
+                            newPath.add(newPath.get(0)); // Complete the cycle
+                            double cost = calculateTotalCost(newPath);
+                            if (cost < bestCost) {
+                                bestCost = cost;
+                                bestPath = newPath;
+                            }
+                        } else {
+                            double bound = calculateBound(newPath, n);
+                            pq.add(new Node(node.level + 1, bound, newPath));
+                        }
+                    }
+                }
+            }
         }
     }
 
-    public static List<ApartOutputSpec> findApproximateShortestPath(List<ApartOutputSpec> aparts) {
-        List<Point> points = aparts.stream().map(apart->{
-            return new Point(Double.parseDouble(apart.getLat()), Double.parseDouble(apart.getLng()), apart);
-        }).collect(Collectors.toList());
-
-        List<Edge> mst = KruskalMST(points);
-        List<List<Integer>> adjList = new ArrayList<>(points.size());
-        for (int i = 0; i < points.size(); i++) {
-            adjList.add(new ArrayList<>());
+    private static double calculateTotalCost(List<Integer> path) {
+        double cost = 0;
+        for (int i = 0; i < path.size() - 1; i++) {
+            cost += distanceMatrix[path.get(i)][path.get(i + 1)];
         }
-
-        for (Edge edge : mst) {
-            adjList.get(edge.src).add(edge.dest);
-            adjList.get(edge.dest).add(edge.src);
-        }
-
-        List<Integer> pathIndex = new ArrayList<>();
-        boolean[] visited = new boolean[points.size()];
-        dfsUtil(0, visited, adjList, pathIndex);
-
-        List<ApartOutputSpec> path = new ArrayList<>();
-        for (int index : pathIndex) {
-            path.add(points.get(index).aprt);
-        }
-        return path;
+        return cost;
     }
 
+    private static double calculateBound(List<Integer> path, int n) {
+        double bound = calculateTotalCost(path);
+        int last = path.get(path.size() - 1);
+
+        double minEdge = Double.MAX_VALUE;
+        for (int i = 0; i < n; i++) {
+            if (!path.contains(i)) {
+                minEdge = Math.min(minEdge, distanceMatrix[last][i]);
+            }
+        }
+        return bound + minEdge;
+    }
 }
+
