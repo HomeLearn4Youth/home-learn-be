@@ -25,4 +25,6 @@ public class HouseInfo {
     private String jibun;
     private String lng;
     private String lat;
+
+    private String aptImg;
 }

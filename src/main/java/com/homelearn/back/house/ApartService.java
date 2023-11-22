@@ -13,7 +13,7 @@ public interface ApartService {
     //동 코드별 아파트
     List<HouseJoinLike>  getApartList(ApartListInputSpec input, User user);
     //아파트 개별 조회
-    ApartOutputSpec getApartInfoById(Long apartCode, User user);
+    HouseJoinLike getApartInfoById(Long apartCode, User user);
     //아파트 거래내역 조회
     List<DealListOutputSpec> getApartDealList(DealListInputSpec dealListInputSpec);
 

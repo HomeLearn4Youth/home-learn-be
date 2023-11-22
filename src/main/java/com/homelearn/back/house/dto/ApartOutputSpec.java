@@ -46,5 +46,21 @@ public class ApartOutputSpec {
     }
 
 
-
+    public ApartOutputSpec houseJoinLikeToApartOutputSpec(HouseJoinLike m){
+        return ApartOutputSpec.builder()
+                .aptId(m.getAptCode())
+                .aptName(m.getApartmentName())
+                .aptImg(m.getAptImg())
+                .dong(m.getDong())
+                .bonbun(m.getBonbun())
+                .bubun(m.getBubun())
+                .aptRoadName(m.getRoadName())
+                .aptRoadNameBonbun(m.getRoadNameBonbun())
+                .aptRoadNameBubun(m.getRoadNameBubun())
+                .likeStatus(m.getLikeStatus())
+                .likeId(m.getLikeId())
+                .lng(m.getLng())
+                .lat(m.getLat())
+                .build();
+    }
 }

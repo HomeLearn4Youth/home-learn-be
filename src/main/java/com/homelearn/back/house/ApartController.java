@@ -2,6 +2,7 @@ package com.homelearn.back.house;
 
 import com.homelearn.back.common.util.MessageUtil;
 import com.homelearn.back.house.dto.*;
+import com.homelearn.back.house.entity.HouseJoinLike;
 import com.homelearn.back.news.CrawlerToObjectMaker;
 import com.homelearn.back.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +33,14 @@ public class ApartController {
         return ResponseEntity.ok().body(
                 MessageUtil.success(
                         apartService.getApartList(inputSpec, user).stream()
-                                .map(m->new ApartOutputSpec().houseJoinLikeToApartOutputSpec(m,maker.getImg(m)))
+                                .map(m->{
+                                    if (m.getAptImg()==null){
+                                        log.error("naverAPI 실행 = {}",m.getAptImg() );
+                                        return new ApartOutputSpec().houseJoinLikeToApartOutputSpec(m,maker.getImg(m));
+                                    }else {
+                                        return new ApartOutputSpec().houseJoinLikeToApartOutputSpec(m);
+                                    }
+                                })
                                 .collect(Collectors.toList())));
     }
 
@@ -41,8 +49,13 @@ public class ApartController {
             @PathVariable("apartCode") Long apartCode,
             @AuthenticationPrincipal User user
     ){
-        return ResponseEntity.ok().body(
-                MessageUtil.success(apartService.getApartInfoById(apartCode, user)));
+        HouseJoinLike apart = apartService.getApartInfoById(apartCode, user);
+        if (apart.getAptImg()!=null){
+            return ResponseEntity.ok().body(MessageUtil.success(
+                            new ApartOutputSpec().houseJoinLikeToApartOutputSpec(apart)));
+        }
+        return ResponseEntity.ok().body(MessageUtil.success(
+                new ApartOutputSpec().houseJoinLikeToApartOutputSpec(apart, maker.getImg(apart))));
     }
 
     @GetMapping("/history")
