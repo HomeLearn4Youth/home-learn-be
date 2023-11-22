@@ -5,7 +5,7 @@ import com.homelearn.back.house.dto.AddApartImgParam;
 import com.homelearn.back.house.entity.HouseInfo;
 import com.homelearn.back.house.entity.HouseJoinLike;
 import com.homelearn.back.news.dto.*;
-import lombok.RequiredArgsConstructor;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,7 +22,7 @@ public class CrawlerToObjectMaker {
     private String naverClientSecret;
     private WebClient webClient;
     private ApartMapper apartMapper;
-    private static final String DEFAULT_APART_IMG_LINK = "https://img.freepik.com/free-photo/vertical-shot-of-a-white-building-under-the-clear-sky_181624-4575.jpg?w=740&t=st=1700655900~exp=1700656500~hmac=230dc5a466dda28cba85a6ef719cc63c165b6c3a73ecfdb18d9d1d308dbc4581";
+    private static final String DEFAULT_APART_IMG_LINK = "https://img.freepik.com/free-photo/3d-view-of-house-model_23-2150761178.jpg?w=1380&t=st=1700658708~exp=1700659308~hmac=003edb3bdfc42e0f43d0280f159c13a2f8e6a48d463a495166541e08bc9ff2c6";
 
     @Autowired
     public CrawlerToObjectMaker(
@@ -56,7 +56,10 @@ public class CrawlerToObjectMaker {
             link = getNaverImgs(house).getItems().get(0).getLink();
         }catch (NullPointerException e){
             link = DEFAULT_APART_IMG_LINK;
+        } catch (IndexOutOfBoundsException e) {
+            link = DEFAULT_APART_IMG_LINK;
         }
+        if (link==null) link = DEFAULT_APART_IMG_LINK;
         apartMapper.addAptImg(AddApartImgParam.builder()
                         .aptCode(house.getAptCode())
                         .aptImg(link)
@@ -86,7 +89,7 @@ public class CrawlerToObjectMaker {
         for (NaverNews item : items) {
             NewsSite siteData = NewsCrawler.getThumbnailAndSiteName(item.getOriginallink());
             output.add(NewsOutputSpec.builder()
-                    .title(item.getTitle().replaceAll("<[^>]*>",""))
+                    .title(item.getTitle().replaceAll("&quot;", "\"").replaceAll("<[^>]*>", ""))
                     .link(item.getLink())
                     .description(item.getDescription().replaceAll("<[^>]*>",""))
                     .pubDate(item.getPubDate())
