@@ -80,7 +80,7 @@ public class GroupServiceImpl implements GroupService{
 
     @Override
     public GroupItemListOutputSpec findGroupItemList(ApartListInputSpec inputSpec, User user) {
-        List<ApartOutputSpec> groupApartList = findShortestPath(apartService.getApartList(inputSpec, user)).stream()
+        List<ApartOutputSpec> groupApartList = apartService.getApartList(inputSpec, user).stream()
                 .map(m -> {
                     if (m.getAptImg()==null){
                         return new ApartOutputSpec().houseJoinLikeToApartOutputSpec(m,maker.getImg(m));
@@ -89,13 +89,14 @@ public class GroupServiceImpl implements GroupService{
                     }
                 })
                 .collect(Collectors.toList());
+
         int endIdx = groupApartList.size()-1;
         ApartOutputSpec startApart = groupApartList.get(0);
         ApartOutputSpec endApart = groupApartList.get(endIdx);
         StringBuilder passList = new StringBuilder();
         for (int i = 1; i <= endIdx-1; i++) {
             ApartOutputSpec passApart = groupApartList.get(i);
-            if (i!=endIdx){
+            if (i!=endIdx-1){
                 passList.append(passApart.getLng())
                         .append(",")
                         .append(passApart.getLat())
@@ -117,36 +118,36 @@ public class GroupServiceImpl implements GroupService{
     }
 
 
-    private static HouseJoinLike findNearestPoint(HouseJoinLike current, List<HouseJoinLike> houses, boolean[] visited) {
-        HouseJoinLike nearest = null;
-        double minDistance = Double.MAX_VALUE;
-        for (int i = 0; i < houses.size(); i++) {
-            if (!visited[i]) {
-                double distance = current.distance(houses.get(i));
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    nearest = houses.get(i);
-                    visited[i] = true;
-                }
-            }
-        }
-        return nearest;
-    }
-    public static List<HouseJoinLike> findShortestPath(List<HouseJoinLike> houses) {
-        List<HouseJoinLike> path = new ArrayList<>();
-        boolean[] visited = new boolean[houses.size()]; // Tracking visited points
-
-        HouseJoinLike current = houses.get(0);
-        visited[0] = true; // Mark the first point as visited
-        path.add(current);
-
-        while (path.size() < houses.size()) {
-            HouseJoinLike next = findNearestPoint(current, houses, visited);
-            if (next != null) {
-                path.add(next);
-                current = next;
-            }
-        }
-        return path;
-    }
+//    private static HouseJoinLike findNearestPoint(HouseJoinLike current, List<HouseJoinLike> houses, boolean[] visited) {
+//        HouseJoinLike nearest = null;
+//        double minDistance = Double.MAX_VALUE;
+//        for (int i = 0; i < houses.size(); i++) {
+//            if (!visited[i]) {
+//                double distance = current.distance(houses.get(i));
+//                if (distance < minDistance) {
+//                    minDistance = distance;
+//                    nearest = houses.get(i);
+//                    visited[i] = true;
+//                }
+//            }
+//        }
+//        return nearest;
+//    }
+//    public static List<HouseJoinLike> findShortestPath(List<HouseJoinLike> houses) {
+//        List<HouseJoinLike> path = new ArrayList<>();
+//        boolean[] visited = new boolean[houses.size()]; // Tracking visited points
+//
+//        HouseJoinLike current = houses.get(0);
+//        visited[0] = true; // Mark the first point as visited
+//        path.add(current);
+//
+//        while (path.size() < houses.size()) {
+//            HouseJoinLike next = findNearestPoint(current, houses, visited);
+//            if (next != null) {
+//                path.add(next);
+//                current = next;
+//            }
+//        }
+//        return path;
+//    }
 }
