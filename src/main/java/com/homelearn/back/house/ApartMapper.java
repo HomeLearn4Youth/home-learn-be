@@ -1,10 +1,7 @@
 package com.homelearn.back.house;
 
 
-import com.homelearn.back.house.dto.ApartInfoParam;
-import com.homelearn.back.house.dto.ApartListParam;
-import com.homelearn.back.house.dto.DealListInputSpec;
-import com.homelearn.back.house.dto.DealListOutputSpec;
+import com.homelearn.back.house.dto.*;
 import com.homelearn.back.house.entity.HouseInfo;
 import com.homelearn.back.house.entity.HouseJoinLike;
 import org.apache.ibatis.annotations.Mapper;
@@ -19,6 +16,6 @@ public interface ApartMapper {
     //아파트 개별 조회
     Optional<HouseJoinLike> getApartInfoById(ApartInfoParam infoParam);
     //아파트 거래내역 조회
-    List<DealListOutputSpec> getApartDealList(DealListInputSpec dealListInputSpec);
+    List<DealListOutputSpec> getApartDealList(DealListInputParam inputParam);
     Optional<HouseInfo> findApartByApartCode(Long ApartCode);
 }
