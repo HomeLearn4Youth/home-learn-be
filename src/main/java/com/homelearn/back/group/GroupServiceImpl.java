@@ -90,6 +90,16 @@ public class GroupServiceImpl implements GroupService{
                 })
                 .collect(Collectors.toList());
 
+        if (groupApartList.size()==0){
+            return GroupItemListOutputSpec.builder()
+                    .startX(null)
+                    .startY(null)
+                    .endX(null)
+                    .endY(null)
+                    .passList(null)
+                    .items(groupApartList)
+                    .build();
+        }
         int endIdx = groupApartList.size()-1;
         ApartOutputSpec startApart = groupApartList.get(0);
         ApartOutputSpec endApart = groupApartList.get(endIdx);
