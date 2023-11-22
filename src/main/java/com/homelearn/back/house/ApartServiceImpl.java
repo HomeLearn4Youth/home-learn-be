@@ -1,6 +1,7 @@
 package com.homelearn.back.house;
 
 import com.homelearn.back.house.dto.*;
+import com.homelearn.back.house.entity.HouseInfo;
 import com.homelearn.back.house.entity.HouseJoinLike;
 import com.homelearn.back.house.exception.HouseErrorCode;
 import com.homelearn.back.house.exception.HouseException;
@@ -37,8 +38,18 @@ public class ApartServiceImpl implements ApartService{
     }
 
     @Override
-    public List<DealListOutputSpec> getApartDealList(DealListInputSpec dealListInputSpec) {
-        return apartMapper.getApartDealList(dealListInputSpec);
+    public List<DealListOutputSpec> getApartDealList(DealListInputSpec inputSpec) {
+        HouseInfo house = apartMapper.findApartByApartCode(inputSpec.getApartCode())
+                .orElseThrow(() -> new HouseException(NOT_EXISTS_HOUSE));
+        return apartMapper.getApartDealList(DealListInputParam.builder()
+                        .startIndex(inputSpec.getStartIndex())
+                        .count(inputSpec.getCount())
+                        .apartCode(inputSpec.getApartCode())
+                        .type(inputSpec.getType())
+                        .dongName(house.getDong())
+                        .bonbun(Integer.parseInt(house.getBonbun()))
+                        .bubun(Integer.parseInt(house.getBubun()))
+                        .build());
     }
 
 }

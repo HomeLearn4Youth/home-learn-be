@@ -204,7 +204,7 @@
         </if>
     </select>
 
-    <select id="getApartDealList" parameterType="DealListInputSpec" resultMap="dealListOutputSpec">
+    <select id="getApartDealList" parameterType="DealListInputParam" resultMap="dealListOutputSpec">
         select * from
             (SELECT
                  aptCode,
@@ -219,13 +219,13 @@
              UNION
              SELECT
                  aptCode,
-                 '전월세' AS type,
-                 CONCAT(dealYear, '-', LPAD(dealMonth, 2, '0'), '-', LPAD(dealDay, 2, '0')) AS `dealDate`,
-                 areaForExclusiveUse AS area,
+                 '전세' AS type,
+                 `dealDate`,
+                 area,
                  floor,
-                 CONCAT(deposit, ' (', monthlyRent, ')') AS dealAmount
+                 deposit AS dealAmount
              FROM houselease
-             where aptCode=#{apartCode}
+             where dongName = #{dongName} and bonbun = #{bonbun} and bubun = #{bubun}
              ) as combined
         <where>
             <if test="type != null and type != ''">
