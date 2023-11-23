@@ -10,6 +10,7 @@ import lombok.*;
 @Getter
 @Setter
 @Builder
+@ToString
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class ApartOutputSpec {
     private Long aptId;
