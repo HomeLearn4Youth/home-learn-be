@@ -54,9 +54,9 @@
     </delete>
     <select id="findGroupCount" parameterType="GroupListCountParam">
         select count(*)
-        from group_item item
+        from group_items item
         join likes l
-        on l.id == item.like_id
+        on l.id = item.like_id
         where l.user_id = #{userId} and item.group_id = #{groupId}
     </select>
 </mapper>
