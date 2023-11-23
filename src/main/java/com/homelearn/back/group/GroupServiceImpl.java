@@ -99,17 +99,24 @@ public class GroupServiceImpl implements GroupService{
                     .passList(null)
                     .items(groupApartList)
                     .build();
-        }
-        else {
-            int endIdx = groupApartList.size() - 1;
-            log.debug("endIdx : " + String.valueOf(endIdx));
+        } else if (groupApartList.size()==1) {
+            return GroupItemListOutputSpec.builder()
+                    .startX(groupApartList.get(0).getLng())
+                    .startY(groupApartList.get(0).getLat())
+                    .endX(groupApartList.get(0).getLng())
+                    .endY(groupApartList.get(0).getLat())
+                    .passList(null)
+                    .items(groupApartList)
+                    .build();
+        } else {
             List<ApartOutputSpec> shortestPath=ShortestPath.findOptimalPath(groupApartList);
             ApartOutputSpec startApart = shortestPath.get(0);
+            int endIdx = shortestPath.size() - 1;
             ApartOutputSpec endApart = shortestPath.get(endIdx);
             StringBuilder passList = new StringBuilder();
             for (int i = 1; i < endIdx; i++) {
                 ApartOutputSpec passApart = shortestPath.get(i);
-                if (i != endIdx - 1) {
+                if (i != endIdx) {
                     passList.append(passApart.getLng())
                             .append(",")
                             .append(passApart.getLat())

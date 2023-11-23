@@ -50,7 +50,7 @@ public class ReportController {
                 MessageUtil.success(
                         reportService.getApartLeaseList(aptCode)));
     }
-    @GetMapping("/avg/{dongCode}")
+    @GetMapping("/per/{dongCode}")
     public ResponseEntity<MessageUtil<List<PerLeaseDeal>>> getLeaseDealPercent(
             @PathVariable("dongCode") String dongCode
     ){
@@ -59,7 +59,8 @@ public class ReportController {
                         reportService.getLeaseDealPercent(dongCode)));
     }
 
-    @GetMapping("/per/{dongCode}")
+
+    @GetMapping("/avg/{dongCode}")
     public ResponseEntity<MessageUtil<List<AvgSquareMeter>>> getLeaseAvg(
             @PathVariable("dongCode") String dongCode
             ){
