@@ -9,4 +9,6 @@ public class RentHouseInfo {
     private int aptCode;
     private String apartmentName;
     private String dongCode;
+    private String dealDeposit;
+    private String dealArea;
 }
