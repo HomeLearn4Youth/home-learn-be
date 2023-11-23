@@ -14,8 +14,10 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Slf4j
@@ -36,24 +38,20 @@ public class SuccessHandler implements AuthenticationSuccessHandler {
                 .provider(OAuthProvider.NAVER)
                 .build();
         log.info(user.toString());
-        responseWithToken(user,response);
-    }
-    public void responseWithToken(User user,HttpServletResponse response) throws IOException {
         String accessToken=jwtUtils.issueAccessToken(user);
         String refreshToken= jwtUtils.issueRefreshToken(user);
-        log.info(accessToken);
-        log.info(refreshToken);
-        // 성공 응답 데이터 생성
-        JSONObject responseData = new JSONObject();
-        response.addHeader("Authorization",accessToken);
-        response.addHeader("refresh_token",refreshToken);
+        // 쿠키 생성
+        Cookie cookieAccess = new Cookie("accessToken", accessToken);
+        Cookie cookieRefresh = new Cookie("refreshToken", refreshToken);
+//        cookieAccess.setHttpOnly(true); // XSS 공격 방지
+//        cookieAccess.setSecure(true); // HTTPS 통신에서만 쿠키 전송
+        cookieAccess.setPath("/"); // 쿠키 접근 경로 설정
+        cookieRefresh.setPath("/"); // 쿠키 접근 경로 설정
+        // cookie.setMaxAge(...); // 쿠키 유효 시간 설정 (선택사항)
 
-        responseData.put("message", "Authentication successful");
-
-        // JSON 형식 응답
-        response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(HttpServletResponse.SC_OK);
-
-        response.getWriter().write(responseData.toJSONString());
+        // 응답에 쿠키 추가
+        response.addCookie(cookieAccess);
+        response.addCookie(cookieRefresh);
+        response.sendRedirect("http://localhost:5173/");
     }
 }

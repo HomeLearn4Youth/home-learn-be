@@ -138,8 +138,10 @@ public class UserController {
      */
     @PutMapping("/edit")
     public ResponseEntity<MessageUtil> editUser(
-            @RequestBody EditUserForm userForm
+            @RequestBody EditUserForm userForm,
+            @AuthenticationPrincipal User user
     ){
+        userForm.setId(user.getId());
         userService.editUser(userForm);
         return ResponseEntity.ok().body(MessageUtil.success());
     }
