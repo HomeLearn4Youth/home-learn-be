@@ -23,7 +23,7 @@ public class LApartListOutputSpec {
                 .aptCode(rentHouseInfo.getAptCode())
                 .apartmentName(rentHouseInfo.getApartmentName())
                 .dealDeposit(rentHouseInfo.getDealDeposit())
-                .dealArea(rentHouseInfo.getArea())
+                .dealArea(rentHouseInfo.getDealArea())
                 .build();
     }
 }
