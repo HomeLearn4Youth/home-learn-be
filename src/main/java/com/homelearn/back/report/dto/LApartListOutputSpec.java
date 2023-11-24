@@ -16,10 +16,14 @@ import lombok.*;
 public class LApartListOutputSpec {
     private int aptCode;
     private String apartmentName;
+    private String dealDeposit;
+    private String dealArea;
     public LApartListOutputSpec rentHouseInfoToLApartListOutputSpec(RentHouseInfo rentHouseInfo){
         return LApartListOutputSpec.builder()
                 .aptCode(rentHouseInfo.getAptCode())
                 .apartmentName(rentHouseInfo.getApartmentName())
+                .dealDeposit(rentHouseInfo.getDealDeposit())
+                .dealArea(rentHouseInfo.getArea())
                 .build();
     }
 }
